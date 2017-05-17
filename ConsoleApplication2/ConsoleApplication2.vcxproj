@@ -138,9 +138,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="src\Data\DataSet.h" />
     <ClInclude Include="src\Data\DataSetManager.h" />
     <ClInclude Include="src\Data\DataSetSample.h" />
@@ -158,7 +155,6 @@
     <ClInclude Include="src\Neuron\BiasNeuron.h" />
     <ClInclude Include="src\Neuron\InputNeuron.h" />
     <ClInclude Include="src\Neuron\Neuron.h" />
-    <ClInclude Include="src\Problem.h" />
     <ClInclude Include="src\tjungblut-math-cpp\CostGradientTuple.h" />
     <ClInclude Include="src\tjungblut-math-cpp\DenseVector.h" />
     <ClInclude Include="src\tjungblut-math-cpp\Fmincg.h" />
@@ -168,7 +164,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleApplication2.cpp" />
-    <ClCompile Include="src\Problem.cpp" />
     <ClCompile Include="src\tjungblut-math-cpp\DenseVector.cpp" />
     <ClCompile Include="src\tjungblut-math-cpp\Fmincg.cpp" />
     <ClCompile Include="stdafx.cpp">

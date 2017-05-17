@@ -10,7 +10,6 @@
 #include "Network.h"
 #include "../Data/DataSet.h"
 #include "../Math/Matrix.h"
-#include "../Problem.h"
 
 #include "../tjungblut-math-cpp/CostGradientTuple.h"
 #include "../tjungblut-math-cpp/DenseVector.h"
