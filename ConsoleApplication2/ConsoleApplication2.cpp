@@ -7,10 +7,13 @@
 #include <string>
 #include <vector>
 #include <ios>
-#include "src/Network/NetworkBuilder.h"
-#include "src/Network/NetworkTrainer.h"
-#include "src/Data/DataSetManager.h"
-#include "src/Data/DataSetManager.h"
+#include <ctime>
+
+#include "src/Impulse/Network/NetworkBuilder.h"
+#include "src/Impulse/Network/NetworkTrainer.h"
+#include "src/Impulse/Data/DataSetManager.h"
+#include "src/Impulse/Data/DataSetManager.h"
+#include "src/Impulse/Network/NetworkSerializer.h"
 
 double strToDouble(std::string str) {
 	std::istringstream os(str);
@@ -41,20 +44,48 @@ TypeMatrix readData(std::string path) {
 
 int main()
 {
-	NetworkBuilder builder = NetworkBuilder();
+	NetworkBuilder * builder = new NetworkBuilder();
+	// Network * net = builder.buildFromJSON("e:/network.json");
 
-	builder.addInputLayer(400);
-	builder.addHiddenLayer(25);
-	builder.addOutputLayer(10);
-	Network * net = builder.getNetwork();
+	builder->addInputLayer(153600);
+	builder->addHiddenLayer(300);
+	builder->addOutputLayer(9);
+	Network * net = builder->getNetwork();
+
+	TypeVector testInput;
+	for (int i = 0; i < 153600; i++) {
+		testInput.push_back(1);
+	}
+	
+	for (int i = 0; i < 10; i++) {
+		clock_t begin = clock();
+		TypeVector netOutput = net->forward(testInput);
+		clock_t end = clock();
+		double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+		std::cout << elapsed_secs << std::endl;
+	}
+
+	/*
+	clock_t begin = clock();
+	TypeVector netOutput = net->forward(testInput);
+	clock_t end = clock();
+
+	for (int i = 0; i < netOutput.size(); i++) {
+		std::cout << "Output " << i << ": " << netOutput.at(i) << std::endl;
+	}
+
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	std::cout << elapsed_secs << std::endl;
+	*/
 
 	// std::cout << net->getSize() << std::endl; // check network size
 
 	// load weights
-	TypeMatrix w1 = readData("data/ex4weights_1.txt");
-	TypeMatrix w2 = readData("data/ex4weights_2.txt");
+	// TypeMatrix w1 = readData("data/ex4weights_1.txt");
+	// TypeMatrix w2 = readData("data/ex4weights_2.txt");
 
 	// set weights
+	/*
 	int i = 0;
 	for (LayerContainer::iterator it = net->getLayers()->begin(); it != net->getLayers()->end(); ++it) {
 		if (i > 0) {
@@ -74,6 +105,7 @@ int main()
 		}
 		i++;
 	}
+	*/
 
 	// debug weights
 	// std::cout << "[1][1][0]" << net->getLayers()->at(1)->getNeurons()->at(1)->weights->at(0) << std::endl;
@@ -87,10 +119,10 @@ int main()
 	// std::cout << "[2][10][25]" << net->getLayers()->at(2)->getNeurons()->at(10)->weights->at(25) << std::endl;
 
 	// load input
-	TypeMatrix input = readData("data/ex4data1_x.txt");
+	// TypeMatrix input = readData("data/ex4data1_x.txt");
 
 	// load output
-	TypeMatrix output = readData("data/ex4data1_y.txt");
+	// TypeMatrix output = readData("data/ex4data1_y.txt");
 
 	/*
 	for (int i = 0; i < input.size(); i++) {
@@ -98,8 +130,9 @@ int main()
 	}
 	*/
 
-	std::cout << input.size() << std::endl;
+	// std::cout << input.size() << std::endl;
 
+	/*
 	TypeVector netOutput = net->forward(input.at(0));
 	for (int i = 0; i < netOutput.size(); i++) {
 		std::cout << "Output " << i << ": " << netOutput.at(i) << std::endl;
@@ -111,7 +144,7 @@ int main()
 	NetworkTrainer * trainer = new NetworkTrainer(net);
 
 	trainer->setRegularization(0.0);
-	trainer->setLearningIterations(50);
+	trainer->setLearningIterations(150);
 
 	CostResult result = trainer->cost(dataSet);
 	std::cout << "Cost: " << result.error << std::endl;
@@ -120,6 +153,17 @@ int main()
 	trainer->train(dataSet);
 	CostResult result2 = trainer->cost(dataSet);
 	std::cout << "Cost: " << result2.error << std::endl;
+
+	TypeVector netOutput2 = net->forward(input.at(0));
+	for (int i = 0; i < netOutput2.size(); i++) {
+		std::cout << "Output " << i << ": " << netOutput2.at(i) << std::endl;
+	}
+	*/
+
+	/*
+	NetworkSerializer * serializer = new NetworkSerializer(net);
+	serializer->toJSON("e:/network.json");
+	*/
 
 	getchar();
 

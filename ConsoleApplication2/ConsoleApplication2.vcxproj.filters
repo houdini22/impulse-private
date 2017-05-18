@@ -21,67 +21,67 @@
     <ClInclude Include="targetver.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\tjungblut-math-cpp\DenseVector.h">
+    <ClInclude Include="src\Impulse\Data\DataSet.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\tjungblut-math-cpp\Fmincg.h">
+    <ClInclude Include="src\Impulse\Data\DataSetManager.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\tjungblut-math-cpp\VectorIterator.h">
+    <ClInclude Include="src\Impulse\Data\DataSetSample.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\tjungblut-math-cpp\CostGradientTuple.h">
+    <ClInclude Include="src\Impulse\Layer\AbstractLayer.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Data\DataSet.h">
+    <ClInclude Include="src\Impulse\Layer\HiddenLayer.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Data\DataSetManager.h">
+    <ClInclude Include="src\Impulse\Layer\InputLayer.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Data\DataSetSample.h">
+    <ClInclude Include="src\Impulse\Layer\OutputLayer.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Layer\AbstractLayer.h">
+    <ClInclude Include="src\Impulse\Math\Matrix.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Layer\HiddenLayer.h">
+    <ClInclude Include="src\Impulse\Math\Vector.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Layer\InputLayer.h">
+    <ClInclude Include="src\Impulse\Network\Network.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Layer\OutputLayer.h">
+    <ClInclude Include="src\Impulse\Network\NetworkBuilder.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Math\Matrix.h">
+    <ClInclude Include="src\Impulse\Network\NetworkTrainer.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Math\Vector.h">
+    <ClInclude Include="src\Impulse\Neuron\AbstractNeuron.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Network\Network.h">
+    <ClInclude Include="src\Impulse\Neuron\BiasNeuron.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Network\NetworkBuilder.h">
+    <ClInclude Include="src\Impulse\Neuron\InputNeuron.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Network\NetworkTrainer.h">
+    <ClInclude Include="src\Impulse\Neuron\Neuron.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Neuron\AbstractNeuron.h">
+    <ClInclude Include="src\Vendor\tjungblut-math-cpp\CostGradientTuple.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Neuron\BiasNeuron.h">
+    <ClInclude Include="src\Vendor\tjungblut-math-cpp\DenseVector.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Neuron\InputNeuron.h">
+    <ClInclude Include="src\Vendor\tjungblut-math-cpp\Fmincg.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Neuron\Neuron.h">
+    <ClInclude Include="src\Vendor\tjungblut-math-cpp\VectorIterator.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Math.h">
+    <ClInclude Include="src\Impulse\Math.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -92,10 +92,13 @@
     <ClCompile Include="ConsoleApplication2.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\tjungblut-math-cpp\DenseVector.cpp">
+    <ClCompile Include="src\Vendor\tjungblut-math-cpp\DenseVector.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\tjungblut-math-cpp\Fmincg.cpp">
+    <ClCompile Include="src\Vendor\tjungblut-math-cpp\Fmincg.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Impulse\Network\NetworkSerializer.h">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
