@@ -118,8 +118,10 @@ int main()
 
 	NetworkTrainer * trainer = new NetworkTrainer(net);
 
-	CostResult result = trainer->cost(dataSet);
-	std::cout << "Cost: " << result.error << std::endl;
+	for (int j = 0; j < 10; j++) {
+		CostResult result = trainer->cost(dataSet);
+		std::cout << "Cost: " << result.error << std::endl;
+	}
 
 	/*
 	5000

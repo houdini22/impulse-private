@@ -55,32 +55,36 @@ public:
         return this->neurons;
     }
 
-    void calculateDeltas(Eigen::VectorXd * prevLayerA, TypeVector sigma) {
+    void calculateDeltas(Eigen::VectorXd * prevLayerA, Eigen::VectorXd sigma) {
         for (int i = 0; i < sigma.size(); i++) {
             for (int j = 0; j < prevLayerA->size(); j++) {
-                (*this->neurons->at(i + 1)->deltas)(j) += (*prevLayerA)(j) * sigma.at(i);
+                (*this->neurons->at(i + 1)->deltas)(j) += (*prevLayerA)(j) * sigma(i);
             }
         }
     }
 
-    TypeVector backward(TypeVector sigma, AbstractLayer * nextLayer) {
-        TypeVector resultSigma;
+	Eigen::VectorXd backward(Eigen::VectorXd sigma, AbstractLayer * nextLayer) {
+		Eigen::VectorXd tmpResultSigma(this->size);
         for (int i = 0; i < this->size; i++) {
-            resultSigma.push_back(0.0);
+			tmpResultSigma(i) = 0.0;
         }
 
         NeuronContainer * neurons = nextLayer->getNeurons();
         for (int i = 1; i < nextLayer->getSize(); i++) {
-            TypeVector tmp = neurons->at(i)->backward(sigma.at(i - 1));
+            TypeVector tmp = neurons->at(i)->backward(sigma(i - 1));
             for (int j = 0; j < tmp.size(); j++) {
-                resultSigma.at(j) += tmp.at(j);
+				tmpResultSigma(j) += tmp.at(j);
             }
         }
-        resultSigma.erase(resultSigma.begin());
+
+		Eigen::VectorXd resultSigma(this->size - 1);
+		for (int i = 1; i < tmpResultSigma.size(); i++) {
+			resultSigma(i - 1) = tmpResultSigma(i);
+		}
 
 		Eigen::VectorXd * a = this->getA();
         for (int i = 0; i < resultSigma.size(); i++) {
-            resultSigma.at(i) *= (*a)(i + 1) * (1.0 - (*a)(i + 1));
+            resultSigma(i) *= (*a)(i + 1) * (1.0 - (*a)(i + 1));
         }
 
         return resultSigma;

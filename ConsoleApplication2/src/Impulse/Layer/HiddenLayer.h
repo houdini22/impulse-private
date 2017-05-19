@@ -13,7 +13,7 @@ public:
 
     HiddenLayer(int size, int prevSize) : AbstractLayer(size, prevSize) {
 		this->a = new Eigen::VectorXd(this->size);
-		this->z = new Eigen::VectorXd(this->size - 1);
+		this->z = new Eigen::VectorXd(this->size);
         this->createNeurons();
     }
 
@@ -40,7 +40,7 @@ public:
         for (NeuronContainer::iterator it = this->neurons->begin() + 1; it != this->neurons->end(); ++it) {
             double result = (*it)->forward(input);
 
-            (*this->z)(i) = result; // save to raw output values container
+            (*this->z)(i - 1) = result; // save to raw output values container
 
             double activated = this->activation(result);
             //save

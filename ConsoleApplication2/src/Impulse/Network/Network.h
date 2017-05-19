@@ -48,9 +48,9 @@ public:
     }
 
     void backward(TypeVector predictions, TypeVector output) {
-        TypeVector sigma;
+		Eigen::VectorXd sigma(predictions.size());
         for (int i = 0; i < predictions.size(); i++) {
-            sigma.push_back(predictions.at(i) - output.at(i));
+            sigma(i) = predictions.at(i) - output.at(i);
         }
 
         for (int i = this->size - 1; i > 0; i--) {
