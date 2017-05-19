@@ -51,7 +51,7 @@ TypeMatrix readData(std::string path) {
 int main()
 {
 	Eigen::initParallel();
-	omp_set_num_threads(4);
+	// omp_set_num_threads(4);
 	Eigen::setNbThreads(4);
 
 	NetworkBuilder builder = NetworkBuilder();

@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>E:\impulse\moje\ConsoleApplication2\ConsoleApplication2\src\eigen;$(IncludePath)</IncludePath>
+    <IncludePath>E:\impulse\moje\repo\impulse-private\ConsoleApplication2\src\Vendor\eigen;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>

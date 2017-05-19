@@ -10,6 +10,8 @@ class InputLayer : public AbstractLayer {
 public:
 
     InputLayer(int size) : AbstractLayer(size, 1) {
+		this->a = new Eigen::VectorXd(this->size);
+		this->z = new Eigen::VectorXd(this->size);
         this->createNeurons();
     }
 
@@ -28,18 +30,20 @@ public:
         double biasResult = this->neurons->at(0)->forward(input);
 
         output.push_back(biasResult);
-        this->a->push_back(biasResult);
-        this->z->push_back(biasResult);
+        (*this->a)(0) = biasResult;
+        (*this->z)(0) = biasResult;
 
         // start from 1 not bias neuron
         int i = 0; // key for input
         for (NeuronContainer::iterator it = this->neurons->begin() + 1; it != this->neurons->end(); ++it) {
-            TypeVector prepared = {input.at(i++)};
+            TypeVector prepared = {input.at(i)};
             double result = (*it)->forward(prepared);
 
             output.push_back(result);
-            this->a->push_back(result);
-            this->z->push_back(result);
+			(*this->a)(i + 1) = result;
+            (*this->z)(i + 1) = result;
+
+			i++;
         }
         return output;
     }

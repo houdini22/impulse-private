@@ -10,6 +10,7 @@ class OutputLayer : public HiddenLayer {
 public:
 
     OutputLayer(int size, int prevSize) : HiddenLayer(size, prevSize) {
+		this->a = new Eigen::VectorXd(prevSize);
     }
 
     TypeVector forward(TypeVector input) {

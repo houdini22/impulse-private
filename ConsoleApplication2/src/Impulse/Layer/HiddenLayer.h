@@ -12,6 +12,8 @@ class HiddenLayer : public AbstractLayer {
 public:
 
     HiddenLayer(int size, int prevSize) : AbstractLayer(size, prevSize) {
+		this->a = new Eigen::VectorXd(this->size);
+		this->z = new Eigen::VectorXd(this->size - 1);
         this->createNeurons();
     }
 
@@ -31,19 +33,21 @@ public:
         double biasResult = this->neurons->at(0)->forward(input);
 
         output.push_back(biasResult); // save to output layer
-        this->a->push_back(biasResult); // save to activated values container
+        (*this->a)(0) = (biasResult); // save to activated values container
 
         // start from 1 not bias neuron
+		int i = 1;
         for (NeuronContainer::iterator it = this->neurons->begin() + 1; it != this->neurons->end(); ++it) {
             double result = (*it)->forward(input);
 
-            this->z->push_back(result); // save to raw output values container
+            (*this->z)(i) = result; // save to raw output values container
 
             double activated = this->activation(result);
             //save
             output.push_back(activated);
-            this->a->push_back(activated);
+            (*this->a)(i) = activated;
 
+			i++;
         }
         return output;
     }
