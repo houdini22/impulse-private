@@ -87,6 +87,18 @@ public:
         result.error = error;
         result.gradient = resultGradient;
 
+		for (LayerContainer::iterator it = net->getLayers()->begin() + 1; it != net->getLayers()->end(); ++it) {
+			for (NeuronContainer::iterator it2 = (*it)->getNeurons()->begin() + 1; it2 != (*it)->getNeurons()->end(); ++it2) {
+				TypeVector * deltas = (*it2)->deltas;
+				for (int i = 0; i < 1; i++) {
+					std::cout << deltas->at(i) << std::endl;
+					break;
+				}
+				break;
+			}
+			break;
+		}
+
         return result;
     }
    

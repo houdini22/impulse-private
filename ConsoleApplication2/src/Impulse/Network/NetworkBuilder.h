@@ -51,6 +51,7 @@ public:
 		std::ifstream fileStream(path);
 		json jsonFile;
 		fileStream >> jsonFile;
+		fileStream.close();
 
 		json savedLayers = jsonFile["layers"];
 		int i = 0;

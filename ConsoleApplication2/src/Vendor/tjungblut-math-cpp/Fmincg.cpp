@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <algorithm>
 #include <iostream>
+#include <ctime>
 
 #include "Fmincg.h"
 #include "DenseVector.h"
@@ -98,6 +99,8 @@ namespace tjmath {
 
 		double d1 = (*s * -1.0).dot(*s); // this is the slope
 		double z1 = red / (1.0 - d1); // initial step is red/(|s|+1)
+
+		clock_t begin = clock();
 
 		while (i < abs(length)) {// while not finished
 			i = i + (length > 0 ? 1 : 0);// count iterations?!
@@ -214,7 +217,9 @@ namespace tjmath {
 			if (success == 1) { // if line search succeeded
 				f1 = f2;
 				if (verbose) {
-					std::cout << "Iteration " << i << " Cost: " << f1 << std::endl;
+					clock_t end = clock();
+					double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+					std::cout << "Iteration: " << i << " Cost: " << f1 << " Time: " << elapsed_secs << std::endl;
 					// printf("Iteration %d | Cost: %f\r", i, f1);
 				}
 				// Polack-Ribiere direction: s =

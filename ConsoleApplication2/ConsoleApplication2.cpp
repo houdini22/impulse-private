@@ -10,6 +10,8 @@
 #include <ctime>
 #include <experimental/filesystem>
 #include <filesystem>
+#include <Eigen/Core>
+#include <Eigen/Dense>
 
 namespace fs = std::experimental::filesystem::v1;
 
@@ -48,17 +50,108 @@ TypeMatrix readData(std::string path) {
 
 int main()
 {
-	NetworkBuilder * builder = new NetworkBuilder();
-	// Network * net = builder.buildFromJSON("e:/network.json");
+	Eigen::initParallel();
 
-	clock_t buildStart = clock();
-	
+	NetworkBuilder builder = NetworkBuilder();
+
+	builder.addInputLayer(400);
+	builder.addHiddenLayer(25);
+	builder.addOutputLayer(10);
+	Network * net = builder.getNetwork();
+
+	// std::cout << net->getSize() << std::endl; // check network size
+
+	// load weights
+	TypeMatrix w1 = readData("data/ex4weights_1.txt");
+	TypeMatrix w2 = readData("data/ex4weights_2.txt");
+
+	// set weights
+	int i = 0;
+	for (LayerContainer::iterator it = net->getLayers()->begin(); it != net->getLayers()->end(); ++it) {
+		if (i > 0) {
+			int k = 0;
+			for (NeuronContainer::iterator it2 = (*it)->getNeurons()->begin() + 1; it2 != (*it)->getNeurons()->end(); ++it2) {
+				TypeVector * weights = (*it2)->weights;
+				for (int j = 0; j < weights->size(); j++) {
+					if (i == 1) {
+						weights->at(j) = w1.at(k).at(j);
+					}
+					else {
+						weights->at(j) = w2.at(k).at(j);
+					}
+				}
+				k++;
+			}
+		}
+		i++;
+	}
+
+	// debug weights
+	// std::cout << "[1][1][0]" << net->getLayers()->at(1)->getNeurons()->at(1)->weights->at(0) << std::endl;
+	// std::cout << "[1][1][400]" << net->getLayers()->at(1)->getNeurons()->at(1)->weights->at(400) << std::endl;
+	// std::cout << "[1][25][0]" << net->getLayers()->at(1)->getNeurons()->at(25)->weights->at(0) << std::endl;
+	// std::cout << "[1][25][400]" << net->getLayers()->at(1)->getNeurons()->at(25)->weights->at(400) << std::endl;
+
+	// std::cout << "[2][1][0]" << net->getLayers()->at(2)->getNeurons()->at(1)->weights->at(0) << std::endl;
+	// std::cout << "[2][1][25]" << net->getLayers()->at(2)->getNeurons()->at(1)->weights->at(25) << std::endl;
+	// std::cout << "[2][10][0]" << net->getLayers()->at(2)->getNeurons()->at(10)->weights->at(0) << std::endl;
+	// std::cout << "[2][10][25]" << net->getLayers()->at(2)->getNeurons()->at(10)->weights->at(25) << std::endl;
+
+	// load input
+	TypeMatrix input = readData("data/ex4data1_x.txt");
+
+	// load output
+	TypeMatrix output = readData("data/ex4data1_y.txt");
+
+	std::cout << input.size() << std::endl;
+
+	TypeVector netOutput = net->forward(input.at(0));
+	for (int i = 0; i < netOutput.size(); i++) {
+		std::cout << "Output " << i << ": " << netOutput.at(i) << std::endl;
+	}
+
+
+	DataSetManager manager = DataSetManager();
+	DataSet dataSet = manager.createSet(input, output);
+
+	NetworkTrainer * trainer = new NetworkTrainer(net);
+
+	CostResult result = trainer->cost(dataSet);
+	std::cout << "Cost: " << result.error << std::endl;
+
+	/*
+	5000
+	Output 0: 0.000112662
+	Output 1: 0.00174128
+	Output 2: 0.00252697
+	Output 3: 1.84032e-05
+	Output 4: 0.00936264
+	Output 5: 0.0039927
+	Output 6: 0.00551518
+	Output 7: 0.000401468
+	Output 8: 0.00648072
+	Output 9: 0.995734
+	0.309359
+	Cost: 0.287629
+	*/
+
+	/*
+	EIGEN
+	Eigen::VectorXd vec(10);
+	for (int i = 0; i < vec.size(); ++i) {
+	vec[i] = i;
+	}
+	std::cout << vec << '\n';
+
+	return 0;
+	NetworkBuilder * builder = new NetworkBuilder();
+
 	builder->addInputLayer(38400);
 	builder->addHiddenLayer(300);
 	builder->addOutputLayer(2);
 
 	DataSetManager manager = DataSetManager();
-	
+
 	TypeMatrix input;
 	TypeMatrix output;
 
@@ -67,36 +160,36 @@ int main()
 	std::string path = "E:\\impulse\\gen2\\samples";
 	int i = 0;
 	for (auto & p : fs::directory_iterator(path)) {
-		if (i > 2000) break;
+	if (i > 500) break;
 
-		if (i % 100 == 0) {
-			std::cout << i << std::endl;
-		}
+	if (i % 100 == 0) {
+	std::cout << i << std::endl;
+	}
 
-		std::stringstream path;
-		path << p;
+	std::stringstream path;
+	path << p;
 
-		std::ifstream fileStream(path.str());
-		json jsonFile;
-		fileStream >> jsonFile;
+	std::ifstream fileStream(path.str());
+	json jsonFile;
+	fileStream >> jsonFile;
 
-		TypeVector inputRow;
-		json x = jsonFile["x"];
-		for (auto it = x.begin(); it != x.end(); ++it) {
-			inputRow.push_back(it.value());
-		}
-		input.push_back(inputRow);
+	TypeVector inputRow;
+	json x = jsonFile["x"];
+	for (auto it = x.begin(); it != x.end(); ++it) {
+	inputRow.push_back(it.value());
+	}
+	input.push_back(inputRow);
 
-		double outputX = jsonFile["y"]["x"];
-		double outputY = jsonFile["y"]["y"];
+	double outputX = jsonFile["y"]["x"];
+	double outputY = jsonFile["y"]["y"];
 
-		TypeVector outputRow;
-		outputRow.push_back(outputX);
-		outputRow.push_back(outputY);
+	TypeVector outputRow;
+	outputRow.push_back(outputX);
+	outputRow.push_back(outputY);
 
-		output.push_back(outputRow);
+	output.push_back(outputRow);
 
-		i++;
+	i++;
 	}
 
 	Network * network = builder->getNetwork();
@@ -106,7 +199,7 @@ int main()
 	NetworkTrainer * trainer = new NetworkTrainer(network);
 
 	trainer->setRegularization(0.0);
-	trainer->setLearningIterations(10);
+	trainer->setLearningIterations(3);
 
 	std::cout << "Start training." << std::endl;
 	trainer->train(dataSet);
@@ -115,6 +208,42 @@ int main()
 
 	NetworkSerializer * serializer = new NetworkSerializer(network);
 	serializer->toJSON("e:/network.json");
+	*/
+
+	// TypeVector netOut = network->forward(input.at(0));
+	
+	// std::cout << netOut.at(0) << " " << netOut.at(1) << std::endl;
+	// std::cout << output.at(0).at(0) << " " << output.at(0).at(1) << std::endl;
+	/*
+	for (int i = 0; i < 10; i++) {
+	TypeVector netOut = network->forward(input.at(i * 15));
+	std::stringstream result;
+	std::copy(netOut.begin(), netOut.end(), std::ostream_iterator<double>(result, " "));
+
+	std::stringstream result2;
+	std::copy(output.at(i * 15).begin(), output.at(i * 15).end(), std::ostream_iterator<double>(result2, " "));
+
+	std::cout << result.str() << " " << result2.str() << std::endl;
+	}
+
+	NetworkTrainer * trainer = new NetworkTrainer(network);
+
+	trainer->setRegularization(0.0);
+
+	CostResult result2 = trainer->cost(dataSet);
+	std::cout << "Cost: " << result2.error << std::endl;
+
+	trainer->setLearningIterations(3);
+
+	std::cout << "Start training." << std::endl;
+	trainer->train(dataSet);
+	CostResult result2 = trainer->cost(dataSet);
+	std::cout << "Cost: " << result2.error << std::endl;
+
+	NetworkSerializer * serializer = new NetworkSerializer(network);
+	serializer->toJSON("e:/network.json");
+	*/
+
 
 	/*
 	std::cout << "Start training." << std::endl;
