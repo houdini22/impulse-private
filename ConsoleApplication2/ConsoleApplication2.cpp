@@ -8,6 +8,10 @@
 #include <vector>
 #include <ios>
 #include <ctime>
+#include <experimental/filesystem>
+#include <filesystem>
+
+namespace fs = std::experimental::filesystem::v1;
 
 #include "src/Impulse/Network/NetworkBuilder.h"
 #include "src/Impulse/Network/NetworkTrainer.h"
@@ -47,13 +51,100 @@ int main()
 	NetworkBuilder * builder = new NetworkBuilder();
 	// Network * net = builder.buildFromJSON("e:/network.json");
 
-	builder->addInputLayer(153600);
+	clock_t buildStart = clock();
+	
+	builder->addInputLayer(38400);
 	builder->addHiddenLayer(300);
-	builder->addOutputLayer(9);
+	builder->addOutputLayer(2);
+
+	DataSetManager manager = DataSetManager();
+	
+	TypeMatrix input;
+	TypeMatrix output;
+
+	std::cout << "Loading dataset." << std::endl;
+
+	std::string path = "E:\\impulse\\gen2\\samples";
+	int i = 0;
+	for (auto & p : fs::directory_iterator(path)) {
+		if (i > 2000) break;
+
+		if (i % 100 == 0) {
+			std::cout << i << std::endl;
+		}
+
+		std::stringstream path;
+		path << p;
+
+		std::ifstream fileStream(path.str());
+		json jsonFile;
+		fileStream >> jsonFile;
+
+		TypeVector inputRow;
+		json x = jsonFile["x"];
+		for (auto it = x.begin(); it != x.end(); ++it) {
+			inputRow.push_back(it.value());
+		}
+		input.push_back(inputRow);
+
+		double outputX = jsonFile["y"]["x"];
+		double outputY = jsonFile["y"]["y"];
+
+		TypeVector outputRow;
+		outputRow.push_back(outputX);
+		outputRow.push_back(outputY);
+
+		output.push_back(outputRow);
+
+		i++;
+	}
+
+	Network * network = builder->getNetwork();
+	std::cout << "Builing net." << std::endl;
+	DataSet dataSet = manager.createSet(input, output);
+
+	NetworkTrainer * trainer = new NetworkTrainer(network);
+
+	trainer->setRegularization(0.0);
+	trainer->setLearningIterations(10);
+
+	std::cout << "Start training." << std::endl;
+	trainer->train(dataSet);
+	CostResult result2 = trainer->cost(dataSet);
+	std::cout << "Cost: " << result2.error << std::endl;
+
+	NetworkSerializer * serializer = new NetworkSerializer(network);
+	serializer->toJSON("e:/network.json");
+
+	/*
+	std::cout << "Start training." << std::endl;
+	trainer->train(dataSet);
+	CostResult result2 = trainer->cost(dataSet);
+	std::cout << "Cost: " << result2.error << std::endl;
+	*/
+
+	/*
+	for (int i = 0; i < 10; i++) {
+		clock_t begin = clock();
+		TypeVector netOutput = network->forward(input.at(i));
+		clock_t end = clock();
+		double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+		for (int i = 0; i < netOutput.size(); i++) {
+			std::cout << "Output " << i << ": " << netOutput.at(i) << std::endl;
+		}
+		std::cout << elapsed_secs << std::endl;
+	}
+	*/
+
+	/*
+	clock_t buildEnd = clock();
+	std::cout << "Build: " << double(buildEnd - buildStart) / CLOCKS_PER_SEC << std::endl;
+	
+
 	Network * net = builder->getNetwork();
 
 	TypeVector testInput;
-	for (int i = 0; i < 153600; i++) {
+	for (int i = 0; i < 38400; i++) {
 		testInput.push_back(1);
 	}
 	
@@ -64,6 +155,7 @@ int main()
 		double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 		std::cout << elapsed_secs << std::endl;
 	}
+	*/
 
 	/*
 	clock_t begin = clock();
