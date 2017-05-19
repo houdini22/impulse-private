@@ -47,6 +47,20 @@ TypeMatrix readData(std::string path) {
 	return result;
 }
 
+Eigen::MatrixXd readMatrix(std::string path)
+{
+	TypeMatrix matrix = readData(path);
+	int rows = matrix.size();
+	int cols = matrix.at(0).size();
+
+	Eigen::MatrixXd result(rows, cols);
+	for (int i = 0; i < rows; i++)
+		for (int j = 0; j < cols; j++)
+			result(i, j) = matrix.at(i).at(j);
+
+	return result;
+};
+
 
 int main()
 {
@@ -100,22 +114,21 @@ int main()
 	// std::cout << "[2][10][25]" << net->getLayers()->at(2)->getNeurons()->at(10)->weights->at(25) << std::endl;
 
 	// load input
-	TypeMatrix input = readData("data/ex4data1_x.txt");
+	Eigen::MatrixXd input = readMatrix("data/ex4data1_x.txt");
 
 	// load output
-	TypeMatrix output = readData("data/ex4data1_y.txt");
+	Eigen::MatrixXd output = readMatrix("data/ex4data1_y.txt");
 
-	std::cout << input.size() << std::endl;
-
-	TypeVector netOutput = net->forward(input.at(0));
+	/*
+	Eigen::VectorXd netOutput = net->forward(input(0));
 	for (int i = 0; i < netOutput.size(); i++) {
-		std::cout << "Output " << i << ": " << netOutput.at(i) << std::endl;
+		std::cout << "Output " << i << ": " << netOutput(i) << std::endl;
 	}
-
+	*/
 
 	DataSetManager manager = DataSetManager();
 	DataSet dataSet = manager.createSet(input, output);
-
+	
 	NetworkTrainer * trainer = new NetworkTrainer(net);
 
 	for (int j = 0; j < 10; j++) {

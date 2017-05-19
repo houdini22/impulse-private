@@ -71,9 +71,9 @@ public:
 
         NeuronContainer * neurons = nextLayer->getNeurons();
         for (int i = 1; i < nextLayer->getSize(); i++) {
-            TypeVector tmp = neurons->at(i)->backward(sigma(i - 1));
+			Eigen::VectorXd tmp = neurons->at(i)->backward(sigma(i - 1));
             for (int j = 0; j < tmp.size(); j++) {
-				tmpResultSigma(j) += tmp.at(j);
+				tmpResultSigma(j) += tmp(j);
             }
         }
 
@@ -117,7 +117,7 @@ public:
         return sum;
     }
 
-    virtual TypeVector forward(TypeVector input) = 0;
+    virtual Eigen::VectorXd forward(Eigen::VectorXd input) = 0;
 };
 
 #endif /* LAYER_H */

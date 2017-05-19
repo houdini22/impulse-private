@@ -22,24 +22,25 @@ public:
         }
     }
 
-    TypeVector forward(TypeVector input) {
+	Eigen::VectorXd forward(Eigen::VectorXd input) {
         this->reset();
-        TypeVector output;
+		Eigen::VectorXd output(this->size);
 
         // get value from bias neuron
         double biasResult = this->neurons->at(0)->forward(input);
 
-        output.push_back(biasResult);
+        output(0) = biasResult;
         (*this->a)(0) = biasResult;
         (*this->z)(0) = biasResult;
 
         // start from 1 not bias neuron
         int i = 0; // key for input
         for (NeuronContainer::iterator it = this->neurons->begin() + 1; it != this->neurons->end(); ++it) {
-            TypeVector prepared = {input.at(i)};
+			Eigen::VectorXd prepared(1);
+			prepared(0) = input(i);
             double result = (*it)->forward(prepared);
 
-            output.push_back(result);
+            output(i + 1) = result;
 			(*this->a)(i + 1) = result;
             (*this->z)(i + 1) = result;
 

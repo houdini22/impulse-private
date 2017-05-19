@@ -13,11 +13,13 @@ public:
 		this->a = new Eigen::VectorXd(prevSize);
     }
 
-    TypeVector forward(TypeVector input) {
-        TypeVector result = HiddenLayer::forward(input);
-        // remove first bias output
-        result.erase(result.begin());
-        return result;
+	Eigen::VectorXd forward(Eigen::VectorXd input) {
+		Eigen::VectorXd result = HiddenLayer::forward(input);
+		Eigen::VectorXd newResult(result.size() - 1);
+		for (int i = 1; i < result.size(); i++) {
+			newResult(i - 1) = result(i);
+		}
+		return newResult;
     }
 };
 

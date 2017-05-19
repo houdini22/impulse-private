@@ -5,10 +5,7 @@
 
 #include "../Math/Vector.h"
 
-typedef std::map<std::string, TypeVector> MapSample;
-
-class DataSetSample {
-};
+typedef std::map<std::string, Eigen::VectorXd> MapSample;
 
 #endif /* SAMPLE_H */
 

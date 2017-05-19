@@ -39,18 +39,18 @@ public:
         return this->layers;
     }
 
-    TypeVector forward(TypeVector input) {
-        TypeVector output = input;
+	Eigen::VectorXd forward(Eigen::VectorXd input) {
+		Eigen::VectorXd output = Eigen::VectorXd(input);
         for (LayerContainer::iterator it = this->layers->begin(); it != this->layers->end(); ++it) {
             output = (*it)->forward(output);
         }
         return output;
     }
 
-    void backward(TypeVector predictions, TypeVector output) {
+    void backward(Eigen::VectorXd predictions, Eigen::VectorXd output) {
 		Eigen::VectorXd sigma(predictions.size());
         for (int i = 0; i < predictions.size(); i++) {
-            sigma(i) = predictions.at(i) - output.at(i);
+            sigma(i) = predictions(i) - output(i);
         }
 
         for (int i = this->size - 1; i > 0; i--) {

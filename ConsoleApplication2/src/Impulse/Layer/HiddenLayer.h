@@ -24,15 +24,15 @@ public:
         }
     }
 
-    TypeVector forward(TypeVector input) {
+	Eigen::VectorXd forward(Eigen::VectorXd input) {
         this->reset();
 
-        TypeVector output;
+		Eigen::VectorXd output(this->neurons->size());
 
         // get value from bias neuron
         double biasResult = this->neurons->at(0)->forward(input);
 
-        output.push_back(biasResult); // save to output layer
+        output(0) = biasResult; // save to output layer
         (*this->a)(0) = (biasResult); // save to activated values container
 
         // start from 1 not bias neuron
@@ -44,7 +44,7 @@ public:
 
             double activated = this->activation(result);
             //save
-            output.push_back(activated);
+            output(i) = activated;
             (*this->a)(i) = activated;
 
 			i++;

@@ -33,10 +33,10 @@ public:
         return this->size;
     }
 
-    TypeVector backward(double sigma) {
-        TypeVector result;
+	Eigen::VectorXd backward(double sigma) {
+		Eigen::VectorXd result(this->weights->size());
         for (int i = 0; i < this->weights->size(); i++) {
-            result.push_back(sigma * (*this->weights)(i));
+            result(i) = sigma * (*this->weights)(i);
         }
         return result;
     }
@@ -58,7 +58,7 @@ public:
         return sum;
     }
 
-    virtual double forward(TypeVector input) = 0;
+    virtual double forward(Eigen::VectorXd input) = 0;
 };
 
 #endif /* NEURON_H */

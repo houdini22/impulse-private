@@ -9,8 +9,8 @@ public:
     InputNeuron() : AbstractNeuron(1) {
     }
 
-    double forward(TypeVector input) {
-        return input[0];
+    double forward(Eigen::VectorXd input) {
+        return input(0);
     }
 };
 

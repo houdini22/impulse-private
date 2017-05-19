@@ -61,11 +61,11 @@ public:
 		}
 
         for (int i = 0; i < samples.size(); i++) {
-            TypeVector predictions = net->forward(samples.at(i)["input"]);
-            TypeVector output = samples.at(i)["output"];
+			Eigen::VectorXd predictions = net->forward(samples.at(i)["input"]);
+			Eigen::VectorXd output = samples.at(i)["output"];
             net->backward(predictions, output);
             for (int j = 0; j < predictions.size(); j++) {
-                sumErrors += ((output.at(j) * log(predictions.at(j))) + ((1 - output.at(j)) * log(1 - predictions.at(j))));
+                sumErrors += ((output(j) * log(predictions(j))) + ((1 - output(j)) * log(1 - predictions(j))));
             }
         }
 

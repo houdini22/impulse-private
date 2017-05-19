@@ -9,22 +9,24 @@
 class DataSetManager {
 public:
 
-    DataSet createSet(TypeMatrix input, TypeMatrix output) {
+    DataSet createSet(Eigen::MatrixXd input, Eigen::MatrixXd output) {
         DataSet set = DataSet();
 
-        for (int i = 0; i < input.size(); i++) {
-            
-			TypeVector newOutput;
-            double realValue = output.at(i).at(0);
-            for (int j = 1; j <= 10; j++) {
-                newOutput.push_back(j == realValue ? 1.0 : 0.0);
-            }
-			
+        for (int i = 0; i < input.rows(); i++) {
 
+			std::cout << output(i) << " " << i << std::endl;
+            
+			Eigen::VectorXd newOutput(10);
+            double realValue = output(i, 0);
+            for (int j = 1; j <= 10; j++) {
+                newOutput(j - 1) = j == realValue ? 1.0 : 0.0;
+            }
+
+			Eigen::VectorXd newInput(input.row(i));
+		
             MapSample dataSample = MapSample();
-            dataSample["input"] = input.at(i);
+			dataSample["input"] = newInput;
             dataSample["output"] = newOutput;
-			// dataSample["output"] = output.at(i);
 
             set.addSample(dataSample);
         }

@@ -24,10 +24,10 @@ public:
         }
     }
 
-    double forward(TypeVector input) {
+    double forward(Eigen::VectorXd input) {
         double result = 0.0;
         for (int i = 0; i < input.size(); i++) {
-            result += input.at(i) * (*this->weights)(i);
+            result += input(i) * (*this->weights)(i);
         }
         return result;
     }

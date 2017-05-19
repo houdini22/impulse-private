@@ -9,7 +9,7 @@ public:
     BiasNeuron() : AbstractNeuron(1) {
     }
 
-    double forward(TypeVector input) {
+    double forward(Eigen::VectorXd input) {
         return 1.0;
     }
 };
