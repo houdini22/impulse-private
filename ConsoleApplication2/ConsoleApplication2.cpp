@@ -51,6 +51,8 @@ TypeMatrix readData(std::string path) {
 int main()
 {
 	Eigen::initParallel();
+	omp_set_num_threads(4);
+	Eigen::setNbThreads(4);
 
 	NetworkBuilder builder = NetworkBuilder();
 
@@ -71,13 +73,13 @@ int main()
 		if (i > 0) {
 			int k = 0;
 			for (NeuronContainer::iterator it2 = (*it)->getNeurons()->begin() + 1; it2 != (*it)->getNeurons()->end(); ++it2) {
-				TypeVector * weights = (*it2)->weights;
+				Eigen::VectorXd * weights = (*it2)->weights;
 				for (int j = 0; j < weights->size(); j++) {
 					if (i == 1) {
-						weights->at(j) = w1.at(k).at(j);
+						(*weights)(j) = w1.at(k).at(j);
 					}
 					else {
-						weights->at(j) = w2.at(k).at(j);
+						(*weights)(j) = w2.at(k).at(j);
 					}
 				}
 				k++;

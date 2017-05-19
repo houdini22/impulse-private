@@ -61,7 +61,7 @@ public:
     void calculateDeltas(TypeVector * prevLayerA, TypeVector sigma) {
         for (int i = 0; i < sigma.size(); i++) {
             for (int j = 0; j < prevLayerA->size(); j++) {
-                this->neurons->at(i + 1)->deltas->at(j) += prevLayerA->at(j) * sigma.at(i);
+                (*this->neurons->at(i + 1)->deltas)(j) += prevLayerA->at(j) * sigma.at(i);
             }
         }
     }
@@ -102,7 +102,7 @@ public:
         for (int i = 1; i < this->size; i++) {
             gradient.push_back(TypeVector());
             for (int j = 0; j < this->neurons->at(i)->deltas->size(); j++) {
-                gradient.at(i - 1).push_back((this->neurons->at(i)->deltas->at(j) / (double) numSamples) + penalty.at(i - 1).at(j));
+                gradient.at(i - 1).push_back(((*this->neurons->at(i)->deltas)(j) / (double) numSamples) + penalty.at(i - 1).at(j));
             }
         }
         return gradient;

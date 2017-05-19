@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <complex>
+#include <Eigen/Dense>
 #include "../Math/Matrix.h"
 #include "../Math/Vector.h"
 
@@ -11,20 +12,20 @@ class AbstractNeuron {
 protected:
     int size;
 public:
-    TypeVector * weights;
-    TypeVector * deltas;
+	Eigen::VectorXd * weights;
+	Eigen::VectorXd * deltas;
 
     AbstractNeuron(int size) {
         this->size = size;
-        this->weights = new TypeVector;
-        this->deltas = new TypeVector;
+        this->weights = new Eigen::VectorXd(size);
+        this->deltas = new Eigen::VectorXd(size);
     }
 
     ~AbstractNeuron() {
-        this->weights->clear();
+		this->weights->resize(0);
         delete this->weights;
 
-        this->deltas->clear();
+		this->deltas->resize(0);
         delete this->deltas;
     }
 
@@ -35,7 +36,7 @@ public:
     TypeVector backward(double sigma) {
         TypeVector result;
         for (int i = 0; i < this->weights->size(); i++) {
-            result.push_back(sigma * this->weights->at(i));
+            result.push_back(sigma * (*this->weights)(i));
         }
         return result;
     }
@@ -44,7 +45,7 @@ public:
         TypeVector result;
         result.push_back(0.0);
         for (int i = 1; i < this->size; i++) {
-            result.push_back((regularization / (double) numSamples) * this->weights->at(i));
+            result.push_back((regularization / (double) numSamples) * (*this->weights)(i));
         }
         return result;
     }
@@ -52,7 +53,7 @@ public:
     double errorPenalty() {
         double sum = 0.0;
         for (int i = 1; i < this->size; i++) {
-            sum += pow(this->weights->at(i), 2.0);
+            sum += pow((*this->weights)(i), 2.0);
         }
         return sum;
     }

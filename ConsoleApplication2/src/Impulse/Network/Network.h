@@ -66,9 +66,9 @@ public:
 		std::vector<double> result;
 		for (auto layerIterator = this->layers->begin() + 1; layerIterator != this->layers->end(); layerIterator++) {
 			for (NeuronContainer::iterator neuronIterator = (*layerIterator)->getNeurons()->begin() + 1; neuronIterator != (*layerIterator)->getNeurons()->end(); ++neuronIterator) {
-				TypeVector * weights = (*neuronIterator)->weights;
+				Eigen::VectorXd * weights = (*neuronIterator)->weights;
 				for (int j = 0; j < weights->size(); j++) {
-					result.push_back(weights->at(j));
+					result.push_back((*weights)(j));
 				}
 			}
 		}
@@ -79,9 +79,9 @@ public:
 		int i = 0;
 		for (LayerContainer::iterator it = this->getLayers()->begin() + 1; it != this->getLayers()->end(); ++it) {
 			for (NeuronContainer::iterator it2 = (*it)->getNeurons()->begin() + 1; it2 != (*it)->getNeurons()->end(); ++it2) {
-				TypeVector * weights = (*it2)->weights;
+				Eigen::VectorXd * weights = (*it2)->weights;
 				for (int j = 0; j < weights->size(); j++) {
-					weights->at(j) = rolledTheta.at(i++);
+					(*weights)(j) = rolledTheta.at(i++);
 				}
 			}
 		}
