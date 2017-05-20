@@ -21,6 +21,7 @@ public:
             }
 
 			Eigen::VectorXd newInput(input.row(i));
+			// Eigen::VectorXd newOutput(output.row(i));
 		
             MapSample dataSample = MapSample();
 			dataSample["input"] = newInput;

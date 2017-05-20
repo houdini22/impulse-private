@@ -66,8 +66,82 @@ int main()
 {
 	Eigen::initParallel();
 	// omp_set_num_threads(4);
-	Eigen::setNbThreads(4);
+	// Eigen::setNbThreads(4);
 
+	/*MOJE
+	NetworkBuilder * builder = new NetworkBuilder();
+
+	// Network * net = builder.buildFromJSON("e:/network.json");
+
+	clock_t buildStart = clock();
+
+	builder->addInputLayer(38400);
+	builder->addHiddenLayer(300);
+	builder->addOutputLayer(2);
+	
+	DataSetManager manager = DataSetManager();
+
+	Eigen::MatrixXd input(500, 38400);
+	Eigen::MatrixXd output(500, 2);
+
+	std::cout << "Loading dataset." << std::endl;
+
+	std::string path = "E:\\impulse\\gen2\\samples";
+	int i = 0;
+	for (auto & p : fs::directory_iterator(path)) {
+		if (i == 500) break;
+
+		if (i % 50 == 0) {
+			std::cout << i << std::endl;
+		}
+
+		std::stringstream path;
+		path << p;
+
+		std::ifstream fileStream(path.str());
+		json jsonFile;
+		fileStream >> jsonFile;
+
+		json x = jsonFile["x"];
+		int j = 0;
+		for (auto it = x.begin(); it != x.end(); ++it) {
+			input(i, j) = it.value();
+			j++;
+		}
+		
+		double outputX = jsonFile["y"]["x"];
+		double outputY = jsonFile["y"]["y"];
+
+		output(i, 0) = outputX;
+		output(i, 1) = outputY;
+
+		i++;
+	}
+
+	// std::cout << "Restoring network state." << std::endl;
+
+	Network * network = builder->getNetwork();
+	// Network * network = builder->buildFromJSON("e:/network.json");
+	DataSet dataSet = manager.createSet(input, output);
+	NetworkTrainer * trainer = new NetworkTrainer(network);
+
+	trainer->setRegularization(0.0);
+	trainer->setLearningIterations(50);
+
+	// std::cout << "Calculating cost." << std::endl;
+	// CostResult result = trainer->cost(dataSet);
+	// std::cout << "Cost: " << result.error << std::endl;
+
+	std::cout << "Start training." << std::endl;
+	trainer->train(dataSet);
+	CostResult result2 = trainer->cost(dataSet);
+	std::cout << "Cost: " << result2.error << std::endl;
+
+	NetworkSerializer * serializer = new NetworkSerializer(network);
+	serializer->toJSON("e:/network.json");
+	*/
+
+	
 	NetworkBuilder builder = NetworkBuilder();
 
 	builder.addInputLayer(400);
@@ -119,16 +193,9 @@ int main()
 	// load output
 	Eigen::MatrixXd output = readMatrix("data/ex4data1_y.txt");
 
-	/*
-	Eigen::VectorXd netOutput = net->forward(input(0));
-	for (int i = 0; i < netOutput.size(); i++) {
-		std::cout << "Output " << i << ": " << netOutput(i) << std::endl;
-	}
-	*/
-
 	DataSetManager manager = DataSetManager();
 	DataSet dataSet = manager.createSet(input, output);
-	
+
 	NetworkTrainer * trainer = new NetworkTrainer(net);
 	trainer->setLearningIterations(100);
 
@@ -137,26 +204,20 @@ int main()
 	CostResult result = trainer->cost(dataSet);
 	std::cout << "Cost: " << result.error << std::endl;
 
+	std::cout << net->forward(input.row(0)) << std::endl;
+	
+	return 0;
+
 	std::cout << "Start training." << std::endl;
 	trainer->train(dataSet);
 
-	return 0;
-
-	/*
 	
-	CostResult result2 = trainer->cost(dataSet);
-	std::cout << "Cost: " << result2.error << std::endl;
-
-	std::cout << result.gradient.at(0) << " " << result.gradient.at(1) << " " << result.gradient.at(2) << " " << result.gradient.size() << std::endl;
-	std::cout << result2.gradient.at(0) << " " << result2.gradient.at(1) << " " << result2.gradient.at(2) << std::endl;
-
-	*/
-
 	std::cout << "Start training." << std::endl;
 	trainer->train(dataSet);
 
 	result = trainer->cost(dataSet);
 	std::cout << "Cost: " << result.error << std::endl;
+	
 	/*
 	5000
 	Output 0: 0.000112662
@@ -249,7 +310,7 @@ int main()
 	*/
 
 	// TypeVector netOut = network->forward(input.at(0));
-	
+
 	// std::cout << netOut.at(0) << " " << netOut.at(1) << std::endl;
 	// std::cout << output.at(0).at(0) << " " << output.at(0).at(1) << std::endl;
 	/*
@@ -292,35 +353,35 @@ int main()
 
 	/*
 	for (int i = 0; i < 10; i++) {
-		clock_t begin = clock();
-		TypeVector netOutput = network->forward(input.at(i));
-		clock_t end = clock();
-		double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-		for (int i = 0; i < netOutput.size(); i++) {
-			std::cout << "Output " << i << ": " << netOutput.at(i) << std::endl;
-		}
-		std::cout << elapsed_secs << std::endl;
+	clock_t begin = clock();
+	TypeVector netOutput = network->forward(input.at(i));
+	clock_t end = clock();
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	for (int i = 0; i < netOutput.size(); i++) {
+	std::cout << "Output " << i << ": " << netOutput.at(i) << std::endl;
+	}
+	std::cout << elapsed_secs << std::endl;
 	}
 	*/
 
 	/*
 	clock_t buildEnd = clock();
 	std::cout << "Build: " << double(buildEnd - buildStart) / CLOCKS_PER_SEC << std::endl;
-	
+
 
 	Network * net = builder->getNetwork();
 
 	TypeVector testInput;
 	for (int i = 0; i < 38400; i++) {
-		testInput.push_back(1);
+	testInput.push_back(1);
 	}
-	
+
 	for (int i = 0; i < 10; i++) {
-		clock_t begin = clock();
-		TypeVector netOutput = net->forward(testInput);
-		clock_t end = clock();
-		double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-		std::cout << elapsed_secs << std::endl;
+	clock_t begin = clock();
+	TypeVector netOutput = net->forward(testInput);
+	clock_t end = clock();
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	std::cout << elapsed_secs << std::endl;
 	}
 	*/
 
@@ -330,7 +391,7 @@ int main()
 	clock_t end = clock();
 
 	for (int i = 0; i < netOutput.size(); i++) {
-		std::cout << "Output " << i << ": " << netOutput.at(i) << std::endl;
+	std::cout << "Output " << i << ": " << netOutput.at(i) << std::endl;
 	}
 
 	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
@@ -347,22 +408,22 @@ int main()
 	/*
 	int i = 0;
 	for (LayerContainer::iterator it = net->getLayers()->begin(); it != net->getLayers()->end(); ++it) {
-		if (i > 0) {
-			int k = 0;
-			for (NeuronContainer::iterator it2 = (*it)->getNeurons()->begin() + 1; it2 != (*it)->getNeurons()->end(); ++it2) {
-				TypeVector * weights = (*it2)->weights;
-				for (int j = 0; j < weights->size(); j++) {
-					if (i == 1) {
-						weights->at(j) = w1.at(k).at(j);
-					}
-					else {
-						weights->at(j) = w2.at(k).at(j);
-					}
-				}
-				k++;
-			}
-		}
-		i++;
+	if (i > 0) {
+	int k = 0;
+	for (NeuronContainer::iterator it2 = (*it)->getNeurons()->begin() + 1; it2 != (*it)->getNeurons()->end(); ++it2) {
+	TypeVector * weights = (*it2)->weights;
+	for (int j = 0; j < weights->size(); j++) {
+	if (i == 1) {
+	weights->at(j) = w1.at(k).at(j);
+	}
+	else {
+	weights->at(j) = w2.at(k).at(j);
+	}
+	}
+	k++;
+	}
+	}
+	i++;
 	}
 	*/
 
@@ -394,7 +455,7 @@ int main()
 	/*
 	TypeVector netOutput = net->forward(input.at(0));
 	for (int i = 0; i < netOutput.size(); i++) {
-		std::cout << "Output " << i << ": " << netOutput.at(i) << std::endl;
+	std::cout << "Output " << i << ": " << netOutput.at(i) << std::endl;
 	}
 
 	DataSetManager manager = DataSetManager();
@@ -415,7 +476,7 @@ int main()
 
 	TypeVector netOutput2 = net->forward(input.at(0));
 	for (int i = 0; i < netOutput2.size(); i++) {
-		std::cout << "Output " << i << ": " << netOutput2.at(i) << std::endl;
+	std::cout << "Output " << i << ": " << netOutput2.at(i) << std::endl;
 	}
 	*/
 
@@ -426,6 +487,6 @@ int main()
 
 	getchar();
 
-    return 0;
+	return 0;
 }
 

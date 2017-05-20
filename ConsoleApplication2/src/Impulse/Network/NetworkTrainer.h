@@ -102,7 +102,6 @@ public:
 		{
 			this->setWeightsFromDenseVector(input);
 			CostResult costResult = this->cost(dataSet);
-			std::cout << "tmp res: " << costResult.error << std::endl;
 			tjmath::DenseVector<double> gradient(costResult.gradient.size(), costResult.gradient);
 
 			return tjmath::CostGradientTuple<double>(costResult.error, gradient);

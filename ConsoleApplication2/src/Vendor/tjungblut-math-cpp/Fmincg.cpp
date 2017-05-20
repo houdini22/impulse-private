@@ -100,9 +100,8 @@ namespace tjmath {
 		double d1 = (*s * -1.0).dot(*s); // this is the slope
 		double z1 = red / (1.0 - d1); // initial step is red/(|s|+1)
 
-		clock_t begin = clock();
-
 		while (i < abs(length)) {// while not finished
+			clock_t begin = clock();
 			i = i + (length > 0 ? 1 : 0);// count iterations?!
 			// make a copy of current values
 			*X0 << *input;

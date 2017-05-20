@@ -84,7 +84,7 @@ public:
 
 		Eigen::VectorXd * a = this->getA();
         for (int i = 0; i < resultSigma.size(); i++) {
-            resultSigma(i) *= (*a)(i + 1) * (1.0 - (*a)(i + 1));
+			resultSigma(i) *= this->derivative((*a)(i + 1));
         }
 
         return resultSigma;
@@ -116,6 +116,10 @@ public:
         }
         return sum;
     }
+
+	double derivative(double input) {
+		return input * (1.0 - input);
+	}
 
     virtual Eigen::VectorXd forward(Eigen::VectorXd input) = 0;
 };

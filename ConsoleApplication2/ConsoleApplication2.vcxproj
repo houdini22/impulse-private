@@ -91,6 +91,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -150,6 +151,7 @@
     <ClInclude Include="src\Impulse\Layer\HiddenLayer.h" />
     <ClInclude Include="src\Impulse\Layer\InputLayer.h" />
     <ClInclude Include="src\Impulse\Layer\OutputLayer.h" />
+    <ClInclude Include="src\Impulse\Layer\Purelin.h" />
     <ClInclude Include="src\Impulse\Math.h" />
     <ClInclude Include="src\Impulse\Math\Matrix.h" />
     <ClInclude Include="src\Impulse\Math\Vector.h" />

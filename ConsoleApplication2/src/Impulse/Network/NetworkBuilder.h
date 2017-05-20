@@ -5,6 +5,7 @@
 #include "../Layer/InputLayer.h"
 #include "../Layer/HiddenLayer.h"
 #include "../Layer/OutputLayer.h"
+#include "../Layer/Purelin.h"
 #include "../../Vendor/json-2.1.1/src/json.hpp"
 
 using json = nlohmann::json;

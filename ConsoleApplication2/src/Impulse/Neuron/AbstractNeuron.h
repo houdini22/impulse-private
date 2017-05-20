@@ -34,10 +34,8 @@ public:
     }
 
 	Eigen::VectorXd backward(double sigma) {
-		Eigen::VectorXd result(this->weights->size());
-        for (int i = 0; i < this->weights->size(); i++) {
-            result(i) = sigma * (*this->weights)(i);
-        }
+		Eigen::VectorXd result(*this->weights);
+		result *= sigma;
         return result;
     }
 
