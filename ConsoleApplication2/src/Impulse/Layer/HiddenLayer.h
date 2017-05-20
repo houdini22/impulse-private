@@ -13,7 +13,7 @@ public:
 
     HiddenLayer(int size, int prevSize) : AbstractLayer(size, prevSize) {
 		this->a = new Eigen::VectorXd(this->size);
-		this->z = new Eigen::VectorXd(this->size);
+		this->z = new Eigen::VectorXd(this->size - 1);
         this->createNeurons();
     }
 

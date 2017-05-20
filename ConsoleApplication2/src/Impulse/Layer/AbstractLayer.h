@@ -22,7 +22,7 @@ public:
     AbstractLayer(int size, int prevSize) {
         this->size = size + 1;
         this->prevSize = prevSize;
-		this->neurons = new NeuronContainer;
+		this->neurons = new NeuronContainer();
     };
 
     ~AbstractLayer() {
@@ -90,20 +90,20 @@ public:
         return resultSigma;
     }
 
-    TypeMatrix backwardPenalty(int numSamples, double regularization) {
-        TypeMatrix penalty;
+	Eigen::MatrixXd backwardPenalty(int numSamples, double regularization) {
+		Eigen::MatrixXd resultPenalty(this->size - 1, this->prevSize);
         for (int i = 1; i < this->size; i++) {
-            penalty.push_back(this->neurons->at(i)->backwardPenalty(numSamples, regularization));
+			Eigen::VectorXd penalty = this->neurons->at(i)->backwardPenalty(numSamples, regularization);
+			resultPenalty.row(i - 1) = penalty;
         }
-        return penalty;
+        return resultPenalty;
     }
 
-    TypeMatrix calculateGradient(int numSamples, TypeMatrix penalty) {
-        TypeMatrix gradient;
+	Eigen::MatrixXd calculateGradient(int numSamples, Eigen::MatrixXd penalty) {
+		Eigen::MatrixXd gradient(this->neurons->at(1)->getSize(), this->size - 1);
         for (int i = 1; i < this->size; i++) {
-            gradient.push_back(TypeVector());
             for (int j = 0; j < this->neurons->at(i)->deltas->size(); j++) {
-                gradient.at(i - 1).push_back(((*this->neurons->at(i)->deltas)(j) / (double) numSamples) + penalty.at(i - 1).at(j));
+                gradient(j, i - 1) = ((*this->neurons->at(i)->deltas)(j) / (double) numSamples) + penalty(i - 1, j);
             }
         }
         return gradient;

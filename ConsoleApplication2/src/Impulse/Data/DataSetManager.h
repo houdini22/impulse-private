@@ -14,8 +14,6 @@ public:
 
         for (int i = 0; i < input.rows(); i++) {
 
-			std::cout << output(i) << " " << i << std::endl;
-            
 			Eigen::VectorXd newOutput(10);
             double realValue = output(i, 0);
             for (int j = 1; j <= 10; j++) {

@@ -41,11 +41,11 @@ public:
         return result;
     }
 
-    TypeVector backwardPenalty(int numSamples, double regularization) {
-        TypeVector result;
-        result.push_back(0.0);
+    Eigen::VectorXd backwardPenalty(int numSamples, double regularization) {
+		Eigen::VectorXd result(this->size);
+        result(0) = 0.0;
         for (int i = 1; i < this->size; i++) {
-            result.push_back((regularization / (double) numSamples) * (*this->weights)(i));
+            result(i) = ((regularization / (double) numSamples) * (*this->weights)(i));
         }
         return result;
     }

@@ -11,18 +11,19 @@ namespace Impulse {
         class Matrix {
         public:
 
-            static void rollMatrixToVector(TypeMatrix matrix, TypeVector & vector) {
-                int xSize = matrix.size();
-                int ySize = matrix.at(0).size();
+            static void rollMatrixToVector(Eigen::MatrixXd & matrix, TypeVector & vector) {
+				int xSize = matrix.cols();
+				int ySize = matrix.rows();
                 int vectorSize = xSize * ySize;
 
                 vector.reserve(vectorSize);
 
-                for (int i = 0; i < matrix.size(); i++) {
-                    for (int j = 0; j < matrix.at(i).size(); j++) {
-                        vector.push_back(matrix.at(i).at(j));
-                    }
-                }
+				for (int i = 0; i < xSize; i++) {
+					Eigen::RowVectorXd row = matrix.col(i);
+					for (int j = 0; j < ySize; j++) {
+						vector.push_back(row(j));
+					}
+				}
             }
         };
     }

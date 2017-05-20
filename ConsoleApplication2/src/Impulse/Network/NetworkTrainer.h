@@ -74,9 +74,9 @@ public:
         LayerContainer * layers = net->getLayers();
 
         for (int i = 1; i < net->getSize(); i++) {
-            TypeMatrix penalty = layers->at(i)->backwardPenalty(dataSet.getSize(), this->regularization);
+            Eigen::MatrixXd penalty = layers->at(i)->backwardPenalty(dataSet.getSize(), this->regularization);
             errorPenalty += layers->at(i)->errorPenalty();
-            TypeMatrix gradient = layers->at(i)->calculateGradient(dataSet.getSize(), penalty);
+            Eigen::MatrixXd gradient = layers->at(i)->calculateGradient(dataSet.getSize(), penalty);
             Impulse::Math::Matrix::rollMatrixToVector(gradient, resultGradient);
         }
 
@@ -86,18 +86,6 @@ public:
         CostResult result;
         result.error = error;
         result.gradient = resultGradient;
-
-		for (LayerContainer::iterator it = net->getLayers()->begin() + 1; it != net->getLayers()->end(); ++it) {
-			for (NeuronContainer::iterator it2 = (*it)->getNeurons()->begin() + 1; it2 != (*it)->getNeurons()->end(); ++it2) {
-				Eigen::VectorXd * deltas = (*it2)->deltas;
-				for (int i = 0; i < 1; i++) {
-					std::cout << (*deltas)(i) << std::endl;
-					break;
-				}
-				break;
-			}
-			break;
-		}
 
         return result;
     }
@@ -114,6 +102,7 @@ public:
 		{
 			this->setWeightsFromDenseVector(input);
 			CostResult costResult = this->cost(dataSet);
+			std::cout << "tmp res: " << costResult.error << std::endl;
 			tjmath::DenseVector<double> gradient(costResult.gradient.size(), costResult.gradient);
 
 			return tjmath::CostGradientTuple<double>(costResult.error, gradient);

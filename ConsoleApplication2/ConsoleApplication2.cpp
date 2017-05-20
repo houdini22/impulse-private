@@ -130,12 +130,33 @@ int main()
 	DataSet dataSet = manager.createSet(input, output);
 	
 	NetworkTrainer * trainer = new NetworkTrainer(net);
+	trainer->setLearningIterations(100);
 
-	for (int j = 0; j < 10; j++) {
-		CostResult result = trainer->cost(dataSet);
-		std::cout << "Cost: " << result.error << std::endl;
-	}
+	std::cout << "Calculating cost." << std::endl;
 
+	CostResult result = trainer->cost(dataSet);
+	std::cout << "Cost: " << result.error << std::endl;
+
+	std::cout << "Start training." << std::endl;
+	trainer->train(dataSet);
+
+	return 0;
+
+	/*
+	
+	CostResult result2 = trainer->cost(dataSet);
+	std::cout << "Cost: " << result2.error << std::endl;
+
+	std::cout << result.gradient.at(0) << " " << result.gradient.at(1) << " " << result.gradient.at(2) << " " << result.gradient.size() << std::endl;
+	std::cout << result2.gradient.at(0) << " " << result2.gradient.at(1) << " " << result2.gradient.at(2) << std::endl;
+
+	*/
+
+	std::cout << "Start training." << std::endl;
+	trainer->train(dataSet);
+
+	result = trainer->cost(dataSet);
+	std::cout << "Cost: " << result.error << std::endl;
 	/*
 	5000
 	Output 0: 0.000112662
