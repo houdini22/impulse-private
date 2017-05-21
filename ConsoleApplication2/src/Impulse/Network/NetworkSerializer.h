@@ -25,7 +25,7 @@ public:
 		json result;
 
 		std::vector<int> layersSize;
-		for (LayerContainer::iterator it = this->network->getLayers()->begin(); it != this->network->getLayers()->end(); ++it) {
+		for (LayerContainer::iterator it = this->network->getLayers()->begin(); it != this->network->getLayers()->end() - 1; ++it) {
 			auto * layer = (*it);
 			layersSize.push_back(layer->getSize() - 1); // without bias neuron
 		}

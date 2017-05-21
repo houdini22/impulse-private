@@ -53,7 +53,7 @@ public:
             sigma(i) = predictions(i) - output(i);
         }
 
-        for (int i = this->size - 1; i > 0; i--) {
+        for (int i = this->size - 2; i > 0; i--) {
             auto * layer = this->layers->at(i);
             auto * prevLayer = this->layers->at(i - 1);
 
@@ -77,7 +77,7 @@ public:
 
 	void setRolledTheta(std::vector<double> rolledTheta) {
 		int i = 0;
-		for (LayerContainer::iterator it = this->getLayers()->begin() + 1; it != this->getLayers()->end(); ++it) {
+		for (LayerContainer::iterator it = this->getLayers()->begin() + 1; it != this->getLayers()->end() - 1; ++it) {
 			for (NeuronContainer::iterator it2 = (*it)->getNeurons()->begin() + 1; it2 != (*it)->getNeurons()->end(); ++it2) {
 				Eigen::VectorXd * weights = (*it2)->weights;
 				for (int j = 0; j < weights->size(); j++) {

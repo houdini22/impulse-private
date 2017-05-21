@@ -51,7 +51,7 @@ public:
         std::vector<MapSample> samples = dataSet.getSamples();
 
 		// reset deltas
-		for (LayerContainer::iterator it = net->getLayers()->begin() + 1; it != net->getLayers()->end(); ++it) {
+		for (LayerContainer::iterator it = net->getLayers()->begin() + 1; it != net->getLayers()->end() - 1; ++it) {
 			for (NeuronContainer::iterator it2 = (*it)->getNeurons()->begin() + 1; it2 != (*it)->getNeurons()->end(); ++it2) {
 				Eigen::VectorXd * deltas = (*it2)->deltas;
 				for (int i = 0; i < deltas->size(); i++) {
@@ -73,7 +73,7 @@ public:
         TypeVector resultGradient;
         LayerContainer * layers = net->getLayers();
 
-        for (int i = 1; i < net->getSize(); i++) {
+        for (int i = 1; i < net->getSize() - 1; i++) {
             Eigen::MatrixXd penalty = layers->at(i)->backwardPenalty(dataSet.getSize(), this->regularization);
             errorPenalty += layers->at(i)->errorPenalty();
             Eigen::MatrixXd gradient = layers->at(i)->calculateGradient(dataSet.getSize(), penalty);

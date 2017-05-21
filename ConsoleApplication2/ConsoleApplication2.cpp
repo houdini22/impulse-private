@@ -146,7 +146,8 @@ int main()
 
 	builder.addInputLayer(400);
 	builder.addHiddenLayer(25);
-	builder.addOutputLayer(10);
+	builder.addHiddenLayer(10);
+	builder.addOutputLayer();
 	Network * net = builder.getNetwork();
 
 	// std::cout << net->getSize() << std::endl; // check network size
@@ -157,7 +158,7 @@ int main()
 
 	// set weights
 	int i = 0;
-	for (LayerContainer::iterator it = net->getLayers()->begin(); it != net->getLayers()->end(); ++it) {
+	for (LayerContainer::iterator it = net->getLayers()->begin(); it != net->getLayers()->end() - 1; ++it) {
 		if (i > 0) {
 			int k = 0;
 			for (NeuronContainer::iterator it2 = (*it)->getNeurons()->begin() + 1; it2 != (*it)->getNeurons()->end(); ++it2) {
@@ -205,6 +206,8 @@ int main()
 	std::cout << "Cost: " << result.error << std::endl;
 
 	std::cout << net->forward(input.row(0)) << std::endl;
+
+	getchar();
 	
 	return 0;
 

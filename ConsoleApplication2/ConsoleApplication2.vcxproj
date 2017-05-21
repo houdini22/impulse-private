@@ -151,7 +151,7 @@
     <ClInclude Include="src\Impulse\Layer\HiddenLayer.h" />
     <ClInclude Include="src\Impulse\Layer\InputLayer.h" />
     <ClInclude Include="src\Impulse\Layer\OutputLayer.h" />
-    <ClInclude Include="src\Impulse\Layer\Purelin.h" />
+    <ClInclude Include="src\Impulse\Layer\PurelinLayer.h" />
     <ClInclude Include="src\Impulse\Math.h" />
     <ClInclude Include="src\Impulse\Math\Matrix.h" />
     <ClInclude Include="src\Impulse\Math\Vector.h" />

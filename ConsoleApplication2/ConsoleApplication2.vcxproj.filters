@@ -84,7 +84,7 @@
     <ClInclude Include="src\Impulse\Math.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Impulse\Layer\Purelin.h">
+    <ClInclude Include="src\Impulse\Layer\PurelinLayer.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
