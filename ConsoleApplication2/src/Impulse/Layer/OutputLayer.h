@@ -17,6 +17,14 @@ public:
 		}
 		return newResult;
     }
+
+	double derivative(double input) {
+		return 0.0;
+	}
+
+	Eigen::VectorXd backward(Eigen::VectorXd sigma, AbstractLayer * nextLayer) {
+		return Eigen::VectorXd();
+	}
 };
 
 #endif /* OUTPUTLAYER_H */

@@ -202,23 +202,24 @@ int main()
 
 	std::cout << "Calculating cost." << std::endl;
 
-	CostResult result = trainer->cost(dataSet);
-	std::cout << "Cost: " << result.error << std::endl;
+//	CostResult result = trainer->cost(dataSet);
+//	std::cout << "Cost: " << result.error << std::endl;
 
 	std::cout << net->forward(input.row(0)) << std::endl;
+
+	std::cout << "Start training." << std::endl;
+	trainer->train(dataSet);
 
 	getchar();
 	
 	return 0;
 
-	std::cout << "Start training." << std::endl;
-	trainer->train(dataSet);
-
+	
 	
 	std::cout << "Start training." << std::endl;
 	trainer->train(dataSet);
 
-	result = trainer->cost(dataSet);
+	CostResult result = trainer->cost(dataSet);
 	std::cout << "Cost: " << result.error << std::endl;
 	
 	/*

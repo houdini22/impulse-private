@@ -5,6 +5,7 @@
 #include "../Layer/InputLayer.h"
 #include "../Layer/HiddenLayer.h"
 #include "../Layer/OutputLayer.h"
+#include "../Layer/PurelinLayer.h"
 #include "../../Vendor/json-2.1.1/src/json.hpp"
 
 using json = nlohmann::json;
@@ -32,6 +33,13 @@ public:
         this->prevSize = layer->getSize();
         return this;
     }
+
+	NetworkBuilder * addHiddenPurelinLayer(int size) {
+		PurelinLayer * layer = new PurelinLayer(size, this->prevSize);
+		this->network->addLayer(layer);
+		this->prevSize = layer->getSize();
+		return this;
+	}
 
     NetworkBuilder * addOutputLayer() {
         OutputLayer * layer = new OutputLayer();

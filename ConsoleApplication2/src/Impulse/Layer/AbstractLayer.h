@@ -63,33 +63,6 @@ public:
         }
     }
 
-	Eigen::VectorXd backward(Eigen::VectorXd sigma, AbstractLayer * nextLayer) {
-		Eigen::VectorXd tmpResultSigma(this->size);
-        for (int i = 0; i < this->size; i++) {
-			tmpResultSigma(i) = 0.0;
-        }
-
-        NeuronContainer * neurons = nextLayer->getNeurons();
-        for (int i = 1; i < nextLayer->getSize(); i++) {
-			Eigen::VectorXd tmp = neurons->at(i)->backward(sigma(i - 1));
-            for (int j = 0; j < tmp.size(); j++) {
-				tmpResultSigma(j) += tmp(j);
-            }
-        }
-
-		Eigen::VectorXd resultSigma(this->size - 1);
-		for (int i = 1; i < tmpResultSigma.size(); i++) {
-			resultSigma(i - 1) = tmpResultSigma(i);
-		}
-
-		Eigen::VectorXd * a = this->getA();
-        for (int i = 0; i < resultSigma.size(); i++) {
-			resultSigma(i) *= this->derivative((*a)(i + 1));
-        }
-
-        return resultSigma;
-    }
-
 	Eigen::MatrixXd backwardPenalty(int numSamples, double regularization) {
 		Eigen::MatrixXd resultPenalty(this->size - 1, this->prevSize);
         for (int i = 1; i < this->size; i++) {
@@ -109,19 +82,17 @@ public:
         return gradient;
     }
 
-    double errorPenalty() {
-        double sum = 0.0;
-        for (int i = 1; i < this->size; i++) {
-            sum += this->neurons->at(i)->errorPenalty();
-        }
-        return sum;
-    }
-
-	double derivative(double input) {
-		return input * (1.0 - input);
+	double errorPenalty() {
+		double sum = 0.0;
+		for (int i = 1; i < this->size; i++) {
+			sum += this->neurons->at(i)->errorPenalty();
+		}
+		return sum;
 	}
 
+	virtual double derivative(double input) = 0;
     virtual Eigen::VectorXd forward(Eigen::VectorXd input) = 0;
+	virtual Eigen::VectorXd backward(Eigen::VectorXd sigma, AbstractLayer * nextLayer) = 0;
 };
 
 #endif /* LAYER_H */

@@ -48,6 +48,14 @@ public:
         }
         return output;
     }
+
+	Eigen::VectorXd backward(Eigen::VectorXd sigma, AbstractLayer * nextLayer) {
+		return Eigen::VectorXd();
+	}
+
+	double derivative(double input) {
+		return 0.0;
+	}
 };
 
 #endif /* INPUTLAYER_H */

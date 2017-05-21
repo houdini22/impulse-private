@@ -64,7 +64,7 @@ public:
 
 	std::vector<double> getRolledTheta() {
 		std::vector<double> result;
-		for (auto layerIterator = this->layers->begin() + 1; layerIterator != this->layers->end(); layerIterator++) {
+		for (auto layerIterator = this->layers->begin() + 1; layerIterator != this->layers->end() - 1; layerIterator++) {
 			for (NeuronContainer::iterator neuronIterator = (*layerIterator)->getNeurons()->begin() + 1; neuronIterator != (*layerIterator)->getNeurons()->end(); ++neuronIterator) {
 				Eigen::VectorXd * weights = (*neuronIterator)->weights;
 				for (int j = 0; j < weights->size(); j++) {

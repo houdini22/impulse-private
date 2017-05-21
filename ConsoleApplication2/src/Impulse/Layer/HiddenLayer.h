@@ -24,6 +24,33 @@ public:
         }
     }
 
+	Eigen::VectorXd backward(Eigen::VectorXd sigma, AbstractLayer * nextLayer) {
+		Eigen::VectorXd tmpResultSigma(this->size);
+		for (int i = 0; i < this->size; i++) {
+			tmpResultSigma(i) = 0.0;
+		}
+
+		NeuronContainer * neurons = nextLayer->getNeurons();
+		for (int i = 1; i < nextLayer->getSize(); i++) {
+			Eigen::VectorXd tmp = neurons->at(i)->backward(sigma(i - 1));
+			for (int j = 0; j < tmp.size(); j++) {
+				tmpResultSigma(j) += tmp(j);
+			}
+		}
+
+		Eigen::VectorXd resultSigma(this->size - 1);
+		for (int i = 1; i < tmpResultSigma.size(); i++) {
+			resultSigma(i - 1) = tmpResultSigma(i);
+		}
+
+		Eigen::VectorXd * a = this->getA();
+		for (int i = 0; i < resultSigma.size(); i++) {
+			resultSigma(i) *= this->derivative((*a)(i + 1));
+		}
+
+		return resultSigma;
+	}
+
 	Eigen::VectorXd forward(Eigen::VectorXd input) {
         this->reset();
 
@@ -51,6 +78,10 @@ public:
         }
         return output;
     }
+
+	double derivative(double input) {
+		return input * (1.0 - input);
+	}
 
     double activation(double input) {
         return 1.0 / (1.0 + exp(-input));
