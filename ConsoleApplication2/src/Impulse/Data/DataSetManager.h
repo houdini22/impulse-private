@@ -14,6 +14,7 @@ public:
 
         for (int i = 0; i < input.rows(); i++) {
 
+			
 			/*
 			Eigen::VectorXd newOutput(10);
             double realValue = output(i, 0);
@@ -21,6 +22,7 @@ public:
                 newOutput(j - 1) = j == realValue ? 1.0 : 0.0;
             }
 			*/
+			
 
 			Eigen::VectorXd newInput(input.row(i));
 			Eigen::VectorXd newOutput(output.row(i));

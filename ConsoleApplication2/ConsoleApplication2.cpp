@@ -68,6 +68,114 @@ int main()
 	// omp_set_num_threads(4);
 	// Eigen::setNbThreads(4);
 
+	NetworkBuilder * builder = new NetworkBuilder();
+	builder->addInputLayer(38400);
+	builder->addHiddenPurelinLayer(500);
+	builder->addHiddenPurelinLayer(300);
+	builder->addHiddenPurelinLayer(300);
+	builder->addHiddenPurelinLayer(4);
+	builder->addOutputLayer();
+
+	DataSetManager manager = DataSetManager();
+
+	Eigen::MatrixXd input(500, 38400);
+	Eigen::MatrixXd output(500, 4);
+
+	std::cout << "Loading dataset." << std::endl;
+
+	std::string path = "E:\\impulse\\gen2\\samples";
+	int i = 0;
+	for (auto & p : fs::directory_iterator(path)) {
+		if (i == 500) break;
+
+		if (i % 50 == 0) {
+			std::cout << i << std::endl;
+		}
+
+		std::stringstream path;
+		path << p;
+
+		std::ifstream fileStream(path.str());
+		json jsonFile;
+		fileStream >> jsonFile;
+
+		json x = jsonFile["x"];
+		int j = 0;
+		for (auto it = x.begin(); it != x.end(); ++it) {
+			input(i, j) = it.value();
+			j++;
+		}
+
+		json y = jsonFile["y"];
+		j = 0;
+		for (auto it = y.begin(); it != y.end(); ++it) {
+			output(i, j) = it.value();
+			j++;
+		}
+		i++;
+	}
+
+
+	Network * network = builder->getNetwork();
+
+	DataSet dataSet = manager.createSet(input, output);
+	NetworkTrainer * trainer = new NetworkTrainer(network);
+	
+	trainer->setRegularization(0.0);
+	trainer->setLearningIterations(50);
+
+	for (int training = 0; training < 10; training++) {
+		std::cout << "Start training." << std::endl;
+		trainer->train(dataSet);
+		std::cout << "Calculating cost." << std::endl;
+		CostResult result = trainer->cost(dataSet);
+		std::cout << "Cost: " << result.error << std::endl;
+
+		NetworkSerializer * serializer = new NetworkSerializer(network);
+		std::string filename = "e:/network.json";
+		filename.append(std::to_string(training));
+		serializer->toJSON(filename);
+	}
+
+	/*
+	PURELIN DEBUG
+	NetworkBuilder * builder = new NetworkBuilder();
+	builder->addInputLayer(1);
+	builder->addHiddenPurelinLayer(4);
+	builder->addHiddenPurelinLayer(1);
+	builder->addOutputLayer();
+
+	DataSetManager manager = DataSetManager();
+
+	Eigen::MatrixXd input(4, 1);
+	Eigen::MatrixXd output(4, 1);
+
+	for (int i = 0; i < 4; i++) {
+	input(i, 0) = i;
+	output(i, 0) = i;
+	}
+
+	Network * network = builder->getNetwork();
+
+	DataSet dataSet = manager.createSet(input, output);
+	NetworkTrainer * trainer = new NetworkTrainer(network);
+
+	trainer->setRegularization(0.0);
+	trainer->setLearningIterations(200);
+
+	std::cout << "Calculating cost." << std::endl;
+	CostResult result = trainer->cost(dataSet);
+	std::cout << "Cost: " << result.error << std::endl;
+
+	std::cout << "Start training." << std::endl;
+	trainer->train(dataSet);
+
+	std::cout << network->forward(input.row(0)) << std::endl;
+	std::cout << network->forward(input.row(1)) << std::endl;
+	std::cout << network->forward(input.row(2)) << std::endl;
+	std::cout << network->forward(input.row(3)) << std::endl;
+	*/
+
 	/*
 	NetworkBuilder * builder = new NetworkBuilder();
 
@@ -143,7 +251,8 @@ int main()
 	serializer->toJSON("e:/network.json");
 	*/
 
-
+	/* DEBUG
+	
 	NetworkBuilder builder = NetworkBuilder();
 
 	builder.addInputLayer(400);
@@ -224,6 +333,7 @@ int main()
 	CostResult result = trainer->cost(dataSet);
 	std::cout << "Cost: " << result.error << std::endl;
 
+	*/
 
 	/*
 	5000
