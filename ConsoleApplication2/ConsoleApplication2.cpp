@@ -68,7 +68,7 @@ int main()
 	// omp_set_num_threads(4);
 	// Eigen::setNbThreads(4);
 
-	/*MOJE
+	/*
 	NetworkBuilder * builder = new NetworkBuilder();
 
 	// Network * net = builder.buildFromJSON("e:/network.json");
@@ -77,12 +77,14 @@ int main()
 
 	builder->addInputLayer(38400);
 	builder->addHiddenLayer(300);
-	builder->addOutputLayer(2);
+	builder->addHiddenLayer(100);
+	builder->addHiddenLayer(100);
+	builder->addOutputLayer();
 	
 	DataSetManager manager = DataSetManager();
 
 	Eigen::MatrixXd input(500, 38400);
-	Eigen::MatrixXd output(500, 2);
+	Eigen::MatrixXd output(500, 100);
 
 	std::cout << "Loading dataset." << std::endl;
 
@@ -108,13 +110,13 @@ int main()
 			input(i, j) = it.value();
 			j++;
 		}
-		
-		double outputX = jsonFile["y"]["x"];
-		double outputY = jsonFile["y"]["y"];
 
-		output(i, 0) = outputX;
-		output(i, 1) = outputY;
-
+		json y = jsonFile["y"];
+		j = 0;
+		for (auto it = y.begin(); it != y.end(); ++it) {
+			output(i, j) = it.value();
+			j++;
+		}
 		i++;
 	}
 
@@ -128,9 +130,9 @@ int main()
 	trainer->setRegularization(0.0);
 	trainer->setLearningIterations(50);
 
-	// std::cout << "Calculating cost." << std::endl;
-	// CostResult result = trainer->cost(dataSet);
-	// std::cout << "Cost: " << result.error << std::endl;
+	 std::cout << "Calculating cost." << std::endl;
+	 CostResult result = trainer->cost(dataSet);
+	 std::cout << "Cost: " << result.error << std::endl;
 
 	std::cout << "Start training." << std::endl;
 	trainer->train(dataSet);
@@ -140,8 +142,8 @@ int main()
 	NetworkSerializer * serializer = new NetworkSerializer(network);
 	serializer->toJSON("e:/network.json");
 	*/
-
 	
+
 	NetworkBuilder builder = NetworkBuilder();
 
 	builder.addInputLayer(400);
@@ -202,8 +204,8 @@ int main()
 
 	std::cout << "Calculating cost." << std::endl;
 
-//	CostResult result = trainer->cost(dataSet);
-//	std::cout << "Cost: " << result.error << std::endl;
+	//	CostResult result = trainer->cost(dataSet);
+	//	std::cout << "Cost: " << result.error << std::endl;
 
 	std::cout << net->forward(input.row(0)) << std::endl;
 
@@ -211,16 +213,17 @@ int main()
 	trainer->train(dataSet);
 
 	getchar();
-	
+
 	return 0;
 
-	
-	
+
+
 	std::cout << "Start training." << std::endl;
 	trainer->train(dataSet);
 
 	CostResult result = trainer->cost(dataSet);
 	std::cout << "Cost: " << result.error << std::endl;
+
 	
 	/*
 	5000
