@@ -7,6 +7,16 @@ class PurelinLayer : public AbstractLayer {
 public:
 
 	PurelinLayer(int size, int prevSize) : AbstractLayer(size, prevSize) {
+		this->a = new Eigen::VectorXd(this->size);
+		this->z = new Eigen::VectorXd(this->size - 1);
+		this->createNeurons();
+	}
+
+	void createNeurons() {
+		this->neurons->push_back(new BiasNeuron());
+		for (int i = 0; i < this->size - 1; i++) { // size is already computed with bias neuron so -1
+			this->neurons->push_back(new Neuron(this->prevSize));
+		}
 	}
 
 	Eigen::VectorXd backward(Eigen::VectorXd sigma, AbstractLayer * nextLayer) {
@@ -69,7 +79,6 @@ public:
 	}
 
 	double derivative(double input) {
-		std::cout << 1 << std::endl;
 		return 1.0;
 	}
 };

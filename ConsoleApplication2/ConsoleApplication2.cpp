@@ -80,7 +80,7 @@ int main()
 	builder->addHiddenLayer(100);
 	builder->addHiddenLayer(100);
 	builder->addOutputLayer();
-	
+
 	DataSetManager manager = DataSetManager();
 
 	Eigen::MatrixXd input(500, 38400);
@@ -91,33 +91,33 @@ int main()
 	std::string path = "E:\\impulse\\gen2\\samples";
 	int i = 0;
 	for (auto & p : fs::directory_iterator(path)) {
-		if (i == 500) break;
+	if (i == 500) break;
 
-		if (i % 50 == 0) {
-			std::cout << i << std::endl;
-		}
+	if (i % 50 == 0) {
+	std::cout << i << std::endl;
+	}
 
-		std::stringstream path;
-		path << p;
+	std::stringstream path;
+	path << p;
 
-		std::ifstream fileStream(path.str());
-		json jsonFile;
-		fileStream >> jsonFile;
+	std::ifstream fileStream(path.str());
+	json jsonFile;
+	fileStream >> jsonFile;
 
-		json x = jsonFile["x"];
-		int j = 0;
-		for (auto it = x.begin(); it != x.end(); ++it) {
-			input(i, j) = it.value();
-			j++;
-		}
+	json x = jsonFile["x"];
+	int j = 0;
+	for (auto it = x.begin(); it != x.end(); ++it) {
+	input(i, j) = it.value();
+	j++;
+	}
 
-		json y = jsonFile["y"];
-		j = 0;
-		for (auto it = y.begin(); it != y.end(); ++it) {
-			output(i, j) = it.value();
-			j++;
-		}
-		i++;
+	json y = jsonFile["y"];
+	j = 0;
+	for (auto it = y.begin(); it != y.end(); ++it) {
+	output(i, j) = it.value();
+	j++;
+	}
+	i++;
 	}
 
 	// std::cout << "Restoring network state." << std::endl;
@@ -130,9 +130,9 @@ int main()
 	trainer->setRegularization(0.0);
 	trainer->setLearningIterations(50);
 
-	 std::cout << "Calculating cost." << std::endl;
-	 CostResult result = trainer->cost(dataSet);
-	 std::cout << "Cost: " << result.error << std::endl;
+	std::cout << "Calculating cost." << std::endl;
+	CostResult result = trainer->cost(dataSet);
+	std::cout << "Cost: " << result.error << std::endl;
 
 	std::cout << "Start training." << std::endl;
 	trainer->train(dataSet);
@@ -142,7 +142,7 @@ int main()
 	NetworkSerializer * serializer = new NetworkSerializer(network);
 	serializer->toJSON("e:/network.json");
 	*/
-	
+
 
 	NetworkBuilder builder = NetworkBuilder();
 
@@ -224,7 +224,7 @@ int main()
 	CostResult result = trainer->cost(dataSet);
 	std::cout << "Cost: " << result.error << std::endl;
 
-	
+
 	/*
 	5000
 	Output 0: 0.000112662

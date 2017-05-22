@@ -65,6 +65,7 @@ public:
 			Eigen::VectorXd output = samples.at(i)["output"];
             net->backward(predictions, output);
             for (int j = 0; j < predictions.size(); j++) {
+				// sumErrors += pow(predictions(j) - output(j), 2.0);
                 sumErrors += ((output(j) * log(predictions(j))) + ((1 - output(j)) * log(1 - predictions(j))));
             }
         }
@@ -82,6 +83,7 @@ public:
 
         double errorRegularization = (this->regularization * errorPenalty) / (2 * (double) dataSet.getSize());
         double error = (-1.0 / (double) dataSet.getSize()) * sumErrors + errorRegularization;
+		// double error = (1.0 / (2.0 * (double)dataSet.getSize())) * sumErrors + errorRegularization;
 
         CostResult result;
         result.error = error;
