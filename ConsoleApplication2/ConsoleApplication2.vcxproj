@@ -153,6 +153,7 @@
     <ClInclude Include="src\Impulse\Layer\OutputLayer.h" />
     <ClInclude Include="src\Impulse\Layer\PurelinLayer.h" />
     <ClInclude Include="src\Impulse\Math.h" />
+    <ClInclude Include="src\Impulse\Math\FmincgMy.h" />
     <ClInclude Include="src\Impulse\Math\Matrix.h" />
     <ClInclude Include="src\Impulse\Math\Vector.h" />
     <ClInclude Include="src\Impulse\Network\Network.h" />
@@ -162,10 +163,6 @@
     <ClInclude Include="src\Impulse\Neuron\BiasNeuron.h" />
     <ClInclude Include="src\Impulse\Neuron\InputNeuron.h" />
     <ClInclude Include="src\Impulse\Neuron\Neuron.h" />
-    <ClInclude Include="src\Vendor\tjungblut-math-cpp\CostGradientTuple.h" />
-    <ClInclude Include="src\Vendor\tjungblut-math-cpp\DenseVector.h" />
-    <ClInclude Include="src\Vendor\tjungblut-math-cpp\Fmincg.h" />
-    <ClInclude Include="src\Vendor\tjungblut-math-cpp\VectorIterator.h" />
     <ClInclude Include="x64\Debug\tjungblut-math-cpp\CostGradientTuple.h" />
     <ClInclude Include="x64\Debug\tjungblut-math-cpp\DenseVector.h" />
     <ClInclude Include="x64\Debug\tjungblut-math-cpp\Fmincg.h" />
@@ -175,9 +172,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleApplication2.cpp" />
+    <ClCompile Include="src\Impulse\Math\FmincgMy.cpp" />
     <ClCompile Include="src\Impulse\Network\NetworkSerializer.h" />
-    <ClCompile Include="src\Vendor\tjungblut-math-cpp\DenseVector.cpp" />
-    <ClCompile Include="src\Vendor\tjungblut-math-cpp\Fmincg.cpp" />
+    <ClCompile Include="src\Impulse\Network\NetworkTrainer.cpp" />
     <ClCompile Include="x64\Debug\tjungblut-math-cpp\DenseVector.cpp" />
     <ClCompile Include="x64\Debug\tjungblut-math-cpp\Fmincg.cpp" />
     <ClCompile Include="stdafx.cpp">
