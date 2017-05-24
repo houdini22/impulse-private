@@ -65,10 +65,9 @@ Eigen::MatrixXd readMatrix(std::string path)
 int main()
 {
 	Eigen::initParallel();
-	// omp_set_num_threads(4);
-	// Eigen::setNbThreads(4);
+	omp_set_num_threads(4);
+	Eigen::setNbThreads(4);
 
-	/*
 	NetworkBuilder * builder = new NetworkBuilder();
 	builder->addInputLayer(38400);
 	builder->addHiddenPurelinLayer(500);
@@ -137,8 +136,8 @@ int main()
 		filename.append(std::to_string(training));
 		serializer->toJSON(filename);
 	}
-	*/
-
+	
+	/*
 	NetworkBuilder * builder = new NetworkBuilder();
 	builder->addInputLayer(1);
 	builder->addHiddenPurelinLayer(4);
@@ -174,7 +173,8 @@ int main()
 	std::cout << network->forward(input.row(1)) << std::endl;
 	std::cout << network->forward(input.row(2)) << std::endl;
 	std::cout << network->forward(input.row(3)) << std::endl;
-
+	*/
+	
 	/*
 	NetworkBuilder * builder = new NetworkBuilder();
 
