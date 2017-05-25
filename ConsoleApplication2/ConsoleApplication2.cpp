@@ -64,6 +64,15 @@ Eigen::MatrixXd readMatrix(std::string path)
 
 int main()
 {
+	tjmath::DenseVector<double> v1(1000000000);
+	tjmath::DenseVector<double> v2(1000000000);
+
+	clock_t begin = clock();
+	tjmath::DenseVector<double> v3 = v1 + v2;
+	clock_t end = clock();
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	std::cout << "Time: " << elapsed_secs << std::endl;
+	/*
 	Eigen::initParallel();
 	omp_set_num_threads(4);
 	Eigen::setNbThreads(4);
@@ -136,6 +145,7 @@ int main()
 		filename.append(std::to_string(training));
 		serializer->toJSON(filename);
 	}
+	*/
 	
 	/*
 	NetworkBuilder * builder = new NetworkBuilder();
