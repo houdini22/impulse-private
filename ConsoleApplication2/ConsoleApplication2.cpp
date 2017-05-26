@@ -64,7 +64,13 @@ Eigen::MatrixXd readMatrix(std::string path)
 
 int main()
 {
+	omp_set_num_threads(4);
+
+	clock_t beginConstruct = clock();
 	tjmath::DenseVector<double> v1(1000000000);
+	clock_t endConstruct = clock();
+	double elapsed_secs2 = double(endConstruct - beginConstruct) / CLOCKS_PER_SEC;
+	std::cout << "Time construct: " << elapsed_secs2 << std::endl;
 	tjmath::DenseVector<double> v2(1000000000);
 
 	clock_t begin = clock();

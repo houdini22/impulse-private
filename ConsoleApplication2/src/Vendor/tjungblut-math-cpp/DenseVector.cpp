@@ -106,11 +106,16 @@ namespace tjmath {
 	template <class T>
 	DenseVector<T> DenseVector<T>::operator+(DenseVector<T> v)
 	{
+		std::cout << "Start copying..." << std::endl;
+		clock_t begin2 = clock();
 		DenseVector<T> newVector(this->dimension, this->data);
+		clock_t end2 = clock();
+		double elapsed_secs2 = double(end2 - begin2) / CLOCKS_PER_SEC;
+		std::cout << "Time copy: " << elapsed_secs2 << std::endl;
 
 		clock_t begin = clock();
 		int index = 0;
-#pragma omp parallel for shared(newVector, v) private(index) schedule(dynamic)
+#pragma omp parallel for shared(newVector, v) private(index) schedule(dynamic, 50)
 		for(index = 0; index < this->dimension; index++)
 		{
 			newVector.data[index] = newVector.data[index] + v.data[index];
