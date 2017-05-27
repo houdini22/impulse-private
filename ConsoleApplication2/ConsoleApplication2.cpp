@@ -68,6 +68,42 @@ int main()
 	// omp_set_num_threads(4);
 	// Eigen::setNbThreads(4);
 
+	NetworkBuilder * builder = new NetworkBuilder();
+	builder->addInputLayer(1);
+	builder->addHiddenPurelinLayer(4);
+	builder->addHiddenPurelinLayer(1);
+	builder->addOutputLayer();
+
+	DataSetManager manager = DataSetManager();
+
+	Eigen::MatrixXd input(4, 1);
+	Eigen::MatrixXd output(4, 1);
+
+	for (int i = 0; i < 4; i++) {
+		input(i, 0) = i;
+		output(i, 0) = i;
+	}
+
+	Network * network = builder->getNetwork();
+
+	DataSet dataSet = manager.createSet(input, output);
+	NetworkTrainer * trainer = new NetworkTrainer(network);
+
+	trainer->setRegularization(0.0);
+	trainer->setLearningIterations(200);
+
+	std::cout << "Calculating cost." << std::endl;
+	CostResult result = trainer->cost(dataSet);
+	std::cout << "Cost: " << result.error << std::endl;
+
+	std::cout << "Start training." << std::endl;
+	trainer->train(dataSet);
+
+	std::cout << network->forward(input.row(0)) << std::endl;
+	std::cout << network->forward(input.row(1)) << std::endl;
+	std::cout << network->forward(input.row(2)) << std::endl;
+	std::cout << network->forward(input.row(3)) << std::endl;
+
 	/*MOJE
 	NetworkBuilder * builder = new NetworkBuilder();
 
@@ -142,6 +178,7 @@ int main()
 	*/
 
 	
+	/*
 	NetworkBuilder builder = NetworkBuilder();
 
 	builder.addInputLayer(400);
@@ -206,6 +243,7 @@ int main()
 	std::cout << "Cost: " << result.error << std::endl;
 
 	std::cout << net->forward(input.row(0)) << std::endl;
+	*/
 
 	/*
 	std::cout << "Start training." << std::endl;
