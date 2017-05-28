@@ -61,12 +61,10 @@ Eigen::MatrixXd readMatrix(std::string path)
 	return result;
 };
 
-
-int main()
-{
+void testPurelin() {
 	Eigen::initParallel();
-	// omp_set_num_threads(4);
-	// Eigen::setNbThreads(4);
+	omp_set_num_threads(4);
+	Eigen::setNbThreads(4);
 
 	NetworkBuilder * builder = new NetworkBuilder();
 	builder->addInputLayer(1);
@@ -103,6 +101,86 @@ int main()
 	std::cout << network->forward(input.row(1)) << std::endl;
 	std::cout << network->forward(input.row(2)) << std::endl;
 	std::cout << network->forward(input.row(3)) << std::endl;
+}
+
+void moje() {
+	Eigen::initParallel();
+	omp_set_num_threads(4);
+	Eigen::setNbThreads(4);
+
+	NetworkBuilder * builder = new NetworkBuilder();
+	builder->addInputLayer(38400);
+	builder->addHiddenPurelinLayer(500);
+	builder->addHiddenPurelinLayer(300);
+	builder->addHiddenPurelinLayer(300);
+	builder->addHiddenPurelinLayer(4);
+	builder->addOutputLayer();
+
+	DataSetManager manager = DataSetManager();
+
+	Eigen::MatrixXd input(500, 38400);
+	Eigen::MatrixXd output(500, 4);
+
+	std::cout << "Loading dataset." << std::endl;
+
+	std::string path = "E:\\impulse\\gen2\\samples";
+	int i = 0;
+	for (auto & p : fs::directory_iterator(path)) {
+		if (i == 500) break;
+
+		if (i % 50 == 0) {
+			std::cout << i << std::endl;
+		}
+
+		std::stringstream path;
+		path << p;
+
+		std::ifstream fileStream(path.str());
+		json jsonFile;
+		fileStream >> jsonFile;
+
+		json x = jsonFile["x"];
+		int j = 0;
+		for (auto it = x.begin(); it != x.end(); ++it) {
+			input(i, j) = it.value();
+			j++;
+		}
+
+		json y = jsonFile["y"];
+		j = 0;
+		for (auto it = y.begin(); it != y.end(); ++it) {
+			output(i, j) = it.value();
+			j++;
+		}
+		i++;
+	}
+
+
+	Network * network = builder->getNetwork();
+
+	DataSet dataSet = manager.createSet(input, output);
+	NetworkTrainer * trainer = new NetworkTrainer(network);
+
+	trainer->setRegularization(0.0);
+	trainer->setLearningIterations(50);
+
+	for (int training = 0; training < 10; training++) {
+		std::cout << "Start training." << std::endl;
+		trainer->train(dataSet);
+		std::cout << "Calculating cost." << std::endl;
+		CostResult result = trainer->cost(dataSet);
+		std::cout << "Cost: " << result.error << std::endl;
+
+		NetworkSerializer * serializer = new NetworkSerializer(network);
+		std::string filename = "e:/network.json";
+		filename.append(std::to_string(training));
+		serializer->toJSON(filename);
+	}
+}
+
+int main()
+{
+	moje();
 
 	/*MOJE
 	NetworkBuilder * builder = new NetworkBuilder();
