@@ -12,6 +12,8 @@
 #include <filesystem>
 #include <Eigen/Core>
 #include <Eigen/Dense>
+#include <amp.h>
+#include <amp_graphics.h>
 
 namespace fs = std::experimental::filesystem::v1;
 
@@ -61,9 +63,23 @@ Eigen::MatrixXd readMatrix(std::string path)
 	return result;
 };
 
-
 int main()
 {
+	std::vector<Concurrency::accelerator> accls = Concurrency::accelerator::get_all();
+	std::vector<Concurrency::accelerator>::iterator usefulAccls = std::find_if(accls.begin(), accls.end(),
+		[=](Concurrency::accelerator& a)
+	{
+		return !a.is_emulated && (a.dedicated_memory >= 1024) && a.has_display;
+	});
+	if (usefulAccls != accls.end())
+	{
+		Concurrency::accelerator::set_default(usefulAccls->device_path);
+		std::wcout << "  Default accelerator is now "
+			<< Concurrency::accelerator(Concurrency::accelerator::default_accelerator).description << std::endl;
+	}
+	else
+		std::wcout << "  No suitable accelerator available" << std::endl;
+
 	Eigen::initParallel();
 	omp_set_num_threads(4);
 	Eigen::setNbThreads(4);
@@ -120,7 +136,7 @@ int main()
 
 	DataSet dataSet = manager.createSet(input, output);
 	NetworkTrainer * trainer = new NetworkTrainer(network);
-	
+
 	trainer->setRegularization(0.0);
 	trainer->setLearningIterations(50);
 
@@ -136,45 +152,8 @@ int main()
 		filename.append(std::to_string(training));
 		serializer->toJSON(filename);
 	}
-	
-	/*
-	NetworkBuilder * builder = new NetworkBuilder();
-	builder->addInputLayer(1);
-	builder->addHiddenPurelinLayer(4);
-	builder->addHiddenPurelinLayer(1);
-	builder->addOutputLayer();
 
-	DataSetManager manager = DataSetManager();
 
-	Eigen::MatrixXd input(4, 1);
-	Eigen::MatrixXd output(4, 1);
-
-	for (int i = 0; i < 4; i++) {
-	input(i, 0) = i;
-	output(i, 0) = i;
-	}
-
-	Network * network = builder->getNetwork();
-
-	DataSet dataSet = manager.createSet(input, output);
-	NetworkTrainer * trainer = new NetworkTrainer(network);
-
-	trainer->setRegularization(0.0);
-	trainer->setLearningIterations(200);
-
-	std::cout << "Calculating cost." << std::endl;
-	CostResult result = trainer->cost(dataSet);
-	std::cout << "Cost: " << result.error << std::endl;
-
-	std::cout << "Start training." << std::endl;
-	trainer->train(dataSet);
-
-	std::cout << network->forward(input.row(0)) << std::endl;
-	std::cout << network->forward(input.row(1)) << std::endl;
-	std::cout << network->forward(input.row(2)) << std::endl;
-	std::cout << network->forward(input.row(3)) << std::endl;
-	*/
-	
 	/*
 	NetworkBuilder * builder = new NetworkBuilder();
 

@@ -122,7 +122,7 @@ namespace tjmath {
 			if (length > 0) {
 				M = MAX;
 			} else {
-				M = std::min(MAX, -length - i);
+				M = min(MAX, -length - i);
 			}
 			// initialize quanteties
 			int success = 0;
@@ -150,7 +150,7 @@ namespace tjmath {
 						z2 = z3 / 2.0;
 					}
 					// don't accept too close to limits
-					z2 = std::max(std::min(z2, INT * z3), (1 - INT) * z3);
+					z2 = max(min(z2, INT * z3), (1 - INT) * z3);
 					// update the step
 					z1 = z1 + z2;
 					*input << *input + (*s * z2);
@@ -239,7 +239,7 @@ namespace tjmath {
 				// realmin in octave = 2.2251e-308
 				// slope ratio but max RATIO
 				double thres = d1 / (d2 - 2.2251e-308);
-				z1 = z1 * std::min(RATIO, thres);
+				z1 = z1 * min(RATIO, thres);
 				d1 = d2;
 				ls_failed = 0; // this line search did not fail
 			} else {

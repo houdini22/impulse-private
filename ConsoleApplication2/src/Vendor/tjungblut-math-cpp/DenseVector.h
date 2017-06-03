@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-
+#include <amp>
 #include "VectorIterator.h"
 
 namespace tjmath {
@@ -42,7 +42,7 @@ namespace tjmath {
 		DenseVector<VALUE_TYPE> operator-(VALUE_TYPE scalar);
 
 		// scalar - DenseVector
-		DenseVector<VALUE_TYPE> subtractFrom(VALUE_TYPE scalar);
+		// DenseVector<VALUE_TYPE> subtractFrom(VALUE_TYPE scalar);
 
 		DenseVector<VALUE_TYPE> operator*(DenseVector<VALUE_TYPE> v);
 
@@ -53,37 +53,37 @@ namespace tjmath {
 		DenseVector<VALUE_TYPE> operator/(VALUE_TYPE scalar);
 
 		// parameter DenseVector / this DenseVector
-		DenseVector<VALUE_TYPE> divideFrom(DenseVector<VALUE_TYPE> v);
+		// DenseVector<VALUE_TYPE> divideFrom(DenseVector<VALUE_TYPE> v);
 
 		// scalar / DenseVector
-		DenseVector<VALUE_TYPE> divideFrom(VALUE_TYPE scalar);
+		// DenseVector<VALUE_TYPE> divideFrom(VALUE_TYPE scalar);
 
 		// this fills the current vector with the given vector values
 		void operator<<(DenseVector<VALUE_TYPE> newValues);
 
-		DenseVector<VALUE_TYPE> pow(VALUE_TYPE scalar);
+		// DenseVector<VALUE_TYPE> pow(VALUE_TYPE scalar);
 
-		DenseVector<VALUE_TYPE> sqrt();
+		// DenseVector<VALUE_TYPE> sqrt();
 
-		DenseVector<VALUE_TYPE> log();
+		// DenseVector<VALUE_TYPE> log();
 
-		DenseVector<VALUE_TYPE> exp();
+		// DenseVector<VALUE_TYPE> exp();
 
 		VALUE_TYPE sum();
 
 		VALUE_TYPE dot(DenseVector<VALUE_TYPE> v);
 
-		VALUE_TYPE min();
+		// VALUE_TYPE min();
 
-		unsigned int minIndex();
+		// unsigned int minIndex();
 
-		VALUE_TYPE max();
+		// VALUE_TYPE max();
 
-		unsigned int maxIndex();
+		// unsigned int maxIndex();
 
-		VectorIterator<VALUE_TYPE> begin();
+		// VectorIterator<VALUE_TYPE> begin();
 
-		VectorIterator<VALUE_TYPE> end();
+		// VectorIterator<VALUE_TYPE> end();
 
 	private : 
 

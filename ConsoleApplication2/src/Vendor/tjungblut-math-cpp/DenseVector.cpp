@@ -4,6 +4,7 @@
 
 #include <string.h>
 #include <math.h>
+#include <amp.h>
 #include "DenseVector.h"
 
 namespace tjmath {
@@ -82,7 +83,7 @@ namespace tjmath {
 		return this->dimension;
 	};
 
-
+	/*
 	template <class T>
 	inline VectorIterator<T> DenseVector<T>::begin()
 	{
@@ -94,17 +95,28 @@ namespace tjmath {
 	{
 		return VectorIterator<T>(&this->data[this->dimension]);
 	};
-
+	*/
 
 	template <class T>
 	inline DenseVector<T> DenseVector<T>::operator+(DenseVector<T> v)
 	{
 		DenseVector<T> newVector(this->dimension, this->data);
 
+		Concurrency::array_view<double, 1> resultAmp(this->dimension, & newVector.data[0]);
+		Concurrency::array_view<double, 1> vAmp(this->dimension, & v.data[0]);
+		Concurrency::parallel_for_each(
+			resultAmp.extent,
+			[resultAmp, vAmp](Concurrency::index<1> idx) restrict(amp) {
+			resultAmp[idx] = resultAmp[idx] + vAmp[idx];
+		});
+
+		Concurrency::copy(resultAmp, newVector.data);
+		/*
 		for(unsigned int index = 0; index < this->dimension; index++)
 		{
 			newVector.data[index] = newVector.data[index] + v.get(index);
 		}
+		*/
 		return newVector;
 	};
 
@@ -113,10 +125,21 @@ namespace tjmath {
 	{
 		DenseVector<T> newVector(this->dimension, this->data);
 
+		Concurrency::array_view<double, 1> resultAmp(this->dimension, &newVector.data[0]);
+		Concurrency::parallel_for_each(
+			resultAmp.extent,
+			[resultAmp, v](Concurrency::index<1> idx) restrict(amp) {
+			resultAmp[idx] = resultAmp[idx] + v;
+		});
+
+		Concurrency::copy(resultAmp, newVector.data);
+
+		/*
 		for(unsigned int index = 0; index < this->dimension; index++)
 		{
 			newVector.data[index] = newVector.data[index] + v;
 		}
+		*/
 
 		return newVector;
 	};
@@ -126,10 +149,22 @@ namespace tjmath {
 	{
 		DenseVector<T> newVector(this->dimension, this->data);
 
+		Concurrency::array_view<double, 1> resultAmp(this->dimension, &newVector.data[0]);
+		Concurrency::array_view<double, 1> vAmp(this->dimension, &v.data[0]);
+		Concurrency::parallel_for_each(
+			resultAmp.extent,
+			[resultAmp, vAmp](Concurrency::index<1> idx) restrict(amp) {
+			resultAmp[idx] = resultAmp[idx] - vAmp[idx];
+		});
+
+		Concurrency::copy(resultAmp, newVector.data);
+
+		/*
 		for(unsigned int index = 0; index < this->dimension; index++)
 		{
 			newVector.data[index] = newVector.data[index] - v.get(index);
 		}
+		*/
 		return newVector;
 	};
 
@@ -139,14 +174,28 @@ namespace tjmath {
 	{
 		DenseVector<T> newVector(this->dimension, this->data);
 
+		Concurrency::array_view<double, 1> resultAmp(this->dimension, &newVector.data[0]);
+		Concurrency::parallel_for_each(
+			resultAmp.extent,
+			[resultAmp, v](Concurrency::index<1> idx) restrict(amp) {
+			resultAmp[idx] = resultAmp[idx] - v;
+		});
+
+		Concurrency::copy(resultAmp, newVector.data);
+
+		/*
+		
 		for(unsigned int index = 0; index < this->dimension; index++)
 		{
 			newVector.data[index] = newVector.data[index] - v;
 		}
 
+		*/
+
 		return newVector;
 	};
 
+	/*
 	template <class T>
 	inline DenseVector<T> DenseVector<T>::subtractFrom(T scalar)
 	{
@@ -159,6 +208,7 @@ namespace tjmath {
 
 		return newVector;
 	};
+	*/
 
 
 	template <class T>
@@ -166,10 +216,23 @@ namespace tjmath {
 	{
 		DenseVector<T> newVector(this->dimension, this->data);
 
+		Concurrency::array_view<double, 1> resultAmp(this->dimension, &newVector.data[0]);
+		Concurrency::array_view<double, 1> vAmp(this->dimension, &v.data[0]);
+		Concurrency::parallel_for_each(
+			resultAmp.extent,
+			[resultAmp, vAmp](Concurrency::index<1> idx) restrict(amp) {
+			resultAmp[idx] = resultAmp[idx] * vAmp[idx];
+		});
+
+		Concurrency::copy(resultAmp, newVector.data);
+	
+		/*
 		for(unsigned int index = 0; index < this->dimension; index++)
 		{
 			newVector.data[index] = newVector.data[index] * v.get(index);
 		}
+		*/
+
 		return newVector;
 	};
 
@@ -179,10 +242,21 @@ namespace tjmath {
 	{
 		DenseVector<T> newVector(this->dimension, this->data);
 
+		Concurrency::array_view<double, 1> resultAmp(this->dimension, &newVector.data[0]);
+		Concurrency::parallel_for_each(
+			resultAmp.extent,
+			[resultAmp, v](Concurrency::index<1> idx) restrict(amp) {
+			resultAmp[idx] = resultAmp[idx] * v;
+		});
+
+		Concurrency::copy(resultAmp, newVector.data);
+
+		/*
 		for(unsigned int index = 0; index < this->dimension; index++)
 		{
 			newVector.data[index] = newVector.data[index] * v;
 		}
+		*/
 
 		return newVector;
 	};
@@ -192,10 +266,23 @@ namespace tjmath {
 	{
 		DenseVector<T> newVector(this->dimension, this->data);
 
+		Concurrency::array_view<double, 1> resultAmp(this->dimension, &newVector.data[0]);
+		Concurrency::array_view<double, 1> vAmp(this->dimension, &v.data[0]);
+		Concurrency::parallel_for_each(
+			resultAmp.extent,
+			[resultAmp, vAmp](Concurrency::index<1> idx) restrict(amp) {
+			resultAmp[idx] = resultAmp[idx] / vAmp[idx];
+		});
+
+		Concurrency::copy(resultAmp, newVector.data);
+
+		/*
 		for(unsigned int index = 0; index < this->dimension; index++)
 		{
 			newVector.data[index] = newVector.data[index] / v.get(index);
 		}
+		*/
+
 		return newVector;
 	};
 
@@ -205,14 +292,26 @@ namespace tjmath {
 	{
 		DenseVector<T> newVector(this->dimension, this->data);
 
+		Concurrency::array_view<double, 1> resultAmp(this->dimension, &newVector.data[0]);
+		Concurrency::parallel_for_each(
+			resultAmp.extent,
+			[resultAmp, v](Concurrency::index<1> idx) restrict(amp) {
+			resultAmp[idx] = resultAmp[idx] / v;
+		});
+
+		Concurrency::copy(resultAmp, newVector.data);
+
+		/*
 		for(unsigned int index = 0; index < this->dimension; index++)
 		{
 			newVector.data[index] = newVector.data[index] / v;
 		}
+		*/
 
 		return newVector;
 	};
 
+	/*
 	template <class T>
 	inline DenseVector<T> DenseVector<T>::divideFrom(DenseVector<T> v)
 	{
@@ -238,6 +337,7 @@ namespace tjmath {
 
 		return newVector;
 	};
+	*/
 
 	template <class T>
 	inline void DenseVector<T>::operator<<(DenseVector<T> newValues)
@@ -245,6 +345,7 @@ namespace tjmath {
 		memcpy(this->data, newValues.data, this->dimension * sizeof(T));
 	};
 
+	/*
 	template <class T>
 	inline DenseVector<T> DenseVector<T>::pow(T scalar)
 	{
@@ -296,6 +397,7 @@ namespace tjmath {
 
 		return newVector;
 	}
+	*/
 
 	template <class T>
 	inline T DenseVector<T>::sum()
@@ -319,6 +421,7 @@ namespace tjmath {
 		return val;
 	}
 
+	/*
 	template <class T>
 	inline unsigned int DenseVector<T>::minIndex()
 	{
@@ -358,8 +461,9 @@ namespace tjmath {
 	{
 		return this->data[maxIndex()];
 	}
+	*/
 
-	template class DenseVector<int>;
-	template class DenseVector<float>;
+	// template class DenseVector<int>;
+	// template class DenseVector<float>;
 	template class DenseVector<double>;
 }
