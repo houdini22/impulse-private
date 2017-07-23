@@ -18,6 +18,9 @@
 #include "src/Impulse/NeuralNetwork/Network/NetworkTrainer.h"
 #include "src/Impulse/NeuralNetwork/Data/DataSetManager.h"
 #include "src/Impulse/NeuralNetwork/Network/NetworkSerializer.h"
+#include "src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetBuilder/CSVBuilder.h"
+#include "src/Vendor/impulse-ml-dataset/src/src/Impulse/Dataset.h"
+#include "src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/DatasetSlicer.h"
 
 double strToDouble(std::string str) {
     std::istringstream os(str);
@@ -180,6 +183,7 @@ void TEST_my() {
 }
 
 void TEST_LogisticRegression() {
+    // build network
     Impulse::NeuralNetwork::Network::NetworkBuilder builder = Impulse::NeuralNetwork::Network::NetworkBuilder();
     builder.addInputLayer(400);
     builder.addLogisticLayer(20);
@@ -187,6 +191,21 @@ void TEST_LogisticRegression() {
     builder.addOutputLayer();
 
     Impulse::NeuralNetwork::Network::Network *net = builder.getNetwork();
+    // end build network
+
+    // create dataset
+    Impulse::DatasetBuilder::CSVBuilder datasetBuilder1(
+            "/home/hud/CLionProjects/impulse-new/data/ex4data1_x.csv");
+    Impulse::Dataset datasetInput = datasetBuilder1.build();
+
+    Impulse::DatasetBuilder::CSVBuilder datasetBuilder2(
+            "/home/hud/CLionProjects/impulse-new/data/ex4data1_y.csv");
+    Impulse::Dataset datasetOutput = datasetBuilder2.build();
+
+    Impulse::SlicedDataset dataset;
+    dataset.input = datasetInput;
+    dataset.output = datasetOutput;
+    // end create dataset
 
     // load input
     Eigen::MatrixXd input = readMatrix(

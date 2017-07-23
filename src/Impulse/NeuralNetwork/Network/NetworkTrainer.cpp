@@ -1,5 +1,6 @@
 #include "NetworkTrainer.h"
 #include "../Math/Minimizer/Fmincg.h"
+#include "../../../Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/DatasetSlicer.h"
 
 namespace Impulse {
 

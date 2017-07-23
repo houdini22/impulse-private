@@ -4,6 +4,30 @@ project(impulse)
 set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_FILES
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetBuilder/BaseBuilder.cpp
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetBuilder/BaseBuilder.h
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetBuilder/CSVBuilder.cpp
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetBuilder/CSVBuilder.h
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/Modifier/Callback.cpp
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/Modifier/Callback.h
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/Modifier/Category.cpp
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/Modifier/Category.h
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/Modifier/MinMaxScaling.cpp
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/Modifier/MinMaxScaling.h
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/Modifier/MissingData.cpp
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/Modifier/MissingData.h
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/Modifier/ZScoresScaling.cpp
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/Modifier/ZScoresScaling.h
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/BaseDatasetModifier.cpp
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/BaseDatasetModifier.h
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/DatasetSlicer.cpp
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/DatasetSlicer.h
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/DatasetSplitter.cpp
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/DatasetSplitter.h
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/Dataset.cpp
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/Dataset.h
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetSample.cpp
+        src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetSample.h
         src/Impulse/NeuralNetwork/Data/DataSet.h
         src/Impulse/NeuralNetwork/Data/DataSetManager.h
         src/Impulse/NeuralNetwork/Data/DataSetSample.h

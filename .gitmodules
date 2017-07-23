@@ -1,0 +1,3 @@
+[submodule "src/Vendor/impulse-ml-dataset"]
+	path = src/Vendor/impulse-ml-dataset
+	url = git@github.com:impulse-ml/impulse-ml-dataset.git
