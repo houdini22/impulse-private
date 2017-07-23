@@ -16,6 +16,8 @@
 #include <functional>
 #include <eigen3/Eigen/Core>
 
+#include "../../Network/NetworkTrainer.h"
+
 struct CostGradientResult;
 
 class Fmincg {

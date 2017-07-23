@@ -24,22 +24,34 @@ struct CostGradientResult {
     }
 };
 
-class NetworkTrainer {
-protected:
-    Network *network;
-    double regularization = 0.0;
-    unsigned int learningIterations = 1;
-public:
+namespace Impulse {
 
-    NetworkTrainer(Network *net);
+    namespace NeuralNetwork {
 
-    Network *getNetwork();
+        namespace Network {
 
-    NetworkTrainer *setRegularization(double regularization);
+            class NetworkTrainer {
+            protected:
+                Impulse::NeuralNetwork::Network::Network *network;
+                double regularization = 0.0;
+                unsigned int learningIterations = 1;
+            public:
 
-    NetworkTrainer *setLearningIterations(unsigned int nb);
+                NetworkTrainer(Impulse::NeuralNetwork::Network::Network *net);
 
-    CostGradientResult cost(DataSet &dataSet);
+                Impulse::NeuralNetwork::Network::Network *getNetwork();
 
-    void train(DataSet dataSet);
-};
+                Impulse::NeuralNetwork::Network::NetworkTrainer *setRegularization(double regularization);
+
+                Impulse::NeuralNetwork::Network::NetworkTrainer *setLearningIterations(unsigned int nb);
+
+                CostGradientResult cost(DataSet &dataSet);
+
+                void train(DataSet dataSet);
+            };
+
+        }
+
+    }
+
+}
