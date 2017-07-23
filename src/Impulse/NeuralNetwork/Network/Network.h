@@ -68,12 +68,12 @@ namespace Impulse {
 
                 Eigen::VectorXd getRolledTheta() {
                     std::vector<double> tmp;
-                    for (auto layerIterator = this->layers.begin() + 1;
-                         layerIterator != this->layers.end() - 1; layerIterator++) {
-                        for (NeuronContainer::iterator neuronIterator = (*layerIterator)->getNeurons()->begin() + 1;
-                             neuronIterator != (*layerIterator)->getNeurons()->end(); ++neuronIterator) {
-                            for (unsigned int j = 0; j < (*neuronIterator)->weights.size(); j++) {
-                                tmp.push_back(((*neuronIterator)->weights(j)));
+                    for (LayerContainer::iterator it = this->getLayers()->begin() + 1;
+                         it != this->getLayers()->end() - 1; ++it) {
+                        for (NeuronContainer::iterator it2 = (*it)->getNeurons()->begin() + 1;
+                             it2 != (*it)->getNeurons()->end(); ++it2) {
+                            for (unsigned int j = 0; j < (*it2)->weights.size(); j++) {
+                                tmp.push_back(((*it2)->weights(j)));
                             }
                         }
                     }
@@ -83,7 +83,8 @@ namespace Impulse {
 
                 void setRolledTheta(Eigen::VectorXd rolledTheta) {
                     unsigned int i = 0;
-                    for (LayerContainer::iterator it = this->getLayers()->begin() + 1; it != this->getLayers()->end() - 1; ++it) {
+                    for (LayerContainer::iterator it = this->getLayers()->begin() + 1;
+                         it != this->getLayers()->end() - 1; ++it) {
                         for (NeuronContainer::iterator it2 = (*it)->getNeurons()->begin() + 1;
                              it2 != (*it)->getNeurons()->end(); ++it2) {
                             for (unsigned int j = 0; j < (*it2)->weights.size(); j++) {
