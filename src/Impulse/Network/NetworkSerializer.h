@@ -12,30 +12,31 @@ using json = nlohmann::json;
 
 class NetworkSerializer {
 protected:
-	Network * network;
+    Network *network;
 public:
 
-	NetworkSerializer(Network * net) {
-		this->network = net;
-	}
+    NetworkSerializer(Network *net) {
+        this->network = net;
+    }
 
-	void toJSON(std::string path) {
-		json result;
+    void toJSON(std::string path) {
+        json result;
 
-		std::vector<int> layersSize;
-		for (LayerContainer::iterator it = this->network->getLayers()->begin(); it != this->network->getLayers()->end() - 1; ++it) {
-			auto * layer = (*it);
-			layersSize.push_back(layer->getSize() - 1); // without bias neuron
-		}
-		result["layers"] = layersSize;
+        std::vector<int> layersSize;
+        for (LayerContainer::iterator it = this->network->getLayers()->begin();
+             it != this->network->getLayers()->end() - 1; ++it) {
+            auto *layer = (*it);
+            layersSize.push_back(layer->getSize() - 1); // without bias neuron
+        }
+        result["layers"] = layersSize;
 
-		Eigen::VectorXd rolledTheta = this->network->getRolledTheta();
-		result["neurons"] = std::vector<double>(rolledTheta.data(), rolledTheta.data() + rolledTheta.size());
+        Eigen::VectorXd rolledTheta = this->network->getRolledTheta();
+        result["neurons"] = std::vector<double>(rolledTheta.data(), rolledTheta.data() + rolledTheta.size());
 
-		std::ofstream out(path);
-		out << result.dump();
-		out.close();
-	}
+        std::ofstream out(path);
+        out << result.dump();
+        out.close();
+    }
 };
 
 #endif

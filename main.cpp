@@ -214,6 +214,8 @@ void TEST_LogisticRegression() {
 
     CostGradientResult result2 = trainer->cost(dataSet);
     std::cout << "Cost: " << result2.error << std::endl;
+
+    std::cout << net->forward(input.row(0)) << std::endl;
     /*
      5000
      Output 0: 0.000112662

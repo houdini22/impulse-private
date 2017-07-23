@@ -12,32 +12,34 @@
 #include "../Math/Minimizer/Fmincg.h"
 
 struct CostGradientResult {
-	double error;
-	Eigen::VectorXd gradient;
-	double getCost() {
-		return this->error;
-	}
-	Eigen::VectorXd getGradient() {
-		return this->gradient;
-	}
+    double error;
+    Eigen::VectorXd gradient;
+
+    double getCost() {
+        return this->error;
+    }
+
+    Eigen::VectorXd getGradient() {
+        return this->gradient;
+    }
 };
 
 class NetworkTrainer {
 protected:
-	Network * network;
-	double regularization = 0.0;
-	int learningIterations = 1;
+    Network *network;
+    double regularization = 0.0;
+    int learningIterations = 1;
 public:
 
-	NetworkTrainer(Network * net);
+    NetworkTrainer(Network *net);
 
-	Network * getNetwork();
+    Network *getNetwork();
 
-	NetworkTrainer * setRegularization(double regularization);
+    NetworkTrainer *setRegularization(double regularization);
 
-	NetworkTrainer * setLearningIterations(int nb);
+    NetworkTrainer *setLearningIterations(int nb);
 
-	CostGradientResult cost(DataSet & dataSet);
+    CostGradientResult cost(DataSet &dataSet);
 
-	void train(DataSet dataSet);
+    void train(DataSet dataSet);
 };

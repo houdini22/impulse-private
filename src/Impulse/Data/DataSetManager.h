@@ -13,11 +13,11 @@ public:
         DataSet set = DataSet();
 
         for (int i = 0; i < input.rows(); i++) {
-			Eigen::VectorXd newInput(input.row(i));
-			Eigen::VectorXd newOutput(output.row(i));
-		
+            Eigen::VectorXd newInput(input.row(i));
+            Eigen::VectorXd newOutput(output.row(i));
+
             MapSample dataSample = MapSample();
-			dataSample["input"] = newInput;
+            dataSample["input"] = newInput;
             dataSample["output"] = newOutput;
 
             set.addSample(dataSample);

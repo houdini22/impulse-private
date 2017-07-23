@@ -20,11 +20,13 @@ struct CostGradientResult;
 
 class Fmincg {
 public:
-	Fmincg(void) {
-	}
-	~Fmincg(void) {
-	}
-	Eigen::VectorXd minimize(
-			std::function<CostGradientResult(Eigen::VectorXd)> costFunction,
-			Eigen::VectorXd theta, int length, bool verbose);
+    Fmincg(void) {
+    }
+
+    ~Fmincg(void) {
+    }
+
+    Eigen::VectorXd minimize(
+            std::function<CostGradientResult(Eigen::VectorXd)> costFunction,
+            Eigen::VectorXd theta, int length, bool verbose);
 };

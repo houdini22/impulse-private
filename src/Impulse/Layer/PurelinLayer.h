@@ -3,85 +3,98 @@
 
 #include "AbstractLayer.h"
 
-class PurelinLayer : public AbstractLayer {
-public:
+namespace Impulse {
 
-	PurelinLayer(int size, int prevSize) : AbstractLayer(size, prevSize) {
-		this->a = new Eigen::VectorXd(this->size);
-		this->z = new Eigen::VectorXd(this->size - 1);
-		this->createNeurons();
-	}
+    namespace NeuralNetwork {
 
-	void createNeurons() {
-		this->neurons->push_back(new BiasNeuron());
-		for (int i = 0; i < this->size - 1; i++) { // size is already computed with bias neuron so -1
-			this->neurons->push_back(new Neuron(this->prevSize));
-		}
-	}
+        namespace Layer {
 
-	Eigen::VectorXd backward(Eigen::VectorXd sigma, AbstractLayer * nextLayer) {
-		Eigen::VectorXd tmpResultSigma(this->size);
-		for (int i = 0; i < this->size; i++) {
-			tmpResultSigma(i) = 0.0;
-		}
+            class PurelinLayer : public Impulse::NeuralNetwork::Layer::AbstractLayer {
+            public:
 
-		NeuronContainer * neurons = nextLayer->getNeurons();
-		for (int i = 1; i < nextLayer->getSize(); i++) {
-			Eigen::VectorXd tmp = neurons->at(i)->backward(sigma(i - 1));
-			for (int j = 0; j < tmp.size(); j++) {
-				tmpResultSigma(j) += tmp(j);
-			}
-		}
+                PurelinLayer(int size, int prevSize) : Impulse::NeuralNetwork::Layer::AbstractLayer(size, prevSize) {
+                    this->a = new Eigen::VectorXd(this->size);
+                    this->z = new Eigen::VectorXd(this->size - 1);
+                    this->createNeurons();
+                }
 
-		Eigen::VectorXd resultSigma(this->size - 1);
-		for (int i = 1; i < tmpResultSigma.size(); i++) {
-			resultSigma(i - 1) = tmpResultSigma(i);
-		}
+                void createNeurons() {
+                    this->neurons->push_back(new BiasNeuron());
+                    for (int i = 0; i < this->size - 1; i++) { // size is already computed with bias neuron so -1
+                        this->neurons->push_back(new Neuron(this->prevSize));
+                    }
+                }
 
-		Eigen::VectorXd * a = this->getA();
-		for (int i = 0; i < resultSigma.size(); i++) {
-			resultSigma(i) *= this->derivative((*a)(i + 1));
-		}
+                Eigen::VectorXd
+                backward(Eigen::VectorXd sigma, Impulse::NeuralNetwork::Layer::AbstractLayer *nextLayer) {
+                    Eigen::VectorXd tmpResultSigma(this->size);
+                    for (int i = 0; i < this->size; i++) {
+                        tmpResultSigma(i) = 0.0;
+                    }
 
-		return resultSigma;
-	}
+                    NeuronContainer *neurons = nextLayer->getNeurons();
+                    for (int i = 1; i < nextLayer->getSize(); i++) {
+                        Eigen::VectorXd tmp = neurons->at(i)->backward(sigma(i - 1));
+                        for (int j = 0; j < tmp.size(); j++) {
+                            tmpResultSigma(j) += tmp(j);
+                        }
+                    }
 
-	Eigen::VectorXd forward(Eigen::VectorXd input) {
-		this->reset();
+                    Eigen::VectorXd resultSigma(this->size - 1);
+                    for (int i = 1; i < tmpResultSigma.size(); i++) {
+                        resultSigma(i - 1) = tmpResultSigma(i);
+                    }
 
-		Eigen::VectorXd output(this->neurons->size());
+                    Eigen::VectorXd *a = this->getA();
+                    for (int i = 0; i < resultSigma.size(); i++) {
+                        resultSigma(i) *= this->derivative((*a)(i + 1));
+                    }
 
-		// get value from bias neuron
-		double biasResult = this->neurons->at(0)->forward(input);
+                    return resultSigma;
+                }
 
-		output(0) = biasResult; // save to output layer
-		(*this->a)(0) = (biasResult); // save to activated values container
+                Eigen::VectorXd forward(Eigen::VectorXd input) {
+                    this->reset();
 
-									  // start from 1 not bias neuron
-		int i = 1;
-		for (NeuronContainer::iterator it = this->neurons->begin() + 1; it != this->neurons->end(); ++it) {
-			double result = (*it)->forward(input);
+                    Eigen::VectorXd output(this->neurons->size());
 
-			(*this->z)(i - 1) = result; // save to raw output values container
+                    // get value from bias neuron
+                    double biasResult = this->neurons->at(0)->forward(input);
 
-			double activated = this->activation(result);
-			//save
-			output(i) = activated;
-			(*this->a)(i) = activated;
+                    output(0) = biasResult; // save to output layer
+                    (*this->a)(0) = (biasResult); // save to activated values container
 
-			i++;
-		}
-		return output;
-	}
+                    // start from 1 not bias neuron
+                    int i = 1;
+                    for (NeuronContainer::iterator it = this->neurons->begin() + 1; it != this->neurons->end(); ++it) {
+                        double result = (*it)->forward(input);
 
-	double activation(double input) {
-		return input;
-	}
+                        (*this->z)(i - 1) = result; // save to raw output values container
 
-	double derivative(double input) {
-		return 1.0;
-	}
-};
+                        double activated = this->activation(result);
+                        //save
+                        output(i) = activated;
+                        (*this->a)(i) = activated;
+
+                        i++;
+                    }
+                    return output;
+                }
+
+                double activation(double input) {
+                    return input;
+                }
+
+                double derivative(double input) {
+                    return 1.0;
+                }
+            };
+
+        }
+
+    }
+
+}
 
 #endif /* OUTPUTLAYER_H */
 

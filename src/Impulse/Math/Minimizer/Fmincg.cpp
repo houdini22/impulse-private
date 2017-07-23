@@ -66,198 +66,198 @@
  * 1) move vector class to Eigen
  */
 Eigen::VectorXd Fmincg::minimize(
-		std::function<CostGradientResult(Eigen::VectorXd)> costFunction,
-		Eigen::VectorXd theta, int length, bool verbose) {
+        std::function<CostGradientResult(Eigen::VectorXd)> costFunction,
+        Eigen::VectorXd theta, int length, bool verbose) {
 
-	// input will be the pointer to our current active parameter set
-	Eigen::VectorXd input(theta);
-	Eigen::VectorXd X0(input);
-	// search directions
-	Eigen::VectorXd s(input.size());
-	// gradients
-	Eigen::VectorXd df0(input.size());
-	Eigen::VectorXd df1(input.size());
-	Eigen::VectorXd df2(input.size());
+    // input will be the pointer to our current active parameter set
+    Eigen::VectorXd input(theta);
+    Eigen::VectorXd X0(input);
+    // search directions
+    Eigen::VectorXd s(input.size());
+    // gradients
+    Eigen::VectorXd df0(input.size());
+    Eigen::VectorXd df1(input.size());
+    Eigen::VectorXd df2(input.size());
 
-	// define some integers for bookkeeping and then start
-	int M = 0;
-	int i = 0; // zero the run length counter
-	int red = 1; // starting point
-	int ls_failed = 0; // no previous line search has failed
-	CostGradientResult evaluateCost = costFunction(input);
-	double f1 = evaluateCost.getCost();
-	df1 = evaluateCost.getGradient();
-	i = i + (length < 0 ? 1 : 0);
-	// search direction is steepest
-	s = (df1 * -1.0);
+    // define some integers for bookkeeping and then start
+    int M = 0;
+    int i = 0; // zero the run length counter
+    int red = 1; // starting point
+    int ls_failed = 0; // no previous line search has failed
+    CostGradientResult evaluateCost = costFunction(input);
+    double f1 = evaluateCost.getCost();
+    df1 = evaluateCost.getGradient();
+    i = i + (length < 0 ? 1 : 0);
+    // search direction is steepest
+    s = (df1 * -1.0);
 
-	double d1 = (s * -1.0).dot(s); // this is the slope
-	double z1 = red / (1.0 - d1); // initial step is red/(|s|+1)
+    double d1 = (s * -1.0).dot(s); // this is the slope
+    double z1 = red / (1.0 - d1); // initial step is red/(|s|+1)
 
-	while (i < abs(length)) { // while not finished
-		clock_t begin = clock();
-		i = i + (length > 0 ? 1 : 0); // count iterations?!
-		// make a copy of current values
-		X0 = input;
-		double f0 = f1;
-		df0 = df1;
-		// begin line search
-		// fill our new line searched parameters
-		input = input + (s * z1);
-		CostGradientResult evaluateCost2 = costFunction(input);
-		double f2 = evaluateCost2.getCost();
-		df2 = evaluateCost2.getGradient();
-		i = i + (length < 0 ? 1 : 0); // count epochs
-		double d2 = df2.dot(s);
-		// initialize point 3 equal to point 1
-		double f3 = f1;
-		double d3 = d1;
-		double z3 = -z1;
-		if (length > 0) {
-			M = MAX;
-		} else {
-			M = std::min(MAX, -length - i);
-		}
-		// initialize quanteties
-		int success = 0;
-		double limit = -1;
+    while (i < abs(length)) { // while not finished
+        clock_t begin = clock();
+        i = i + (length > 0 ? 1 : 0); // count iterations?!
+        // make a copy of current values
+        X0 = input;
+        double f0 = f1;
+        df0 = df1;
+        // begin line search
+        // fill our new line searched parameters
+        input = input + (s * z1);
+        CostGradientResult evaluateCost2 = costFunction(input);
+        double f2 = evaluateCost2.getCost();
+        df2 = evaluateCost2.getGradient();
+        i = i + (length < 0 ? 1 : 0); // count epochs
+        double d2 = df2.dot(s);
+        // initialize point 3 equal to point 1
+        double f3 = f1;
+        double d3 = d1;
+        double z3 = -z1;
+        if (length > 0) {
+            M = MAX;
+        } else {
+            M = std::min(MAX, -length - i);
+        }
+        // initialize quanteties
+        int success = 0;
+        double limit = -1;
 
-		while (true) {
-			while (((f2 > f1 + z1 * RHO * d1) | (d2 > -SIG * d1)) && (M > 0)) {
-				// tighten the bracket
-				limit = z1;
-				double z2 = 0.0;
-				double A = 0.0;
-				double B = 0.0;
-				if (f2 > f1) {
-					// quadratic fit
-					z2 = z3 - (0.5 * d3 * z3 * z3) / (d3 * z3 + f2 - f3);
-				} else {
-					// cubic fit
-					A = 6 * (f2 - f3) / z3 + 3 * (d2 + d3);
-					B = 3 * (f3 - f2) - z3 * (d3 + 2 * d2);
-					// numerical error possible - ok!
-					z2 = (sqrt(B * B - A * d2 * z3 * z3) - B) / A;
-				}
-				if (isnan(z2) || !finite(z2)) {
-					// if we had a numerical problem then bisect
-					z2 = z3 / 2.0;
-				}
-				// don't accept too close to limits
-				z2 = std::max(std::min(z2, INT * z3), (1 - INT) * z3);
-				// update the step
-				z1 = z1 + z2;
-				input = input + (s * z2);
-				CostGradientResult evaluateCost3 = costFunction(input);
-				f2 = evaluateCost3.getCost();
-				df2 = evaluateCost3.getGradient();
-				M = M - 1;
-				i = i + (length < 0 ? 1 : 0); // count epochs
-				d2 = df2.dot(s);
-				// z3 is now relative to the location of z2
-				z3 = z3 - z2;
-			}
+        while (true) {
+            while (((f2 > f1 + z1 * RHO * d1) | (d2 > -SIG * d1)) && (M > 0)) {
+                // tighten the bracket
+                limit = z1;
+                double z2 = 0.0;
+                double A = 0.0;
+                double B = 0.0;
+                if (f2 > f1) {
+                    // quadratic fit
+                    z2 = z3 - (0.5 * d3 * z3 * z3) / (d3 * z3 + f2 - f3);
+                } else {
+                    // cubic fit
+                    A = 6 * (f2 - f3) / z3 + 3 * (d2 + d3);
+                    B = 3 * (f3 - f2) - z3 * (d3 + 2 * d2);
+                    // numerical error possible - ok!
+                    z2 = (sqrt(B * B - A * d2 * z3 * z3) - B) / A;
+                }
+                if (isnan(z2) || !finite(z2)) {
+                    // if we had a numerical problem then bisect
+                    z2 = z3 / 2.0;
+                }
+                // don't accept too close to limits
+                z2 = std::max(std::min(z2, INT * z3), (1 - INT) * z3);
+                // update the step
+                z1 = z1 + z2;
+                input = input + (s * z2);
+                CostGradientResult evaluateCost3 = costFunction(input);
+                f2 = evaluateCost3.getCost();
+                df2 = evaluateCost3.getGradient();
+                M = M - 1;
+                i = i + (length < 0 ? 1 : 0); // count epochs
+                d2 = df2.dot(s);
+                // z3 is now relative to the location of z2
+                z3 = z3 - z2;
+            }
 
-			if (f2 > f1 + z1 * RHO * d1 || d2 > -SIG * d1) {
-				break; // this is a failure
-			} else if (d2 > SIG * d1) {
-				success = 1;
-				break; // success
-			} else if (M == 0) {
-				break; // failure
-			}
-			// make cubic extrapolation
-			double A = 6 * (f2 - f3) / z3 + 3 * (d2 + d3);
-			double B = 3 * (f3 - f2) - z3 * (d3 + 2 * d2);
-			double z2 = -d2 * z3 * z3 / (B + sqrt(B * B - A * d2 * z3 * z3));
-			// num prob or wrong sign?
-			if (isnan(z2) || !finite(z2) || z2 < 0)
-				// if we have no upper limit
-				if (limit < -0.5) {
-					// the extrapolate the maximum amount
-					z2 = z1 * (EXT - 1);
-				} else {
-					// otherwise bisect
-					z2 = (limit - z1) / 2;
-				}
-			else if ((limit > -0.5) && (z2 + z1 > limit)) {
-				// extraplation beyond max?
-				z2 = (limit - z1) / 2; // bisect
-			} else if ((limit < -0.5) && (z2 + z1 > z1 * EXT)) {
-				// extrapolationbeyond limit
-				z2 = z1 * (EXT - 1.0); // set to extrapolation limit
-			} else if (z2 < -z3 * INT) {
-				z2 = -z3 * INT;
-			} else if ((limit > -0.5) && (z2 < (limit - z1) * (1.0 - INT))) {
-				// too close to the limit
-				z2 = (limit - z1) * (1.0 - INT);
-			}
-			// set point 3 equal to point 2
-			f3 = f2;
-			d3 = d2;
-			z3 = -z2;
-			z1 = z1 + z2;
-			// update current estimates
-			input = input + (s * z2);
-			CostGradientResult evaluateCost3 = costFunction(input);
-			f2 = evaluateCost3.getCost();
-			df2 = evaluateCost3.getGradient();
-			M = M - 1;
-			i = i + (length < 0 ? 1 : 0); // count epochs?!
-			d2 = df2.dot(s);
-		} // end of line search
+            if (f2 > f1 + z1 * RHO * d1 || d2 > -SIG * d1) {
+                break; // this is a failure
+            } else if (d2 > SIG * d1) {
+                success = 1;
+                break; // success
+            } else if (M == 0) {
+                break; // failure
+            }
+            // make cubic extrapolation
+            double A = 6 * (f2 - f3) / z3 + 3 * (d2 + d3);
+            double B = 3 * (f3 - f2) - z3 * (d3 + 2 * d2);
+            double z2 = -d2 * z3 * z3 / (B + sqrt(B * B - A * d2 * z3 * z3));
+            // num prob or wrong sign?
+            if (isnan(z2) || !finite(z2) || z2 < 0)
+                // if we have no upper limit
+                if (limit < -0.5) {
+                    // the extrapolate the maximum amount
+                    z2 = z1 * (EXT - 1);
+                } else {
+                    // otherwise bisect
+                    z2 = (limit - z1) / 2;
+                }
+            else if ((limit > -0.5) && (z2 + z1 > limit)) {
+                // extraplation beyond max?
+                z2 = (limit - z1) / 2; // bisect
+            } else if ((limit < -0.5) && (z2 + z1 > z1 * EXT)) {
+                // extrapolationbeyond limit
+                z2 = z1 * (EXT - 1.0); // set to extrapolation limit
+            } else if (z2 < -z3 * INT) {
+                z2 = -z3 * INT;
+            } else if ((limit > -0.5) && (z2 < (limit - z1) * (1.0 - INT))) {
+                // too close to the limit
+                z2 = (limit - z1) * (1.0 - INT);
+            }
+            // set point 3 equal to point 2
+            f3 = f2;
+            d3 = d2;
+            z3 = -z2;
+            z1 = z1 + z2;
+            // update current estimates
+            input = input + (s * z2);
+            CostGradientResult evaluateCost3 = costFunction(input);
+            f2 = evaluateCost3.getCost();
+            df2 = evaluateCost3.getGradient();
+            M = M - 1;
+            i = i + (length < 0 ? 1 : 0); // count epochs?!
+            d2 = df2.dot(s);
+        } // end of line search
 
-		if (success == 1) { // if line search succeeded
-			f1 = f2;
-			if (verbose) {
-				clock_t end = clock();
-				std::cout << "Iteration: " << i
-						<< " | Cost: " << f1
-						<< " | Time: " << (double(end - begin) / CLOCKS_PER_SEC)
-						<< std::endl;
-			}
-			// Polack-Ribiere direction: s =
-			// (df2'*df2-df1'*df2)/(df1'*df1)*s - df2;
-			double df2len = df2.dot(df2);
-			double df12len = df1.dot(df2);
-			double df1len = df1.dot(df1);
-			double numerator = (df2len - df12len) / df1len;
-			s = ((s * numerator) - df2);
-			std::swap(df1, df2); // swap derivatives
-			d2 = df1.dot(s);
-			// new slope must be negative
-			if (d2 > 0) {
-				// otherwise use steepest direction
-				s = (df1 * -1.0);
-				d2 = (s * -1.0).dot(s);
-			}
-			// realmin in octave = 2.2251e-308
-			// slope ratio but max RATIO
-			double thres = d1 / (d2 - 2.2251e-308);
-			z1 = z1 * std::min(RATIO, thres);
-			d1 = d2;
-			ls_failed = 0; // this line search did not fail
-		} else {
-			// restore data from the beginning of the iteration
-			input = X0;
-			f1 = f0;
-			df1 = df0; // restore point from before failed line search
-			// line search failed twice in a row?
-			if (ls_failed == 1 || i > abs(length)) {
-				break; // or we ran out of time, so we give up
-			}
-			// swap derivatives
-			std::swap(df1, df2);
-			// try steepest
-			s = (df1 * -1.0);
-			d1 = (s * -1.0).dot(s);
-			z1 = 1.0 / (1.0 - d1);
-			ls_failed = 1; // this line search failed
-		}
-	} // while true loop
-	if (verbose) {
-		// if verbose, we want to switch to a newline now
-		std::cout << std::endl;
-	}
-	return input;
+        if (success == 1) { // if line search succeeded
+            f1 = f2;
+            if (verbose) {
+                clock_t end = clock();
+                std::cout << "Iteration: " << i
+                          << " | Cost: " << f1
+                          << " | Time: " << (double(end - begin) / CLOCKS_PER_SEC)
+                          << std::endl;
+            }
+            // Polack-Ribiere direction: s =
+            // (df2'*df2-df1'*df2)/(df1'*df1)*s - df2;
+            double df2len = df2.dot(df2);
+            double df12len = df1.dot(df2);
+            double df1len = df1.dot(df1);
+            double numerator = (df2len - df12len) / df1len;
+            s = ((s * numerator) - df2);
+            std::swap(df1, df2); // swap derivatives
+            d2 = df1.dot(s);
+            // new slope must be negative
+            if (d2 > 0) {
+                // otherwise use steepest direction
+                s = (df1 * -1.0);
+                d2 = (s * -1.0).dot(s);
+            }
+            // realmin in octave = 2.2251e-308
+            // slope ratio but max RATIO
+            double thres = d1 / (d2 - 2.2251e-308);
+            z1 = z1 * std::min(RATIO, thres);
+            d1 = d2;
+            ls_failed = 0; // this line search did not fail
+        } else {
+            // restore data from the beginning of the iteration
+            input = X0;
+            f1 = f0;
+            df1 = df0; // restore point from before failed line search
+            // line search failed twice in a row?
+            if (ls_failed == 1 || i > abs(length)) {
+                break; // or we ran out of time, so we give up
+            }
+            // swap derivatives
+            std::swap(df1, df2);
+            // try steepest
+            s = (df1 * -1.0);
+            d1 = (s * -1.0).dot(s);
+            z1 = 1.0 / (1.0 - d1);
+            ls_failed = 1; // this line search failed
+        }
+    } // while true loop
+    if (verbose) {
+        // if verbose, we want to switch to a newline now
+        std::cout << std::endl;
+    }
+    return input;
 }
