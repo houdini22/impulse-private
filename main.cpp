@@ -14,10 +14,10 @@
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
 
-#include "src/Impulse/Network/NetworkBuilder.h"
-#include "src/Impulse/Network/NetworkTrainer.h"
-#include "src/Impulse/Data/DataSetManager.h"
-#include "src/Impulse/Network/NetworkSerializer.h"
+#include "src/Impulse/NeuralNetwork/Network/NetworkBuilder.h"
+#include "src/Impulse/NeuralNetwork/Network/NetworkTrainer.h"
+#include "src/Impulse/NeuralNetwork/Data/DataSetManager.h"
+#include "src/Impulse/NeuralNetwork/Network/NetworkSerializer.h"
 
 double strToDouble(std::string str) {
     std::istringstream os(str);
@@ -62,8 +62,8 @@ void TEST_Purelin() {
     NetworkBuilder *builder = new NetworkBuilder();
     // Network * network = builder->buildFromJSON("/home/hud/ml/purelin.json");
     builder->addInputLayer(1);
-    builder->addHiddenPurelinLayer(4);
-    builder->addHiddenPurelinLayer(1);
+    builder->addPurelinLayer(4);
+    builder->addPurelinLayer(1);
     builder->addOutputLayer();
 
     DataSetManager manager = DataSetManager();
@@ -103,9 +103,9 @@ void TEST_Purelin() {
 void TEST_my() {
     NetworkBuilder *builder = new NetworkBuilder();
     builder->addInputLayer(19200);
-    builder->addHiddenPurelinLayer(300);
-    builder->addHiddenPurelinLayer(100);
-    builder->addHiddenPurelinLayer(4);
+    builder->addPurelinLayer(300);
+    builder->addPurelinLayer(100);
+    builder->addPurelinLayer(4);
     builder->addOutputLayer();
     // Network * network = builder->buildFromJSON("/home/hud/ml/network.json");
     Network *network = builder->getNetwork();
@@ -182,8 +182,8 @@ void TEST_my() {
 void TEST_LogisticRegression() {
     NetworkBuilder builder = NetworkBuilder();
     builder.addInputLayer(400);
-    builder.addHiddenLayer(20);
-    builder.addHiddenLayer(10);
+    builder.addLogisticLayer(20);
+    builder.addLogisticLayer(10);
     builder.addOutputLayer();
 
     Network *net = builder.getNetwork();

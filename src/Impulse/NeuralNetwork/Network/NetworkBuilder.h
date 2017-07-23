@@ -3,10 +3,10 @@
 
 #include "Network.h"
 #include "../Layer/InputLayer.h"
-#include "../Layer/HiddenLayer.h"
+#include "../Layer/LogisticLayer.h"
 #include "../Layer/OutputLayer.h"
 #include "../Layer/PurelinLayer.h"
-#include "../../Vendor/json.hpp"
+#include "../../../Vendor/json.hpp"
 
 using json = nlohmann::json;
 
@@ -27,14 +27,14 @@ public:
         return this;
     }
 
-    NetworkBuilder *addHiddenLayer(unsigned int size) {
-        Impulse::NeuralNetwork::Layer::HiddenLayer *layer = new Impulse::NeuralNetwork::Layer::HiddenLayer(size, this->prevSize);
+    NetworkBuilder *addLogisticLayer(unsigned int size) {
+        Impulse::NeuralNetwork::Layer::LogisticLayer *layer = new Impulse::NeuralNetwork::Layer::LogisticLayer(size, this->prevSize);
         this->network->addLayer(layer);
         this->prevSize = layer->getSize();
         return this;
     }
 
-    NetworkBuilder *addHiddenPurelinLayer(unsigned int size) {
+    NetworkBuilder *addPurelinLayer(unsigned int size) {
         Impulse::NeuralNetwork::Layer::PurelinLayer *layer = new Impulse::NeuralNetwork::Layer::PurelinLayer(size, this->prevSize);
         this->network->addLayer(layer);
         this->prevSize = layer->getSize();
@@ -67,7 +67,7 @@ public:
             if (i == 0) {
                 this->addInputLayer(it.value());
             } else {
-                this->addHiddenPurelinLayer(it.value());
+                this->addPurelinLayer(it.value());
             }
             i++;
         }

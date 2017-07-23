@@ -4,27 +4,27 @@ project(impulse)
 set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_FILES
-        src/Impulse/Data/DataSet.h
-        src/Impulse/Data/DataSetManager.h
-        src/Impulse/Data/DataSetSample.h
-        src/Impulse/Layer/AbstractLayer.h
-        src/Impulse/Layer/HiddenLayer.h
-        src/Impulse/Layer/InputLayer.h
-        src/Impulse/Layer/OutputLayer.h
-        src/Impulse/Layer/PurelinLayer.h
-        src/Impulse/Math/Minimizer/Fmincg.cpp
-        src/Impulse/Math/Minimizer/Fmincg.h
-        src/Impulse/Math/Matrix.h
-        src/Impulse/Math/Vector.h
-        src/Impulse/Network/Network.h
-        src/Impulse/Network/NetworkBuilder.h
-        src/Impulse/Network/NetworkSerializer.h
-        src/Impulse/Network/NetworkTrainer.cpp
-        src/Impulse/Network/NetworkTrainer.h
-        src/Impulse/Neuron/AbstractNeuron.h
-        src/Impulse/Neuron/BiasNeuron.h
-        src/Impulse/Neuron/InputNeuron.h
-        src/Impulse/Neuron/SigmoidNeuron.h
+        src/Impulse/NeuralNetwork/Data/DataSet.h
+        src/Impulse/NeuralNetwork/Data/DataSetManager.h
+        src/Impulse/NeuralNetwork/Data/DataSetSample.h
+        src/Impulse/NeuralNetwork/Layer/AbstractLayer.h
+        src/Impulse/NeuralNetwork/Layer/LogisticLayer.h
+        src/Impulse/NeuralNetwork/Layer/InputLayer.h
+        src/Impulse/NeuralNetwork/Layer/OutputLayer.h
+        src/Impulse/NeuralNetwork/Layer/PurelinLayer.h
+        src/Impulse/NeuralNetwork/Math/Minimizer/Fmincg.cpp
+        src/Impulse/NeuralNetwork/Math/Minimizer/Fmincg.h
+        src/Impulse/NeuralNetwork/Math/Matrix.h
+        src/Impulse/NeuralNetwork/Math/Vector.h
+        src/Impulse/NeuralNetwork/Network/Network.h
+        src/Impulse/NeuralNetwork/Network/NetworkBuilder.h
+        src/Impulse/NeuralNetwork/Network/NetworkSerializer.h
+        src/Impulse/NeuralNetwork/Network/NetworkTrainer.cpp
+        src/Impulse/NeuralNetwork/Network/NetworkTrainer.h
+        src/Impulse/NeuralNetwork/Neuron/AbstractNeuron.h
+        src/Impulse/NeuralNetwork/Neuron/BiasNeuron.h
+        src/Impulse/NeuralNetwork/Neuron/InputNeuron.h
+        src/Impulse/NeuralNetwork/Neuron/LinearNeuron.h
         src/Vendor/json.hpp
         main.cpp)
 

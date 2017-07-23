@@ -9,10 +9,10 @@ namespace Impulse {
 
         namespace Neuron {
 
-            class SigmoidNeuron : public Impulse::NeuralNetwork::Neuron::AbstractNeuron {
+            class LinearNeuron : public Impulse::NeuralNetwork::Neuron::AbstractNeuron {
             public:
 
-                SigmoidNeuron(unsigned int size) : Impulse::NeuralNetwork::Neuron::AbstractNeuron(size) {
+                LinearNeuron(unsigned int size) : Impulse::NeuralNetwork::Neuron::AbstractNeuron(size) {
                     this->initializeWeights();
                     this->initializeDeltas();
                 }

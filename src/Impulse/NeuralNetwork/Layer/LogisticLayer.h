@@ -6,7 +6,7 @@
 #include "./AbstractLayer.h"
 #include "../Neuron/AbstractNeuron.h"
 #include "../Neuron/BiasNeuron.h"
-#include "../Neuron/SigmoidNeuron.h"
+#include "../Neuron/LinearNeuron.h"
 
 namespace Impulse {
 
@@ -14,10 +14,10 @@ namespace Impulse {
 
         namespace Layer {
 
-            class HiddenLayer : public Impulse::NeuralNetwork::Layer::AbstractLayer {
+            class LogisticLayer : public Impulse::NeuralNetwork::Layer::AbstractLayer {
             public:
 
-                HiddenLayer(unsigned int size, unsigned int prevSize) : Impulse::NeuralNetwork::Layer::AbstractLayer(size, prevSize) {
+                LogisticLayer(unsigned int size, unsigned int prevSize) : Impulse::NeuralNetwork::Layer::AbstractLayer(size, prevSize) {
                     this->a.resize(this->size);
                     this->z.resize(this->size - 1);
                     this->createNeurons();
@@ -26,7 +26,7 @@ namespace Impulse {
                 void createNeurons() {
                     this->neurons.push_back(new Impulse::NeuralNetwork::Neuron::BiasNeuron());
                     for (unsigned int i = 0; i < this->size - 1; i++) { // size is already computed with bias neuron so -1
-                        this->neurons.push_back(new Impulse::NeuralNetwork::Neuron::SigmoidNeuron(this->prevSize));
+                        this->neurons.push_back(new Impulse::NeuralNetwork::Neuron::LinearNeuron(this->prevSize));
                     }
                 }
 
