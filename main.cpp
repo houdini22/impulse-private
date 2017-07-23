@@ -242,10 +242,12 @@ void TEST_LogisticRegression() {
 void TEST_LogisticLoad() {
     Impulse::NeuralNetwork::Network::NetworkBuilder * builder = new Impulse::NeuralNetwork::Network::NetworkBuilder();
     Impulse::NeuralNetwork::Network::Network * net = builder->buildFromJSON("/home/hud/CLionProjects/impulse-new/cmake-build-release/logistic.json");
-
+    std::cout << "Loaded." << std::endl;
     // load input
     Eigen::MatrixXd input = readMatrix(
             "/home/hud/CLionProjects/impulse/data/ex4data1_x.txt");
+    std::cout << "Input loaded." << std::endl;
+/*
 
     // load output
     Eigen::MatrixXd output = readMatrix(
@@ -258,15 +260,15 @@ void TEST_LogisticLoad() {
 
     CostGradientResult result2 = trainer->cost(dataSet);
     std::cout << "Cost: " << result2.error << std::endl;
-
+*/
     std::cout << net->forward(input.row(0)) << std::endl;
 }
 
 int main() {
     //TEST_my();
     //TEST_Purelin();
-    //TEST_LogisticRegression();
-    TEST_LogisticLoad();
+    TEST_LogisticRegression();
+    //TEST_LogisticLoad();
     getchar();
     return 0;
 }
