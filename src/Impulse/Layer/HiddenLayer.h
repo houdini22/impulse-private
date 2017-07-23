@@ -18,15 +18,15 @@ namespace Impulse {
             public:
 
                 HiddenLayer(int size, int prevSize) : Impulse::NeuralNetwork::Layer::AbstractLayer(size, prevSize) {
-                    this->a = new Eigen::VectorXd(this->size);
-                    this->z = new Eigen::VectorXd(this->size - 1);
+                    this->a.resize(this->size);
+                    this->z.resize(this->size - 1);
                     this->createNeurons();
                 }
 
                 void createNeurons() {
-                    this->neurons->push_back(new BiasNeuron());
+                    this->neurons.push_back(new BiasNeuron());
                     for (int i = 0; i < this->size - 1; i++) { // size is already computed with bias neuron so -1
-                        this->neurons->push_back(new Neuron(this->prevSize));
+                        this->neurons.push_back(new Neuron(this->prevSize));
                     }
                 }
 
@@ -61,25 +61,25 @@ namespace Impulse {
                 Eigen::VectorXd forward(Eigen::VectorXd input) {
                     this->reset();
 
-                    Eigen::VectorXd output(this->neurons->size());
+                    Eigen::VectorXd output(this->neurons.size());
 
                     // get value from bias neuron
-                    double biasResult = this->neurons->at(0)->forward(input);
+                    double biasResult = this->neurons.at(0)->forward(input);
 
                     output(0) = biasResult; // save to output layer
-                    (*this->a)(0) = (biasResult); // save to activated values container
+                    this->a(0) = (biasResult); // save to activated values container
 
                     // start from 1 not bias neuron
                     int i = 1;
-                    for (NeuronContainer::iterator it = this->neurons->begin() + 1; it != this->neurons->end(); ++it) {
+                    for (NeuronContainer::iterator it = this->neurons.begin() + 1; it != this->neurons.end(); ++it) {
                         double result = (*it)->forward(input);
 
-                        (*this->z)(i - 1) = result; // save to raw output values container
+                        this->z(i - 1) = result; // save to raw output values container
 
                         double activated = this->activation(result);
                         //save
                         output(i) = activated;
-                        (*this->a)(i) = activated;
+                        this->a(i) = activated;
 
                         i++;
                     }
