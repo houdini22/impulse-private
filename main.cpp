@@ -61,7 +61,7 @@ Eigen::MatrixXd readMatrix(std::string path) {
     return result;
 };
 
-void TEST_Purelin() {
+/*void TEST_Purelin() {
     Impulse::NeuralNetwork::Network::NetworkBuilder *builder = new Impulse::NeuralNetwork::Network::NetworkBuilder();
     // Network * network = builder->buildFromJSON("/home/hud/ml/purelin.json");
     builder->addInputLayer(1);
@@ -98,12 +98,12 @@ void TEST_Purelin() {
     std::cout << network->forward(input.row(2)) << std::endl;
     std::cout << network->forward(input.row(3)) << std::endl;
 
-    /*NetworkSerializer * serializer = new NetworkSerializer(network);
+    *//*NetworkSerializer * serializer = new NetworkSerializer(network);
      std::string filename = "/home/hud/ml/purelin.json";
-     serializer->toJSON(filename);*/
-}
+     serializer->toJSON(filename);*//*
+}*/
 
-void TEST_my() {
+/*void TEST_my() {
     Impulse::NeuralNetwork::Network::NetworkBuilder *builder = new Impulse::NeuralNetwork::Network::NetworkBuilder();
     builder->addInputLayer(19200);
     builder->addPurelinLayer(300);
@@ -180,7 +180,7 @@ void TEST_my() {
         serializer->toJSON(filename);
     }
 
-}
+}*/
 
 void TEST_LogisticRegression() {
     // build network
@@ -207,34 +207,23 @@ void TEST_LogisticRegression() {
     dataset.output = datasetOutput;
     // end create dataset
 
-    // load input
-    Eigen::MatrixXd input = readMatrix(
-            "/home/hud/CLionProjects/impulse/data/ex4data1_x.txt");
-
-    // load output
-    Eigen::MatrixXd output = readMatrix(
-            "/home/hud/CLionProjects/impulse/data/ex4data1_y.txt");
-
-    DataSetManager manager = DataSetManager();
-    DataSet dataSet = manager.createSet(input, output);
-
     Impulse::NeuralNetwork::Network::NetworkTrainer *trainer = new Impulse::NeuralNetwork::Network::NetworkTrainer(net);
     trainer->setLearningIterations(400);
 
     std::cout << "Calculating cost." << std::endl;
 
-    CostGradientResult result = trainer->cost(dataSet);
+    CostGradientResult result = trainer->cost(&dataset);
     std::cout << "Cost: " << result.error << std::endl;
 
-    std::cout << net->forward(input.row(0)) << std::endl;
+    std::cout << net->forward(dataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
 
     std::cout << "Start training." << std::endl;
-    trainer->train(dataSet);
+    trainer->train(&dataset);
 
-    CostGradientResult result2 = trainer->cost(dataSet);
+    CostGradientResult result2 = trainer->cost(&dataset);
     std::cout << "Cost: " << result2.error << std::endl;
 
-    std::cout << net->forward(input.row(0)) << std::endl;
+    std::cout << net->forward(dataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
 
     Impulse::NeuralNetwork::Network::NetworkSerializer * serializer = new Impulse::NeuralNetwork::Network::NetworkSerializer(net);
     std::string filename = "/home/hud/CLionProjects/impulse-new/cmake-build-release/logistic.json";
@@ -262,32 +251,34 @@ void TEST_LogisticLoad() {
     Impulse::NeuralNetwork::Network::NetworkBuilder * builder = new Impulse::NeuralNetwork::Network::NetworkBuilder();
     Impulse::NeuralNetwork::Network::Network * net = builder->buildFromJSON("/home/hud/CLionProjects/impulse-new/cmake-build-release/logistic.json");
     std::cout << "Loaded." << std::endl;
-    // load input
-    Eigen::MatrixXd input = readMatrix(
-            "/home/hud/CLionProjects/impulse/data/ex4data1_x.txt");
-    std::cout << "Input loaded." << std::endl;
-/*
 
-    // load output
-    Eigen::MatrixXd output = readMatrix(
-            "/home/hud/CLionProjects/impulse/data/ex4data1_y.txt");
+    // create dataset
+    Impulse::DatasetBuilder::CSVBuilder datasetBuilder1(
+            "/home/hud/CLionProjects/impulse-new/data/ex4data1_x.csv");
+    Impulse::Dataset datasetInput = datasetBuilder1.build();
 
-    DataSetManager manager = DataSetManager();
-    DataSet dataSet = manager.createSet(input, output);
+    Impulse::DatasetBuilder::CSVBuilder datasetBuilder2(
+            "/home/hud/CLionProjects/impulse-new/data/ex4data1_y.csv");
+    Impulse::Dataset datasetOutput = datasetBuilder2.build();
+
+    Impulse::SlicedDataset dataset;
+    dataset.input = datasetInput;
+    dataset.output = datasetOutput;
+    // end create dataset
 
     Impulse::NeuralNetwork::Network::NetworkTrainer *trainer = new Impulse::NeuralNetwork::Network::NetworkTrainer(net);
 
-    CostGradientResult result2 = trainer->cost(dataSet);
-    std::cout << "Cost: " << result2.error << std::endl;
-*/
-    std::cout << net->forward(input.row(0)) << std::endl;
+    CostGradientResult result = trainer->cost(&dataset);
+    std::cout << "Cost: " << result.error << std::endl;
+
+    std::cout << net->forward(datasetInput.getSampleAt(0)->exportToEigen()) << std::endl;
 }
 
 int main() {
     //TEST_my();
     //TEST_Purelin();
-    TEST_LogisticRegression();
-    //TEST_LogisticLoad();
+    //TEST_LogisticRegression();
+    TEST_LogisticLoad();
     getchar();
     return 0;
 }

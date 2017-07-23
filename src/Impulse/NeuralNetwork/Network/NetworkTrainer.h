@@ -10,6 +10,7 @@
 #include "../Data/DataSet.h"
 #include "../Math/Matrix.h"
 #include "../Math/Minimizer/Fmincg.h"
+#include "../../../Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/DatasetSlicer.h"
 
 struct CostGradientResult {
     double error;
@@ -45,9 +46,9 @@ namespace Impulse {
 
                 Impulse::NeuralNetwork::Network::NetworkTrainer *setLearningIterations(unsigned int nb);
 
-                CostGradientResult cost(DataSet &dataSet);
+                CostGradientResult cost(Impulse::SlicedDataset *dataSet);
 
-                void train(DataSet dataSet);
+                void train(Impulse::SlicedDataset *dataSet);
             };
 
         }
