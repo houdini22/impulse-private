@@ -12,7 +12,7 @@ public:
     DataSet createSet(Eigen::MatrixXd input, Eigen::MatrixXd output) {
         DataSet set = DataSet();
 
-        for (int i = 0; i < input.rows(); i++) {
+        for (unsigned int i = 0; i < input.rows(); i++) {
             Eigen::VectorXd newInput(input.row(i));
             Eigen::VectorXd newOutput(output.row(i));
 

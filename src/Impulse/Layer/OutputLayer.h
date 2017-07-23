@@ -18,7 +18,7 @@ namespace Impulse {
 
                 Eigen::VectorXd forward(Eigen::VectorXd input) {
                     Eigen::VectorXd newResult(input.size() - 1);
-                    for (int i = 0; i < input.size() - 1; i++) {
+                    for (unsigned int i = 0; i < input.size() - 1; i++) {
                         newResult(i) = input(i + 1);
                     }
                     return newResult;

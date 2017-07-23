@@ -12,15 +12,15 @@ namespace Impulse {
         public:
 
             static void rollMatrixToVector(Eigen::MatrixXd &matrix, TypeVector &vector) {
-                int xSize = matrix.cols();
-                int ySize = matrix.rows();
-                int vectorSize = xSize * ySize;
+                unsigned int xSize = matrix.cols();
+                unsigned int ySize = matrix.rows();
+                unsigned int vectorSize = xSize * ySize;
 
                 vector.reserve(vectorSize);
 
-                for (int i = 0; i < xSize; i++) {
+                for (unsigned int i = 0; i < xSize; i++) {
                     Eigen::RowVectorXd row = matrix.col(i);
-                    for (int j = 0; j < ySize; j++) {
+                    for (unsigned int j = 0; j < ySize; j++) {
                         vector.push_back(row(j));
                     }
                 }

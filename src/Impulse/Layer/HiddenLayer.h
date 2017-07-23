@@ -17,7 +17,7 @@ namespace Impulse {
             class HiddenLayer : public Impulse::NeuralNetwork::Layer::AbstractLayer {
             public:
 
-                HiddenLayer(int size, int prevSize) : Impulse::NeuralNetwork::Layer::AbstractLayer(size, prevSize) {
+                HiddenLayer(unsigned int size, unsigned int prevSize) : Impulse::NeuralNetwork::Layer::AbstractLayer(size, prevSize) {
                     this->a.resize(this->size);
                     this->z.resize(this->size - 1);
                     this->createNeurons();
@@ -25,7 +25,7 @@ namespace Impulse {
 
                 void createNeurons() {
                     this->neurons.push_back(new Impulse::NeuralNetwork::Neuron::BiasNeuron());
-                    for (int i = 0; i < this->size - 1; i++) { // size is already computed with bias neuron so -1
+                    for (unsigned int i = 0; i < this->size - 1; i++) { // size is already computed with bias neuron so -1
                         this->neurons.push_back(new Impulse::NeuralNetwork::Neuron::SigmoidNeuron(this->prevSize));
                     }
                 }
@@ -33,25 +33,25 @@ namespace Impulse {
                 Eigen::VectorXd
                 backward(Eigen::VectorXd sigma, Impulse::NeuralNetwork::Layer::AbstractLayer *nextLayer) {
                     Eigen::VectorXd tmpResultSigma(this->size);
-                    for (int i = 0; i < this->size; i++) {
+                    for (unsigned int i = 0; i < this->size; i++) {
                         tmpResultSigma(i) = 0.0;
                     }
 
                     NeuronContainer *neurons = nextLayer->getNeurons();
-                    for (int i = 1; i < nextLayer->getSize(); i++) {
+                    for (unsigned int i = 1; i < nextLayer->getSize(); i++) {
                         Eigen::VectorXd tmp = neurons->at(i)->backward(sigma(i - 1));
-                        for (int j = 0; j < tmp.size(); j++) {
+                        for (unsigned int j = 0; j < tmp.size(); j++) {
                             tmpResultSigma(j) += tmp(j);
                         }
                     }
 
                     Eigen::VectorXd resultSigma(this->size - 1);
-                    for (int i = 1; i < tmpResultSigma.size(); i++) {
+                    for (unsigned int i = 1; i < tmpResultSigma.size(); i++) {
                         resultSigma(i - 1) = tmpResultSigma(i);
                     }
 
                     Eigen::VectorXd *a = this->getA();
-                    for (int i = 0; i < resultSigma.size(); i++) {
+                    for (unsigned int i = 0; i < resultSigma.size(); i++) {
                         resultSigma(i) *= this->derivative((*a)(i + 1));
                     }
 
@@ -70,7 +70,7 @@ namespace Impulse {
                     this->a(0) = (biasResult); // save to activated values container
 
                     // start from 1 not bias neuron
-                    int i = 1;
+                    unsigned int i = 1;
                     for (NeuronContainer::iterator it = this->neurons.begin() + 1; it != this->neurons.end(); ++it) {
                         double result = (*it)->forward(input);
 

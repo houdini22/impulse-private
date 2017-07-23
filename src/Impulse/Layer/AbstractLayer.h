@@ -17,15 +17,15 @@ namespace Impulse {
 
             class AbstractLayer {
             protected:
-                int size;
-                int prevSize;
+                unsigned int size;
+                unsigned int prevSize;
                 NeuronContainer neurons;
                 Eigen::VectorXd a;
                 Eigen::VectorXd z;
 
             public:
 
-                AbstractLayer(int size, int prevSize) {
+                AbstractLayer(unsigned int size, unsigned int prevSize) {
                     this->size = size + 1;
                     this->prevSize = prevSize;
                 };
@@ -39,7 +39,7 @@ namespace Impulse {
                     this->z.resize(0);
                 }
 
-                int getSize() {
+                unsigned int getSize() {
                     return this->size;
                 }
 
@@ -56,28 +56,28 @@ namespace Impulse {
                 }
 
                 void calculateDeltas(Eigen::VectorXd *prevLayerA, Eigen::VectorXd sigma) {
-                    for (int i = 0; i < sigma.size(); i++) {
-                        for (int j = 0; j < prevLayerA->size(); j++) {
-                            (*this->neurons.at(i + 1)->deltas)(j) += (*prevLayerA)(j) * sigma(i);
+                    for (unsigned int i = 0; i < sigma.size(); i++) {
+                        for (unsigned int j = 0; j < prevLayerA->size(); j++) {
+                            this->neurons.at(i + 1)->deltas(j) += (*prevLayerA)(j) * sigma(i);
                         }
                     }
                 }
 
-                Eigen::MatrixXd backwardPenalty(int numSamples, double regularization) {
+                Eigen::MatrixXd backwardPenalty(unsigned int numSamples, double regularization) {
                     Eigen::MatrixXd resultPenalty(this->size - 1, this->prevSize);
-                    for (int i = 1; i < this->size; i++) {
+                    for (unsigned int i = 1; i < this->size; i++) {
                         Eigen::VectorXd penalty = this->neurons.at(i)->backwardPenalty(numSamples, regularization);
                         resultPenalty.row(i - 1) = penalty;
                     }
                     return resultPenalty;
                 }
 
-                Eigen::MatrixXd calculateGradient(int numSamples, Eigen::MatrixXd penalty) {
+                Eigen::MatrixXd calculateGradient(unsigned int numSamples, Eigen::MatrixXd penalty) {
                     Eigen::MatrixXd gradient(this->neurons.at(1)->getSize(), this->size - 1);
-                    for (int i = 1; i < this->size; i++) {
-                        for (int j = 0; j < this->neurons.at(i)->deltas->size(); j++) {
+                    for (unsigned int i = 1; i < this->size; i++) {
+                        for (unsigned int j = 0; j < this->neurons.at(i)->deltas.size(); j++) {
                             gradient(j, i - 1) =
-                                    ((*this->neurons.at(i)->deltas)(j) / (double) numSamples) + penalty(i - 1, j);
+                                    (this->neurons.at(i)->deltas(j) / (double) numSamples) + penalty(i - 1, j);
                         }
                     }
                     return gradient;
@@ -85,7 +85,7 @@ namespace Impulse {
 
                 double errorPenalty() {
                     double sum = 0.0;
-                    for (int i = 1; i < this->size; i++) {
+                    for (unsigned int i = 1; i < this->size; i++) {
                         sum += this->neurons.at(i)->errorPenalty();
                     }
                     return sum;

@@ -14,7 +14,7 @@ NetworkTrainer *NetworkTrainer::setRegularization(double regularization) {
     return this;
 }
 
-NetworkTrainer *NetworkTrainer::setLearningIterations(int nb) {
+NetworkTrainer *NetworkTrainer::setLearningIterations(unsigned int nb) {
     this->learningIterations = nb;
     return this;
 }
@@ -29,9 +29,8 @@ CostGradientResult NetworkTrainer::cost(DataSet &dataSet) {
          it != net->getLayers()->end() - 1; ++it) {
         for (NeuronContainer::iterator it2 = (*it)->getNeurons()->begin() + 1;
              it2 != (*it)->getNeurons()->end(); ++it2) {
-            Eigen::VectorXd *deltas = (*it2)->deltas;
-            for (int i = 0; i < deltas->size(); i++) {
-                (*deltas)(i) = 0;
+            for (int i = 0; i < (*it2)->deltas.size(); i++) {
+                (*it2)->deltas(i) = 0;
             }
         }
     }

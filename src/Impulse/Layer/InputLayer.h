@@ -15,7 +15,7 @@ namespace Impulse {
             class InputLayer : public Impulse::NeuralNetwork::Layer::AbstractLayer {
             public:
 
-                InputLayer(int size) : Impulse::NeuralNetwork::Layer::AbstractLayer(size, 1) {
+                InputLayer(unsigned int size) : Impulse::NeuralNetwork::Layer::AbstractLayer(size, 1) {
                     this->a.resize(this->size);
                     this->z.resize(this->size);
                     this->createNeurons();
@@ -23,7 +23,7 @@ namespace Impulse {
 
                 void createNeurons() {
                     this->neurons.push_back(new Impulse::NeuralNetwork::Neuron::BiasNeuron());
-                    for (int i = 0; i < this->size - 1; i++) {
+                    for (unsigned int i = 0; i < this->size - 1; i++) {
                         this->neurons.push_back(new Impulse::NeuralNetwork::Neuron::InputNeuron());
                     }
                 }
@@ -40,7 +40,7 @@ namespace Impulse {
                     this->z(0) = biasResult;
 
                     // start from 1 not bias neuron
-                    int i = 0; // key for input
+                    unsigned int i = 0; // key for input
                     for (NeuronContainer::iterator it = this->neurons.begin() + 1; it != this->neurons.end(); ++it) {
                         Eigen::VectorXd prepared(1);
                         prepared(0) = input(i);

@@ -28,5 +28,5 @@ public:
 
     Eigen::VectorXd minimize(
             std::function<CostGradientResult(Eigen::VectorXd)> costFunction,
-            Eigen::VectorXd theta, int length, bool verbose);
+            Eigen::VectorXd theta, unsigned int length, bool verbose);
 };

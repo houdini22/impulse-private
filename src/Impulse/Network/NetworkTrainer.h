@@ -28,7 +28,7 @@ class NetworkTrainer {
 protected:
     Network *network;
     double regularization = 0.0;
-    int learningIterations = 1;
+    unsigned int learningIterations = 1;
 public:
 
     NetworkTrainer(Network *net);
@@ -37,7 +37,7 @@ public:
 
     NetworkTrainer *setRegularization(double regularization);
 
-    NetworkTrainer *setLearningIterations(int nb);
+    NetworkTrainer *setLearningIterations(unsigned int nb);
 
     CostGradientResult cost(DataSet &dataSet);
 

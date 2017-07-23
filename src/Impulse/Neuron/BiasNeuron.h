@@ -16,7 +16,7 @@ namespace Impulse {
                 }
 
                 double forward(Eigen::VectorXd input) {
-                    return (*this->weights)(0);
+                    return this->weights(0);
                 }
             };
 

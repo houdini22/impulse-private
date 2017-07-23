@@ -67,7 +67,7 @@
  */
 Eigen::VectorXd Fmincg::minimize(
         std::function<CostGradientResult(Eigen::VectorXd)> costFunction,
-        Eigen::VectorXd theta, int length, bool verbose) {
+        Eigen::VectorXd theta, unsigned int length, bool verbose) {
 
     // input will be the pointer to our current active parameter set
     Eigen::VectorXd input(theta);
@@ -116,7 +116,7 @@ Eigen::VectorXd Fmincg::minimize(
         if (length > 0) {
             M = MAX;
         } else {
-            M = std::min(MAX, -length - i);
+            M = std::min(MAX, (int) -length - i);
         }
         // initialize quanteties
         int success = 0;

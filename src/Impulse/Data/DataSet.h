@@ -7,7 +7,7 @@
 
 class DataSet {
 protected:
-    int size = 0;
+    unsigned int size = 0;
     std::vector<MapSample> samples;
 public:
 
@@ -16,7 +16,7 @@ public:
         this->samples.push_back(sample);
     }
 
-    int getSize() {
+    unsigned int getSize() {
         return this->size;
     }
 

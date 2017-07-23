@@ -13,28 +13,28 @@ using json = nlohmann::json;
 class NetworkBuilder {
 protected:
     Network *network;
-    int prevSize;
+    unsigned int prevSize;
 public:
 
     NetworkBuilder() {
         this->network = new Network();
     }
 
-    NetworkBuilder *addInputLayer(int size) {
+    NetworkBuilder *addInputLayer(unsigned int size) {
         Impulse::NeuralNetwork::Layer::InputLayer *layer = new Impulse::NeuralNetwork::Layer::InputLayer(size);
         this->network->addLayer(layer);
         this->prevSize = layer->getSize();
         return this;
     }
 
-    NetworkBuilder *addHiddenLayer(int size) {
+    NetworkBuilder *addHiddenLayer(unsigned int size) {
         Impulse::NeuralNetwork::Layer::HiddenLayer *layer = new Impulse::NeuralNetwork::Layer::HiddenLayer(size, this->prevSize);
         this->network->addLayer(layer);
         this->prevSize = layer->getSize();
         return this;
     }
 
-    NetworkBuilder *addHiddenPurelinLayer(int size) {
+    NetworkBuilder *addHiddenPurelinLayer(unsigned int size) {
         Impulse::NeuralNetwork::Layer::PurelinLayer *layer = new Impulse::NeuralNetwork::Layer::PurelinLayer(size, this->prevSize);
         this->network->addLayer(layer);
         this->prevSize = layer->getSize();
@@ -62,7 +62,7 @@ public:
         fileStream.close();
 
         json savedLayers = jsonFile["layers"];
-        int i = 0;
+        unsigned int i = 0;
         for (auto it = savedLayers.begin(); it != savedLayers.end(); ++it) {
             if (i == 0) {
                 this->addInputLayer(it.value());
@@ -74,7 +74,7 @@ public:
 
         this->addOutputLayer();
 
-        int j = 0;
+        unsigned int j = 0;
         json savedTheta = jsonFile["neurons"];
         Eigen::VectorXd theta(savedTheta.size());
         for (auto it = savedTheta.begin(); it != savedTheta.end(); ++it) {

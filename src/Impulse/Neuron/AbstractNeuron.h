@@ -16,48 +16,45 @@ namespace Impulse {
 
             class AbstractNeuron {
             protected:
-                int size;
+                unsigned int size;
             public:
-                Eigen::VectorXd *weights;
-                Eigen::VectorXd *deltas;
+                Eigen::VectorXd weights;
+                Eigen::VectorXd deltas;
 
-                AbstractNeuron(int size) {
+                AbstractNeuron(unsigned int size) {
                     this->size = size;
-                    this->weights = new Eigen::VectorXd(size);
-                    this->deltas = new Eigen::VectorXd(size);
+                    this->weights.resize(size);
+                    this->deltas.resize(size);
                 }
 
                 ~AbstractNeuron() {
-                    this->weights->resize(0);
-                    delete this->weights;
-
-                    this->deltas->resize(0);
-                    delete this->deltas;
+                    this->weights.resize(0);
+                    this->deltas.resize(0);
                 }
 
-                int getSize() {
+                unsigned int getSize() {
                     return this->size;
                 }
 
                 Eigen::VectorXd backward(double sigma) {
-                    Eigen::VectorXd result(*this->weights);
+                    Eigen::VectorXd result(this->weights);
                     result *= sigma;
                     return result;
                 }
 
-                Eigen::VectorXd backwardPenalty(int numSamples, double regularization) {
+                Eigen::VectorXd backwardPenalty(unsigned int numSamples, double regularization) {
                     Eigen::VectorXd result(this->size);
                     result(0) = 0.0;
-                    for (int i = 1; i < this->size; i++) {
-                        result(i) = ((regularization / (double) numSamples) * (*this->weights)(i));
+                    for (unsigned int i = 1; i < this->size; i++) {
+                        result(i) = ((regularization / (double) numSamples) * this->weights(i));
                     }
                     return result;
                 }
 
                 double errorPenalty() {
                     double sum = 0.0;
-                    for (int i = 1; i < this->size; i++) {
-                        sum += pow((*this->weights)(i), 2.0);
+                    for (unsigned int i = 1; i < this->size; i++) {
+                        sum += pow(this->weights(i), 2.0);
                     }
                     return sum;
                 }

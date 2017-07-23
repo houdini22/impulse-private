@@ -9,7 +9,7 @@ typedef std::vector<Impulse::NeuralNetwork::Layer::AbstractLayer *> LayerContain
 class Network {
 protected:
 
-    int size = 0;
+    unsigned int size = 0;
     LayerContainer layers;
 
 public:
@@ -29,7 +29,7 @@ public:
         this->layers.push_back(layer);
     }
 
-    int getSize() {
+    unsigned int getSize() {
         return this->size;
     }
 
@@ -47,11 +47,11 @@ public:
 
     void backward(Eigen::VectorXd predictions, Eigen::VectorXd output) {
         Eigen::VectorXd sigma(predictions.size());
-        for (int i = 0; i < predictions.size(); i++) {
+        for (unsigned int i = 0; i < predictions.size(); i++) {
             sigma(i) = predictions(i) - output(i);
         }
 
-        for (int i = this->size - 2; i > 0; i--) {
+        for (unsigned int i = this->size - 2; i > 0; i--) {
             auto *layer = this->layers.at(i);
             auto *prevLayer = this->layers.at(i - 1);
 
@@ -66,9 +66,8 @@ public:
              layerIterator != this->layers.end() - 1; layerIterator++) {
             for (NeuronContainer::iterator neuronIterator = (*layerIterator)->getNeurons()->begin() + 1;
                  neuronIterator != (*layerIterator)->getNeurons()->end(); ++neuronIterator) {
-                Eigen::VectorXd *weights = (*neuronIterator)->weights;
-                for (int j = 0; j < weights->size(); j++) {
-                    tmp.push_back(((*weights)(j)));
+                for (unsigned int j = 0; j < (*neuronIterator)->weights.size(); j++) {
+                    tmp.push_back(((*neuronIterator)->weights(j)));
                 }
             }
         }
@@ -77,13 +76,12 @@ public:
     }
 
     void setRolledTheta(Eigen::VectorXd rolledTheta) {
-        int i = 0;
+        unsigned int i = 0;
         for (LayerContainer::iterator it = this->getLayers()->begin() + 1; it != this->getLayers()->end() - 1; ++it) {
             for (NeuronContainer::iterator it2 = (*it)->getNeurons()->begin() + 1;
                  it2 != (*it)->getNeurons()->end(); ++it2) {
-                Eigen::VectorXd *weights = (*it2)->weights;
-                for (int j = 0; j < weights->size(); j++) {
-                    (*weights)(j) = rolledTheta(i++);
+                for (unsigned int j = 0; j < (*it2)->weights.size(); j++) {
+                    (*it2)->weights(j) = rolledTheta(i++);
                 }
             }
         }

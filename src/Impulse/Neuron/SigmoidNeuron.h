@@ -12,29 +12,26 @@ namespace Impulse {
             class SigmoidNeuron : public Impulse::NeuralNetwork::Neuron::AbstractNeuron {
             public:
 
-                SigmoidNeuron(int size) : Impulse::NeuralNetwork::Neuron::AbstractNeuron(size) {
+                SigmoidNeuron(unsigned int size) : Impulse::NeuralNetwork::Neuron::AbstractNeuron(size) {
                     this->initializeWeights();
                     this->initializeDeltas();
                 }
 
                 void initializeWeights() {
                     double epsilon = 0.12;
-                    for (int i = 0; i < this->size; i++) {
-                        (*this->weights)(i) = (((double) rand() / (RAND_MAX)) * 2 * epsilon - epsilon);
+                    for (unsigned int i = 0; i < this->size; i++) {
+                        this->weights(i) = (((double) rand() / (RAND_MAX)) * 2 * epsilon - epsilon);
                     }
                 }
 
                 void initializeDeltas() {
-                    for (int i = 0; i < this->size; i++) {
-                        (*this->deltas)(i) = 0.0;
+                    for (unsigned int i = 0; i < this->size; i++) {
+                        this->deltas(i) = 0.0;
                     }
                 }
 
                 double forward(Eigen::VectorXd input) {
-                    double result = 0.0;
-                    for (int i = 0; i < input.size(); i++) {
-                        result += input(i) * (*this->weights)(i);
-                    }
+                    double result = input.dot(this->weights);
                     return result;
                 }
             };
