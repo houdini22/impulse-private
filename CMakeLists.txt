@@ -24,7 +24,7 @@ set(SOURCE_FILES
         src/Impulse/Neuron/AbstractNeuron.h
         src/Impulse/Neuron/BiasNeuron.h
         src/Impulse/Neuron/InputNeuron.h
-        src/Impulse/Neuron/Neuron.h
+        src/Impulse/Neuron/SigmoidNeuron.h
         src/Vendor/json.hpp
         main.cpp)
 

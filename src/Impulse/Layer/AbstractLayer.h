@@ -7,7 +7,7 @@
 #include "../Math/Matrix.h"
 #include "../Math/Vector.h"
 
-typedef std::vector<AbstractNeuron *> NeuronContainer;
+typedef std::vector<Impulse::NeuralNetwork::Neuron::AbstractNeuron *> NeuronContainer;
 
 namespace Impulse {
 

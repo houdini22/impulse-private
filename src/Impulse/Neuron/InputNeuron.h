@@ -3,16 +3,28 @@
 
 #include "AbstractNeuron.h"
 
-class InputNeuron : public AbstractNeuron {
-public:
+namespace Impulse {
 
-    InputNeuron() : AbstractNeuron(1) {
+    namespace NeuralNetwork {
+
+        namespace Neuron {
+
+            class InputNeuron : public Impulse::NeuralNetwork::Neuron::AbstractNeuron {
+            public:
+
+                InputNeuron() : Impulse::NeuralNetwork::Neuron::AbstractNeuron(1) {
+                }
+
+                double forward(Eigen::VectorXd input) {
+                    return input(0);
+                }
+            };
+
+        }
+
     }
 
-    double forward(Eigen::VectorXd input) {
-        return input(0);
-    }
-};
+}
 
 #endif /* INPUTNEURON_H */
 
