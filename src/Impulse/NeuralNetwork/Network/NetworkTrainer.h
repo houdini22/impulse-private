@@ -12,24 +12,24 @@
 #include "../Math/Minimizer/Fmincg.h"
 #include "../../../Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/DatasetSlicer.h"
 
-struct CostGradientResult {
-    double error;
-    Eigen::VectorXd gradient;
-
-    double getCost() {
-        return this->error;
-    }
-
-    Eigen::VectorXd getGradient() {
-        return this->gradient;
-    }
-};
-
 namespace Impulse {
 
     namespace NeuralNetwork {
 
         namespace Network {
+
+            struct CostGradientResult {
+                double error;
+                Eigen::VectorXd gradient;
+
+                double getCost() {
+                    return this->error;
+                }
+
+                Eigen::VectorXd getGradient() {
+                    return this->gradient;
+                }
+            };
 
             class NetworkTrainer {
             protected:
@@ -46,7 +46,7 @@ namespace Impulse {
 
                 Impulse::NeuralNetwork::Network::NetworkTrainer *setLearningIterations(unsigned int nb);
 
-                CostGradientResult cost(Impulse::SlicedDataset *dataSet);
+                Impulse::NeuralNetwork::Network::CostGradientResult cost(Impulse::SlicedDataset *dataSet);
 
                 void train(Impulse::SlicedDataset *dataSet);
             };

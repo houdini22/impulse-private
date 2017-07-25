@@ -67,7 +67,7 @@ namespace Impulse {
                 }
 
                 Eigen::VectorXd getRolledTheta() {
-                    std::vector<double> tmp;
+                    Impulse::Math::TypeVector tmp;
                     for (LayerContainer::iterator it = this->getLayers()->begin() + 1;
                          it != this->getLayers()->end() - 1; ++it) {
                         for (NeuronContainer::iterator it2 = (*it)->getNeurons()->begin() + 1;

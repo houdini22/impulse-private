@@ -1,17 +1,16 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-typedef std::vector<std::vector<double>> TypeMatrix;
-
 #include "Vector.h"
 
 namespace Impulse {
+
     namespace Math {
 
         class Matrix {
         public:
 
-            static void rollMatrixToVector(Eigen::MatrixXd &matrix, TypeVector &vector) {
+            static void rollMatrixToVector(Eigen::MatrixXd &matrix, Impulse::Math::TypeVector &vector) {
                 unsigned int xSize = matrix.cols();
                 unsigned int ySize = matrix.rows();
                 unsigned int vectorSize = xSize * ySize;

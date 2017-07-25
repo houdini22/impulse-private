@@ -22,45 +22,6 @@
 #include "src/Vendor/impulse-ml-dataset/src/src/Impulse/Dataset.h"
 #include "src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/DatasetSlicer.h"
 
-double strToDouble(std::string str) {
-    std::istringstream os(str);
-    double d;
-    os >> d;
-    return d;
-}
-
-TypeMatrix readData(std::string path) {
-    std::ifstream file(path);
-    std::string line;
-
-    TypeMatrix result;
-
-    while (std::getline(file, line)) {
-        TypeVector lineData;
-        std::istringstream iss(line);
-        std::string token;
-        while (std::getline(iss, token, ' ')) {
-            lineData.push_back(strToDouble(token));
-        }
-        result.push_back(lineData);
-    }
-
-    return result;
-}
-
-Eigen::MatrixXd readMatrix(std::string path) {
-    TypeMatrix matrix = readData(path);
-    int rows = matrix.size();
-    int cols = matrix.at(0).size();
-
-    Eigen::MatrixXd result(rows, cols);
-    for (int i = 0; i < rows; i++)
-        for (int j = 0; j < cols; j++)
-            result(i, j) = matrix.at(i).at(j);
-
-    return result;
-};
-
 /*void TEST_Purelin() {
     Impulse::NeuralNetwork::Network::NetworkBuilder *builder = new Impulse::NeuralNetwork::Network::NetworkBuilder();
     // Network * network = builder->buildFromJSON("/home/hud/ml/purelin.json");
@@ -212,7 +173,7 @@ void TEST_LogisticRegression() {
 
     std::cout << "Calculating cost." << std::endl;
 
-    CostGradientResult result = trainer->cost(&dataset);
+    Impulse::NeuralNetwork::Network::CostGradientResult result = trainer->cost(&dataset);
     std::cout << "Cost: " << result.error << std::endl;
 
     std::cout << net->forward(dataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
@@ -220,7 +181,7 @@ void TEST_LogisticRegression() {
     std::cout << "Start training." << std::endl;
     trainer->train(&dataset);
 
-    CostGradientResult result2 = trainer->cost(&dataset);
+    Impulse::NeuralNetwork::Network::CostGradientResult result2 = trainer->cost(&dataset);
     std::cout << "Cost: " << result2.error << std::endl;
 
     std::cout << net->forward(dataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
@@ -268,7 +229,7 @@ void TEST_LogisticLoad() {
 
     Impulse::NeuralNetwork::Network::NetworkTrainer *trainer = new Impulse::NeuralNetwork::Network::NetworkTrainer(net);
 
-    CostGradientResult result = trainer->cost(&dataset);
+    Impulse::NeuralNetwork::Network::CostGradientResult result = trainer->cost(&dataset);
     std::cout << "Cost: " << result.error << std::endl;
 
     std::cout << net->forward(datasetInput.getSampleAt(0)->exportToEigen()) << std::endl;
@@ -277,8 +238,8 @@ void TEST_LogisticLoad() {
 int main() {
     //TEST_my();
     //TEST_Purelin();
-    //TEST_LogisticRegression();
-    TEST_LogisticLoad();
+    TEST_LogisticRegression();
+    //TEST_LogisticLoad();
     getchar();
     return 0;
 }

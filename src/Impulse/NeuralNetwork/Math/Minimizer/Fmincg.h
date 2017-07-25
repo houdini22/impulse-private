@@ -18,17 +18,29 @@
 
 #include "../../Network/NetworkTrainer.h"
 
-struct CostGradientResult;
+namespace Impulse {
+    namespace NeuralNetwork {
+        namespace Network {
+            struct CostGradientResult;
+        }
+        namespace Math {
+            namespace Minimizer {
+                class Fmincg {
+                public:
+                    Fmincg(void) {
+                    }
 
-class Fmincg {
-public:
-    Fmincg(void) {
+                    ~Fmincg(void) {
+                    }
+
+                    Eigen::VectorXd minimize(
+                            std::function<Impulse::NeuralNetwork::Network::CostGradientResult(
+                                    Eigen::VectorXd)> costFunction,
+                            Eigen::VectorXd theta, unsigned int length, bool verbose);
+                };
+
+            }
+        }
     }
+}
 
-    ~Fmincg(void) {
-    }
-
-    Eigen::VectorXd minimize(
-            std::function<CostGradientResult(Eigen::VectorXd)> costFunction,
-            Eigen::VectorXd theta, unsigned int length, bool verbose);
-};

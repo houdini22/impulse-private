@@ -26,7 +26,7 @@ namespace Impulse {
                 return this;
             }
 
-            CostGradientResult NetworkTrainer::cost(Impulse::SlicedDataset *dataSet) {
+            Impulse::NeuralNetwork::Network::CostGradientResult NetworkTrainer::cost(Impulse::SlicedDataset *dataSet) {
                 Impulse::NeuralNetwork::Network::Network *net = this->network;
                 double sumErrors = 0.0;
 
@@ -55,7 +55,7 @@ namespace Impulse {
                 }
 
                 double errorPenalty = 0.0;
-                TypeVector resultGradient;
+                Impulse::Math::TypeVector resultGradient;
                 LayerContainer *layers = net->getLayers();
 
                 for (int i = 1; i < net->getSize() - 1; i++) {
@@ -72,7 +72,7 @@ namespace Impulse {
                 // double error = (1.0 / (2.0 * (double) dataSet.getSize())) * sumErrors + errorRegularization;
                 double error = (-1.0 / (double) dataSet->input.getSize()) * sumErrors + errorRegularization;
 
-                CostGradientResult result;
+                Impulse::NeuralNetwork::Network::CostGradientResult result;
                 result.error = error;
                 result.gradient = Eigen::Map<Eigen::VectorXd>(resultGradient.data(),
                                                               resultGradient.size());
@@ -81,12 +81,12 @@ namespace Impulse {
             }
 
             void NetworkTrainer::train(Impulse::SlicedDataset *dataSet) {
-                Fmincg minimizer;
+                Impulse::NeuralNetwork::Math::Minimizer::Fmincg minimizer;
 
                 Impulse::NeuralNetwork::Network::Network *network = this->network;
                 Eigen::VectorXd theta = network->getRolledTheta();
 
-                std::function<CostGradientResult(Eigen::VectorXd)> cf(
+                std::function<Impulse::NeuralNetwork::Network::CostGradientResult(Eigen::VectorXd)> cf(
                         [this, &dataSet](Eigen::VectorXd input) {
                             this->network->setRolledTheta(input);
                             return this->cost(dataSet);
