@@ -52,10 +52,7 @@ namespace Impulse {
                 }
 
                 void backward(Eigen::VectorXd predictions, Eigen::VectorXd output) {
-                    Eigen::VectorXd sigma(predictions.size());
-                    for (unsigned int i = 0; i < predictions.size(); i++) {
-                        sigma(i) = predictions(i) - output(i);
-                    }
+                    Eigen::VectorXd sigma = predictions - output;
 
                     for (unsigned int i = this->size - 2; i > 0; i--) {
                         auto *layer = this->layers.at(i);

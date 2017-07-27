@@ -25,14 +25,11 @@ namespace Impulse {
                 }
 
                 void initializeDeltas() {
-                    for (unsigned int i = 0; i < this->size; i++) {
-                        this->deltas(i) = 0.0;
-                    }
+                    this->deltas.setZero();
                 }
 
                 double forward(Eigen::VectorXd input) {
-                    double result = input.dot(this->weights);
-                    return result;
+                    return input.dot(this->weights);
                 }
             };
 

@@ -16,7 +16,6 @@
 
 #include "src/Impulse/NeuralNetwork/Network/NetworkBuilder.h"
 #include "src/Impulse/NeuralNetwork/Network/NetworkTrainer.h"
-#include "src/Impulse/NeuralNetwork/Data/DataSetManager.h"
 #include "src/Impulse/NeuralNetwork/Network/NetworkSerializer.h"
 #include "src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetBuilder/CSVBuilder.h"
 #include "src/Vendor/impulse-ml-dataset/src/src/Impulse/Dataset.h"

@@ -47,10 +47,6 @@ namespace Impulse {
                     return &this->a;
                 }
 
-                void reset() {
-
-                }
-
                 NeuronContainer *getNeurons() {
                     return &this->neurons;
                 }
@@ -66,8 +62,7 @@ namespace Impulse {
                 Eigen::MatrixXd backwardPenalty(unsigned int numSamples, double regularization) {
                     Eigen::MatrixXd resultPenalty(this->size - 1, this->prevSize);
                     for (unsigned int i = 1; i < this->size; i++) {
-                        Eigen::VectorXd penalty = this->neurons.at(i)->backwardPenalty(numSamples, regularization);
-                        resultPenalty.row(i - 1) = penalty;
+                        resultPenalty.row(i - 1) = this->neurons.at(i)->backwardPenalty(numSamples, regularization);
                     }
                     return resultPenalty;
                 }

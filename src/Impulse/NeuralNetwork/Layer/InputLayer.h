@@ -29,7 +29,6 @@ namespace Impulse {
                 }
 
                 Eigen::VectorXd forward(Eigen::VectorXd input) {
-                    this->reset();
                     Eigen::VectorXd output(this->size);
 
                     // get value from bias neuron

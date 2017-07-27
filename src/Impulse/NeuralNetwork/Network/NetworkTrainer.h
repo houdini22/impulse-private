@@ -7,7 +7,6 @@
 #include <cstring>
 
 #include "Network.h"
-#include "../Data/DataSet.h"
 #include "../Math/Matrix.h"
 #include "../Math/Minimizer/Fmincg.h"
 #include "../../../Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/DatasetSlicer.h"

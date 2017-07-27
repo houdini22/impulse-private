@@ -28,9 +28,6 @@ set(SOURCE_FILES
         src/Vendor/impulse-ml-dataset/src/src/Impulse/Dataset.h
         src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetSample.cpp
         src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetSample.h
-        src/Impulse/NeuralNetwork/Data/DataSet.h
-        src/Impulse/NeuralNetwork/Data/DataSetManager.h
-        src/Impulse/NeuralNetwork/Data/DataSetSample.h
         src/Impulse/NeuralNetwork/Layer/AbstractLayer.h
         src/Impulse/NeuralNetwork/Layer/LogisticLayer.h
         src/Impulse/NeuralNetwork/Layer/InputLayer.h
@@ -59,7 +56,7 @@ FIND_PACKAGE(OpenMP REQUIRED)
 if(OPENMP_FOUND)
     message("OPENMP FOUND")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS} -m64 -Ofast -flto -march=native -funroll-loops -mavx -msse4.2")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 endif()
 

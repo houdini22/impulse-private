@@ -60,10 +60,6 @@ namespace Impulse {
                     return this->network;
                 }
 
-                void clear() {
-                    delete this->network;
-                }
-
                 Impulse::NeuralNetwork::Network::Network *buildFromJSON(std::string path) {
                     std::ifstream fileStream(path);
                     json jsonFile;

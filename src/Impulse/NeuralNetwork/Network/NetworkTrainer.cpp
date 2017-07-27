@@ -35,9 +35,7 @@ namespace Impulse {
                      it != net->getLayers()->end() - 1; ++it) {
                     for (NeuronContainer::iterator it2 = (*it)->getNeurons()->begin() + 1;
                          it2 != (*it)->getNeurons()->end(); ++it2) {
-                        for (int i = 0; i < (*it2)->deltas.size(); i++) {
-                            (*it2)->deltas(i) = 0.0;
-                        }
+                        (*it2)->deltas.setZero();
                     }
                 }
 
