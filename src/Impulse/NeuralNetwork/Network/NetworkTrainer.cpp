@@ -39,8 +39,8 @@ namespace Impulse {
                     }
                 }
 
-                Eigen::MatrixXd * inputMatrix = dataSet->getInput();
-                Eigen::MatrixXd * outputMatrix = dataSet->getOutput();
+                Eigen::MatrixXd *inputMatrix = dataSet->getInput();
+                Eigen::MatrixXd *outputMatrix = dataSet->getOutput();
 
                 for (int i = 0; i < dataSet->input.getSize(); i++) {
                     Eigen::VectorXd predictions = net->forward(inputMatrix->row(i));
@@ -48,7 +48,7 @@ namespace Impulse {
                     net->backward(predictions, output);
                     for (int j = 0; j < predictions.size(); j++) {
                         // sumErrors += pow(predictions(j) - output(j), 2.0);
-                        sumErrors += ((output(j) * log(predictions(j))) + ((1 - output(j)) * log(1 - predictions(j))));
+                        sumErrors += ((output(j) * log(predictions(j))) + ((1.0 - output(j)) * log(1.0 - predictions(j))));
                     }
                 }
 
@@ -67,7 +67,7 @@ namespace Impulse {
 
                 double errorRegularization = (this->regularization * errorPenalty)
                                              / (2 * (double) dataSet->input.getSize());
-                // double error = (1.0 / (2.0 * (double) dataSet.getSize())) * sumErrors + errorRegularization;
+                // double error = (1.0 / (2.0 * (double) dataSet->input.getSize())) * sumErrors + errorRegularization;
                 double error = (-1.0 / (double) dataSet->input.getSize()) * sumErrors + errorRegularization;
 
                 Impulse::NeuralNetwork::Network::CostGradientResult result;

@@ -63,11 +63,12 @@ namespace Impulse {
                     }
                 }
 
-                Eigen::VectorXd getRolledTheta() {
+                Eigen::VectorXd getRolledTheta(bool withBiasNeuron = false) {
                     Impulse::Math::TypeVector tmp;
+                    int add = withBiasNeuron ? 0 : 1;
                     for (LayerContainer::iterator it = this->getLayers()->begin() + 1;
                          it != this->getLayers()->end() - 1; ++it) {
-                        for (NeuronContainer::iterator it2 = (*it)->getNeurons()->begin() + 1;
+                        for (NeuronContainer::iterator it2 = (*it)->getNeurons()->begin() + add;
                              it2 != (*it)->getNeurons()->end(); ++it2) {
                             for (unsigned int j = 0; j < (*it2)->weights.size(); j++) {
                                 tmp.push_back(((*it2)->weights(j)));
@@ -78,11 +79,12 @@ namespace Impulse {
                     return result;
                 }
 
-                void setRolledTheta(Eigen::VectorXd rolledTheta) {
+                void setRolledTheta(Eigen::VectorXd rolledTheta, bool withBiasNeuron = false) {
                     unsigned int i = 0;
+                    int add = withBiasNeuron ? 0 : 1;
                     for (LayerContainer::iterator it = this->getLayers()->begin() + 1;
                          it != this->getLayers()->end() - 1; ++it) {
-                        for (NeuronContainer::iterator it2 = (*it)->getNeurons()->begin() + 1;
+                        for (NeuronContainer::iterator it2 = (*it)->getNeurons()->begin() + add;
                              it2 != (*it)->getNeurons()->end(); ++it2) {
                             for (unsigned int j = 0; j < (*it2)->weights.size(); j++) {
                                 (*it2)->weights(j) = rolledTheta(i++);

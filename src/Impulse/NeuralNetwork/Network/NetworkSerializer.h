@@ -36,7 +36,7 @@ namespace Impulse {
                     }
                     result["layers"] = layersSize;
 
-                    Eigen::VectorXd rolledTheta = this->network->getRolledTheta();
+                    Eigen::VectorXd rolledTheta = this->network->getRolledTheta(true);
                     result["neurons"] = Impulse::Math::TypeVector(rolledTheta.data(), rolledTheta.data() + rolledTheta.size());
 
                     std::ofstream out(path);

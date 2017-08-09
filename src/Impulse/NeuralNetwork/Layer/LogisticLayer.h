@@ -33,9 +33,7 @@ namespace Impulse {
                 Eigen::VectorXd
                 backward(Eigen::VectorXd sigma, Impulse::NeuralNetwork::Layer::AbstractLayer *nextLayer) {
                     Eigen::VectorXd tmpResultSigma(this->size);
-                    for (unsigned int i = 0; i < this->size; i++) {
-                        tmpResultSigma(i) = 0.0;
-                    }
+                    tmpResultSigma.setZero();
 
                     NeuronContainer *neurons = nextLayer->getNeurons();
                     for (unsigned int i = 1; i < nextLayer->getSize(); i++) {

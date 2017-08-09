@@ -2,6 +2,7 @@
 #define PURELINLAYER_H
 
 #include "AbstractLayer.h"
+#include "../Neuron/LinearNeuron.h"
 
 namespace Impulse {
 

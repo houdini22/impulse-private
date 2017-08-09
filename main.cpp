@@ -14,58 +14,56 @@
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
 
-#include "src/Impulse/NeuralNetwork/Network/NetworkBuilder.h"
+#include "src/Impulse/NeuralNetwork/Builder/ClassificationBuilder.h"
+#include "src/Impulse/NeuralNetwork/Builder/RegressionBuilder.h"
 #include "src/Impulse/NeuralNetwork/Network/NetworkTrainer.h"
 #include "src/Impulse/NeuralNetwork/Network/NetworkSerializer.h"
 #include "src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetBuilder/CSVBuilder.h"
 #include "src/Vendor/impulse-ml-dataset/src/src/Impulse/Dataset.h"
 #include "src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/DatasetSlicer.h"
 
-/*void TEST_Purelin() {
-    Impulse::NeuralNetwork::Network::NetworkBuilder *builder = new Impulse::NeuralNetwork::Network::NetworkBuilder();
-    // Network * network = builder->buildFromJSON("/home/hud/ml/purelin.json");
-    builder->addInputLayer(1);
-    builder->addPurelinLayer(4);
-    builder->addPurelinLayer(1);
-    builder->addOutputLayer();
+void TEST_Regression() {
+    Impulse::NeuralNetwork::Builder::RegressionBuilder builder;
+    builder.createInputLayer(1);
+    builder.createHiddenLayer(4);
+    builder.createHiddenLayer(1);
+    builder.addOutputLayer();
 
-    DataSetManager manager = DataSetManager();
+    Impulse::SlicedDataset data;
 
-    Eigen::MatrixXd input(4, 1);
-    Eigen::MatrixXd output(4, 1);
-
-    for (int i = 0; i < 4; i++) {
-        input(i, 0) = i;
-        output(i, 0) = i;
+    for (double i = 0.0; i < 4.0; i = i + 1.0) {
+        data.input.addSample(Impulse::DatasetSample({i}));
+        data.output.addSample(Impulse::DatasetSample({i}));
     }
 
-    Impulse::NeuralNetwork::Network::Network *network = builder->getNetwork();
+    Impulse::NeuralNetwork::Network::Network *network = builder.getNetwork();
 
-    DataSet dataSet = manager.createSet(input, output);
-    Impulse::NeuralNetwork::Network::NetworkTrainer *trainer = new Impulse::NeuralNetwork::Network::NetworkTrainer(network);
+    Impulse::NeuralNetwork::Network::NetworkTrainer *trainer = new Impulse::NeuralNetwork::Network::NetworkTrainer(
+            network);
 
     trainer->setRegularization(0.0);
     trainer->setLearningIterations(200);
     std::cout << "Calculating cost." << std::endl;
-    CostGradientResult result = trainer->cost(dataSet);
+    Impulse::NeuralNetwork::Network::CostGradientResult result = trainer->cost(&data);
     std::cout << "Cost: " << result.getCost() << std::endl;
 
     std::cout << "Start training." << std::endl;
-    trainer->train(dataSet);
+    trainer->train(&data);
 
-    std::cout << network->forward(input.row(0)) << std::endl;
-    std::cout << network->forward(input.row(1)) << std::endl;
-    std::cout << network->forward(input.row(2)) << std::endl;
-    std::cout << network->forward(input.row(3)) << std::endl;
+    std::cout << network->forward(data.inputVector.row(0)) << std::endl;
+    std::cout << network->forward(data.inputVector.row(1)) << std::endl;
+    std::cout << network->forward(data.inputVector.row(2)) << std::endl;
+    std::cout << network->forward(data.inputVector.row(3)) << std::endl;
 
-    *//*NetworkSerializer * serializer = new NetworkSerializer(network);
-     std::string filename = "/home/hud/ml/purelin.json";
-     serializer->toJSON(filename);*//*
-}*/
+    Impulse::NeuralNetwork::Network::NetworkSerializer *serializer = new Impulse::NeuralNetwork::Network::NetworkSerializer(network);
+    std::string filename = "/home/hud/ml/purelin.json";
+    serializer->toJSON(filename);
+    std::cout << "Saved." << std::endl;
+}
 
 /*void TEST_my() {
     Impulse::NeuralNetwork::Network::NetworkBuilder *builder = new Impulse::NeuralNetwork::Network::NetworkBuilder();
-    builder->addInputLayer(19200);
+    builder->createInputLayer(19200);
     builder->addPurelinLayer(300);
     builder->addPurelinLayer(100);
     builder->addPurelinLayer(4);
@@ -142,12 +140,13 @@
 
 }*/
 
-void TEST_LogisticRegression() {
+void TEST_Classification() {
     // build network
-    Impulse::NeuralNetwork::Network::NetworkBuilder builder = Impulse::NeuralNetwork::Network::NetworkBuilder();
-    builder.addInputLayer(400);
-    builder.addLogisticLayer(20);
-    builder.addLogisticLayer(10);
+
+    Impulse::NeuralNetwork::Builder::ClassificationBuilder builder;
+    builder.createInputLayer(400);
+    builder.createHiddenLayer(20);
+    builder.createHiddenLayer(10);
     builder.addOutputLayer();
 
     Impulse::NeuralNetwork::Network::Network *net = builder.getNetwork();
@@ -185,7 +184,8 @@ void TEST_LogisticRegression() {
 
     std::cout << net->forward(dataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
 
-    Impulse::NeuralNetwork::Network::NetworkSerializer * serializer = new Impulse::NeuralNetwork::Network::NetworkSerializer(net);
+    Impulse::NeuralNetwork::Network::NetworkSerializer *serializer = new Impulse::NeuralNetwork::Network::NetworkSerializer(
+            net);
     std::string filename = "/home/hud/CLionProjects/impulse-new/cmake-build-release/logistic.json";
     serializer->toJSON(filename);
 
@@ -207,8 +207,8 @@ void TEST_LogisticRegression() {
      */
 }
 
-void TEST_LogisticLoad() {
-    Impulse::NeuralNetwork::Network::NetworkBuilder * builder = new Impulse::NeuralNetwork::Network::NetworkBuilder();
+void TEST_ClassificationLoad() {
+    Impulse::NeuralNetwork::Builder::ClassificationBuilder * builder = new Impulse::NeuralNetwork::Builder::ClassificationBuilder();
     Impulse::NeuralNetwork::Network::Network * net = builder->buildFromJSON("/home/hud/CLionProjects/impulse-new/cmake-build-release/logistic.json");
     std::cout << "Loaded." << std::endl;
 
@@ -228,17 +228,17 @@ void TEST_LogisticLoad() {
 
     Impulse::NeuralNetwork::Network::NetworkTrainer *trainer = new Impulse::NeuralNetwork::Network::NetworkTrainer(net);
 
+    std::cout << net->forward(datasetInput.getSampleAt(0)->exportToEigen()) << std::endl;
+
     Impulse::NeuralNetwork::Network::CostGradientResult result = trainer->cost(&dataset);
     std::cout << "Cost: " << result.error << std::endl;
-
-    std::cout << net->forward(datasetInput.getSampleAt(0)->exportToEigen()) << std::endl;
 }
 
 int main() {
     //TEST_my();
-    //TEST_Purelin();
-    TEST_LogisticRegression();
-    //TEST_LogisticLoad();
+    //TEST_Regression();
+    //TEST_Classification();
+    TEST_ClassificationLoad();
     getchar();
     return 0;
 }
