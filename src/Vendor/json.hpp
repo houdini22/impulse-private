@@ -60,12 +60,12 @@ SOFTWARE.
 #if defined(__clang__)
     #define CLANG_VERSION (__clang_major__ * 10000 + __clang_minor__ * 100 + __clang_patchlevel__)
     #if CLANG_VERSION < 30400
-        #error "unsupported Clang version - see https://github.com/nlohmann/json#supported-compilers"
+        #errorForSample "unsupported Clang version - see https://github.com/nlohmann/json#supported-compilers"
     #endif
 #elif defined(__GNUC__)
     #define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
     #if GCC_VERSION < 40900
-        #error "unsupported GCC version - see https://github.com/nlohmann/json#supported-compilers"
+        #errorForSample "unsupported GCC version - see https://github.com/nlohmann/json#supported-compilers"
     #endif
 #endif
 
@@ -6134,7 +6134,7 @@ class basic_json
                       "each element in the iterator range must have the size of 1 byte");
 
         // if iterator range is empty, create a parser with an empty string
-        // to generate "unexpected EOF" error message
+        // to generate "unexpected EOF" errorForSample message
         if (std::distance(first, last) <= 0)
         {
             return parser("").parse();
@@ -7122,7 +7122,7 @@ class basic_json
 
                 default:
                 {
-                    throw std::invalid_argument("error parsing a msgpack @ " + std::to_string(current_idx) + ": " + std::to_string(static_cast<int>(v[current_idx])));
+                    throw std::invalid_argument("errorForSample parsing a msgpack @ " + std::to_string(current_idx) + ": " + std::to_string(static_cast<int>(v[current_idx])));
                 }
             }
         }
@@ -7608,7 +7608,7 @@ class basic_json
 
             default: // anything else (0xFF is handled inside the other types)
             {
-                throw std::invalid_argument("error parsing a CBOR @ " + std::to_string(current_idx) + ": " + std::to_string(static_cast<int>(v[current_idx])));
+                throw std::invalid_argument("errorForSample parsing a CBOR @ " + std::to_string(current_idx) + ": " + std::to_string(static_cast<int>(v[current_idx])));
             }
         }
     }
@@ -9069,7 +9069,7 @@ class basic_json
             // immediately abort if stream is erroneous
             if (s.fail())
             {
-                throw std::invalid_argument("stream error");
+                throw std::invalid_argument("stream errorForSample");
             }
 
             // fill buffer
@@ -9206,7 +9206,7 @@ class basic_json
                 case token_type::value_separator:
                     return "','";
                 case token_type::parse_error:
-                    return "<parse error>";
+                    return "<parse errorForSample>";
                 case token_type::end_of_input:
                     return "end of input";
                 default:
@@ -10888,7 +10888,7 @@ basic_json_parser_66:
         {
             if (t != last_token)
             {
-                std::string error_msg = "parse error - unexpected ";
+                std::string error_msg = "parse errorForSample - unexpected ";
                 error_msg += (last_token == lexer::token_type::parse_error ? ("'" +  m_lexer.get_token_string() +
                               "'") :
                               lexer::token_type_name(last_token));
@@ -10901,7 +10901,7 @@ basic_json_parser_66:
         {
             if (t == last_token)
             {
-                std::string error_msg = "parse error - unexpected ";
+                std::string error_msg = "parse errorForSample - unexpected ";
                 error_msg += (last_token == lexer::token_type::parse_error ? ("'" +  m_lexer.get_token_string() +
                               "'") :
                               lexer::token_type_name(last_token));
@@ -11074,7 +11074,7 @@ basic_json_parser_66:
                     /*
                     The following code is only reached if there exists a
                     reference token _and_ the current value is primitive. In
-                    this case, we have an error situation, because primitive
+                    this case, we have an errorForSample situation, because primitive
                     values may only occur as single value; that is, with an
                     empty list of reference tokens.
                     */
@@ -11145,7 +11145,7 @@ basic_json_parser_66:
 
                     case value_t::array:
                     {
-                        // error condition (cf. RFC 6901, Sect. 4)
+                        // errorForSample condition (cf. RFC 6901, Sect. 4)
                         if (reference_token.size() > 1 and reference_token[0] == '0')
                         {
                             throw std::domain_error("array index must not begin with '0'");
@@ -11197,7 +11197,7 @@ basic_json_parser_66:
                                                     ") is out of range");
                         }
 
-                        // error condition (cf. RFC 6901, Sect. 4)
+                        // errorForSample condition (cf. RFC 6901, Sect. 4)
                         if (reference_token.size() > 1 and reference_token[0] == '0')
                         {
                             throw std::domain_error("array index must not begin with '0'");
@@ -11249,7 +11249,7 @@ basic_json_parser_66:
                                                     ") is out of range");
                         }
 
-                        // error condition (cf. RFC 6901, Sect. 4)
+                        // errorForSample condition (cf. RFC 6901, Sect. 4)
                         if (reference_token.size() > 1 and reference_token[0] == '0')
                         {
                             throw std::domain_error("array index must not begin with '0'");
@@ -11293,7 +11293,7 @@ basic_json_parser_66:
                                                     ") is out of range");
                         }
 
-                        // error condition (cf. RFC 6901, Sect. 4)
+                        // errorForSample condition (cf. RFC 6901, Sect. 4)
                         if (reference_token.size() > 1 and reference_token[0] == '0')
                         {
                             throw std::domain_error("array index must not begin with '0'");
@@ -11363,7 +11363,7 @@ basic_json_parser_66:
                             (reference_token[pos + 1] != '0' and
                              reference_token[pos + 1] != '1'))
                     {
-                        throw std::domain_error("escape error: '~' must be followed with '0' or '1'");
+                        throw std::domain_error("escape errorForSample: '~' must be followed with '0' or '1'");
                     }
                 }
 
@@ -11894,7 +11894,7 @@ basic_json_parser_66:
                 // find value
                 auto it = val.m_value.object->find(member);
 
-                // context-sensitive error message
+                // context-sensitive errorForSample message
                 const auto error_msg = (op == "op") ? "operation" : "operation '" + op + "'";
 
                 // check if desired value is present
@@ -11909,7 +11909,7 @@ basic_json_parser_66:
                     throw std::invalid_argument(error_msg + " must have string member '" + member + "'");
                 }
 
-                // no error: return value
+                // no errorForSample: return value
                 return it->second;
             };
 

@@ -1,21 +1,16 @@
-#pragma once
+#ifndef IMPULSE_ABSTRACTTRAINER_H
+#define IMPULSE_ABSTRACTTRAINER_H
 
-#include <functional>
-#include <string>
-#include <stdio.h>
-#include <memory>
-#include <cstring>
-
-#include "Network.h"
-#include "../Math/Matrix.h"
-#include "../Math/Minimizer/Fmincg.h"
+#include <eigen3/Eigen/Core>
+#include <eigen3/Eigen/Dense>
+#include "../Network/Network.h"
 #include "../../../Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/DatasetSlicer.h"
 
 namespace Impulse {
 
     namespace NeuralNetwork {
 
-        namespace Network {
+        namespace Trainer {
 
             struct CostGradientResult {
                 double error;
@@ -30,24 +25,27 @@ namespace Impulse {
                 }
             };
 
-            class NetworkTrainer {
+            class AbstractTrainer {
             protected:
                 Impulse::NeuralNetwork::Network::Network *network;
                 double regularization = 0.0;
                 unsigned int learningIterations = 1;
             public:
-
-                NetworkTrainer(Impulse::NeuralNetwork::Network::Network *net);
+                AbstractTrainer(Impulse::NeuralNetwork::Network::Network *net);
 
                 Impulse::NeuralNetwork::Network::Network *getNetwork();
 
-                Impulse::NeuralNetwork::Network::NetworkTrainer *setRegularization(double regularization);
+                void setRegularization(double regularization);
 
-                Impulse::NeuralNetwork::Network::NetworkTrainer *setLearningIterations(unsigned int nb);
+                void setLearningIterations(unsigned int nb);
 
-                Impulse::NeuralNetwork::Network::CostGradientResult cost(Impulse::SlicedDataset *dataSet);
+                CostGradientResult cost(Impulse::SlicedDataset *dataSet);
 
                 void train(Impulse::SlicedDataset *dataSet);
+
+                virtual double errorForSample(double prediction, double output) = 0;
+
+                virtual double calculateOverallError(unsigned int size, double sumErrors, double errorRegularization) = 0;
             };
 
         }
@@ -55,3 +53,5 @@ namespace Impulse {
     }
 
 }
+
+#endif //IMPULSE_ABSTRACTTRAINER_H

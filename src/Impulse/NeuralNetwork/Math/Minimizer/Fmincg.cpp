@@ -7,7 +7,6 @@
 #include <ctime>
 
 #include "Fmincg.h"
-#include "../../Network/NetworkTrainer.h"
 
 /*
  * Minimize a continuous differentialble multivariate function. Starting point <br/>
@@ -71,7 +70,7 @@ namespace Impulse {
         namespace Math {
             namespace Minimizer {
                 Eigen::VectorXd Fmincg::minimize(
-                        std::function<Impulse::NeuralNetwork::Network::CostGradientResult(
+                        std::function<Impulse::NeuralNetwork::Trainer::CostGradientResult(
                                 Eigen::VectorXd)> costFunction,
                         Eigen::VectorXd theta, unsigned int length, bool verbose) {
 
@@ -90,7 +89,7 @@ namespace Impulse {
                     int i = 0; // zero the run length counter
                     int red = 1; // starting point
                     int ls_failed = 0; // no previous line search has failed
-                    Impulse::NeuralNetwork::Network::CostGradientResult evaluateCost = costFunction(input);
+                    Impulse::NeuralNetwork::Trainer::CostGradientResult evaluateCost = costFunction(input);
                     double f1 = evaluateCost.getCost();
                     df1 = evaluateCost.getGradient();
                     i = i + (length < 0 ? 1 : 0);
@@ -110,7 +109,7 @@ namespace Impulse {
                         // begin line search
                         // fill our new line searched parameters
                         input = input + (s * z1);
-                        Impulse::NeuralNetwork::Network::CostGradientResult evaluateCost2 = costFunction(input);
+                        Impulse::NeuralNetwork::Trainer::CostGradientResult evaluateCost2 = costFunction(input);
                         double f2 = evaluateCost2.getCost();
                         df2 = evaluateCost2.getGradient();
                         i = i + (length < 0 ? 1 : 0); // count epochs
@@ -142,7 +141,7 @@ namespace Impulse {
                                     // cubic fit
                                     A = 6 * (f2 - f3) / z3 + 3 * (d2 + d3);
                                     B = 3 * (f3 - f2) - z3 * (d3 + 2 * d2);
-                                    // numerical error possible - ok!
+                                    // numerical errorForSample possible - ok!
                                     z2 = (sqrt(B * B - A * d2 * z3 * z3) - B) / A;
                                 }
                                 if (isnan(z2) || !finite(z2)) {
@@ -154,7 +153,7 @@ namespace Impulse {
                                 // update the step
                                 z1 = z1 + z2;
                                 input = input + (s * z2);
-                                Impulse::NeuralNetwork::Network::CostGradientResult evaluateCost3 = costFunction(input);
+                                Impulse::NeuralNetwork::Trainer::CostGradientResult evaluateCost3 = costFunction(input);
                                 f2 = evaluateCost3.getCost();
                                 df2 = evaluateCost3.getGradient();
                                 M = M - 1;
@@ -205,7 +204,7 @@ namespace Impulse {
                             z1 = z1 + z2;
                             // update current estimates
                             input = input + (s * z2);
-                            Impulse::NeuralNetwork::Network::CostGradientResult evaluateCost3 = costFunction(input);
+                            Impulse::NeuralNetwork::Trainer::CostGradientResult evaluateCost3 = costFunction(input);
                             f2 = evaluateCost3.getCost();
                             df2 = evaluateCost3.getGradient();
                             M = M - 1;

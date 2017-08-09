@@ -39,14 +39,12 @@ set(SOURCE_FILES
         src/Impulse/NeuralNetwork/Math/Vector.h
         src/Impulse/NeuralNetwork/Network/Network.h
         src/Impulse/NeuralNetwork/Network/NetworkSerializer.h
-        src/Impulse/NeuralNetwork/Network/NetworkTrainer.cpp
-        src/Impulse/NeuralNetwork/Network/NetworkTrainer.h
         src/Impulse/NeuralNetwork/Neuron/AbstractNeuron.h
         src/Impulse/NeuralNetwork/Neuron/BiasNeuron.h
         src/Impulse/NeuralNetwork/Neuron/InputNeuron.h
         src/Impulse/NeuralNetwork/Neuron/LinearNeuron.h
         src/Vendor/json.hpp
-        main.cpp src/Impulse/NeuralNetwork/Builder/AbstractBuilder.h src/Impulse/NeuralNetwork/Builder/RegressionBuilder.h src/Impulse/NeuralNetwork/Builder/ClassificationBuilder.h)
+        main.cpp src/Impulse/NeuralNetwork/Builder/AbstractBuilder.h src/Impulse/NeuralNetwork/Builder/RegressionBuilder.h src/Impulse/NeuralNetwork/Builder/ClassificationBuilder.h src/Impulse/NeuralNetwork/Trainer/AbstractTrainer.h src/Impulse/NeuralNetwork/Trainer/AbstractTrainer.cpp src/Impulse/NeuralNetwork/Trainer/ClassificationTrainer.h)
 
 find_package(Boost 1.57.0 COMPONENTS system filesystem REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})

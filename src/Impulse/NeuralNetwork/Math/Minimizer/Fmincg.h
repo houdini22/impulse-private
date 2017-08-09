@@ -16,7 +16,7 @@
 #include <functional>
 #include <eigen3/Eigen/Core>
 
-#include "../../Network/NetworkTrainer.h"
+#include "../../Trainer/AbstractTrainer.h"
 
 namespace Impulse {
     namespace NeuralNetwork {
@@ -34,7 +34,7 @@ namespace Impulse {
                     }
 
                     Eigen::VectorXd minimize(
-                            std::function<Impulse::NeuralNetwork::Network::CostGradientResult(
+                            std::function<Impulse::NeuralNetwork::Trainer::CostGradientResult(
                                     Eigen::VectorXd)> costFunction,
                             Eigen::VectorXd theta, unsigned int length, bool verbose);
                 };

@@ -16,11 +16,12 @@
 
 #include "src/Impulse/NeuralNetwork/Builder/ClassificationBuilder.h"
 #include "src/Impulse/NeuralNetwork/Builder/RegressionBuilder.h"
-#include "src/Impulse/NeuralNetwork/Network/NetworkTrainer.h"
 #include "src/Impulse/NeuralNetwork/Network/NetworkSerializer.h"
 #include "src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetBuilder/CSVBuilder.h"
 #include "src/Vendor/impulse-ml-dataset/src/src/Impulse/Dataset.h"
 #include "src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/DatasetSlicer.h"
+#include "src/Impulse/NeuralNetwork/Trainer/ClassificationTrainer.h"
+#include "src/Impulse/NeuralNetwork/Trainer/RegressionTrainer.h"
 
 void TEST_Regression() {
     Impulse::NeuralNetwork::Builder::RegressionBuilder builder;
@@ -38,13 +39,13 @@ void TEST_Regression() {
 
     Impulse::NeuralNetwork::Network::Network *network = builder.getNetwork();
 
-    Impulse::NeuralNetwork::Network::NetworkTrainer *trainer = new Impulse::NeuralNetwork::Network::NetworkTrainer(
+    Impulse::NeuralNetwork::Trainer::RegressionTrainer *trainer = new Impulse::NeuralNetwork::Trainer::RegressionTrainer(
             network);
 
     trainer->setRegularization(0.0);
     trainer->setLearningIterations(200);
     std::cout << "Calculating cost." << std::endl;
-    Impulse::NeuralNetwork::Network::CostGradientResult result = trainer->cost(&data);
+    Impulse::NeuralNetwork::Trainer::CostGradientResult result = trainer->cost(&data);
     std::cout << "Cost: " << result.getCost() << std::endl;
 
     std::cout << "Start training." << std::endl;
@@ -166,12 +167,12 @@ void TEST_Classification() {
     dataset.output = datasetOutput;
     // end create dataset
 
-    Impulse::NeuralNetwork::Network::NetworkTrainer *trainer = new Impulse::NeuralNetwork::Network::NetworkTrainer(net);
+    Impulse::NeuralNetwork::Trainer::ClassificationTrainer *trainer = new Impulse::NeuralNetwork::Trainer::ClassificationTrainer(net);
     trainer->setLearningIterations(400);
 
     std::cout << "Calculating cost." << std::endl;
 
-    Impulse::NeuralNetwork::Network::CostGradientResult result = trainer->cost(&dataset);
+    Impulse::NeuralNetwork::Trainer::CostGradientResult result = trainer->cost(&dataset);
     std::cout << "Cost: " << result.error << std::endl;
 
     std::cout << net->forward(dataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
@@ -179,7 +180,7 @@ void TEST_Classification() {
     std::cout << "Start training." << std::endl;
     trainer->train(&dataset);
 
-    Impulse::NeuralNetwork::Network::CostGradientResult result2 = trainer->cost(&dataset);
+    Impulse::NeuralNetwork::Trainer::CostGradientResult result2 = trainer->cost(&dataset);
     std::cout << "Cost: " << result2.error << std::endl;
 
     std::cout << net->forward(dataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
@@ -226,11 +227,11 @@ void TEST_ClassificationLoad() {
     dataset.output = datasetOutput;
     // end create dataset
 
-    Impulse::NeuralNetwork::Network::NetworkTrainer *trainer = new Impulse::NeuralNetwork::Network::NetworkTrainer(net);
+    Impulse::NeuralNetwork::Trainer::ClassificationTrainer *trainer = new Impulse::NeuralNetwork::Trainer::ClassificationTrainer(net);
 
     std::cout << net->forward(datasetInput.getSampleAt(0)->exportToEigen()) << std::endl;
 
-    Impulse::NeuralNetwork::Network::CostGradientResult result = trainer->cost(&dataset);
+    Impulse::NeuralNetwork::Trainer::CostGradientResult result = trainer->cost(&dataset);
     std::cout << "Cost: " << result.error << std::endl;
 }
 
