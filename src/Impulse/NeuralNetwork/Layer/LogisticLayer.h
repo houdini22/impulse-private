@@ -17,15 +17,16 @@ namespace Impulse {
             class LogisticLayer : public Impulse::NeuralNetwork::Layer::AbstractLayer {
             public:
 
-                LogisticLayer(unsigned int size, unsigned int prevSize) : Impulse::NeuralNetwork::Layer::AbstractLayer(size, prevSize) {
+                LogisticLayer(unsigned int size, unsigned int prevSize) : Impulse::NeuralNetwork::Layer::AbstractLayer(
+                        size, prevSize) {
                     this->a.resize(this->size);
-                    this->z.resize(this->size - 1);
                     this->createNeurons();
                 }
 
                 void createNeurons() {
                     this->neurons.push_back(new Impulse::NeuralNetwork::Neuron::BiasNeuron());
-                    for (unsigned int i = 0; i < this->size - 1; i++) { // size is already computed with bias neuron so -1
+                    for (unsigned int i = 0;
+                         i < this->size - 1; i++) { // size is already computed with bias neuron so -1
                         this->neurons.push_back(new Impulse::NeuralNetwork::Neuron::LinearNeuron(this->prevSize));
                     }
                 }

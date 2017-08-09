@@ -17,7 +17,6 @@ namespace Impulse {
 
                 InputLayer(unsigned int size) : Impulse::NeuralNetwork::Layer::AbstractLayer(size, 1) {
                     this->a.resize(this->size);
-                    this->z.resize(this->size);
                     this->createNeurons();
                 }
 
@@ -36,7 +35,6 @@ namespace Impulse {
 
                     output(0) = biasResult;
                     this->a(0) = biasResult;
-                    this->z(0) = biasResult;
 
                     // start from 1 not bias neuron
                     unsigned int i = 0; // key for input
@@ -47,7 +45,6 @@ namespace Impulse {
 
                         output(i + 1) = result;
                         this->a(i + 1) = result;
-                        this->z(i + 1) = result;
 
                         i++;
                     }

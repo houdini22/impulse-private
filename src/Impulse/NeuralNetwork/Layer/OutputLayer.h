@@ -16,20 +16,20 @@ namespace Impulse {
 
                 }
 
-                Eigen::VectorXd forward(Eigen::VectorXd input) {
-                    Eigen::VectorXd newResult(input.size() - 1);
-                    for (unsigned int i = 0; i < input.size() - 1; i++) {
-                        newResult(i) = input(i + 1);
-                    }
-                    return newResult;
-                }
-
                 double derivative(double input) {
                     return 0.0;
                 }
 
                 double activation(double input) {
                     return input;
+                }
+
+                Eigen::VectorXd forward(Eigen::VectorXd input) {
+                    Eigen::VectorXd newResult(input.size() - 1);
+                    for (unsigned int i = 0; i < input.size() - 1; i++) {
+                        newResult(i) = input(i + 1);
+                    }
+                    return newResult;
                 }
 
                 Eigen::VectorXd backward(Eigen::VectorXd sigma, AbstractLayer *nextLayer) {

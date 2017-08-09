@@ -45,7 +45,8 @@ namespace Impulse {
 
                 virtual double errorForSample(double prediction, double output) = 0;
 
-                virtual double calculateOverallError(unsigned int size, double sumErrors, double errorRegularization) = 0;
+                virtual double
+                calculateOverallError(unsigned int size, double sumErrors, double errorRegularization) = 0;
             };
 
         }

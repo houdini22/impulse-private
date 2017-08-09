@@ -14,6 +14,7 @@ namespace Impulse {
                 RegressionTrainer(Impulse::NeuralNetwork::Network *net) : AbstractTrainer(net) {
 
                 }
+
                 double errorForSample(double prediction, double output) {
                     return pow(prediction - output, 2.0);
                 }
