@@ -8,11 +8,11 @@ namespace Impulse {
 
         namespace Trainer {
 
-            AbstractTrainer::AbstractTrainer(Impulse::NeuralNetwork::Network::Network *net) {
+            AbstractTrainer::AbstractTrainer(Impulse::NeuralNetwork::Network *net) {
                 this->network = net;
             }
 
-            Impulse::NeuralNetwork::Network::Network *AbstractTrainer::getNetwork() {
+            Impulse::NeuralNetwork::Network *AbstractTrainer::getNetwork() {
                 return this->network;
             }
 
@@ -25,7 +25,7 @@ namespace Impulse {
             }
 
             Impulse::NeuralNetwork::Trainer::CostGradientResult AbstractTrainer::cost(Impulse::SlicedDataset *dataSet) {
-                Impulse::NeuralNetwork::Network::Network *net = this->network;
+                Impulse::NeuralNetwork::Network *net = this->network;
                 double sumErrors = 0.0;
 
                 // reset deltas
@@ -77,7 +77,7 @@ namespace Impulse {
             void AbstractTrainer::train(Impulse::SlicedDataset *dataSet) {
                 Impulse::NeuralNetwork::Math::Minimizer::Fmincg minimizer;
 
-                Impulse::NeuralNetwork::Network::Network *network = this->network;
+                Impulse::NeuralNetwork::Network *network = this->network;
                 Eigen::VectorXd theta = network->getRolledTheta();
 
                 std::function<Impulse::NeuralNetwork::Trainer::CostGradientResult(Eigen::VectorXd)> cf(

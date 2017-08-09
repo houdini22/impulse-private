@@ -3,7 +3,7 @@
 
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
-#include "../Network/Network.h"
+#include "../Network.h"
 #include "../../../Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/DatasetSlicer.h"
 
 namespace Impulse {
@@ -27,13 +27,13 @@ namespace Impulse {
 
             class AbstractTrainer {
             protected:
-                Impulse::NeuralNetwork::Network::Network *network;
+                Impulse::NeuralNetwork::Network *network;
                 double regularization = 0.0;
                 unsigned int learningIterations = 1;
             public:
-                AbstractTrainer(Impulse::NeuralNetwork::Network::Network *net);
+                AbstractTrainer(Impulse::NeuralNetwork::Network *net);
 
-                Impulse::NeuralNetwork::Network::Network *getNetwork();
+                Impulse::NeuralNetwork::Network *getNetwork();
 
                 void setRegularization(double regularization);
 

@@ -16,7 +16,7 @@
 
 #include "src/Impulse/NeuralNetwork/Builder/ClassificationBuilder.h"
 #include "src/Impulse/NeuralNetwork/Builder/RegressionBuilder.h"
-#include "src/Impulse/NeuralNetwork/Network/NetworkSerializer.h"
+#include "src/Impulse/NeuralNetwork/NetworkSerializer.h"
 #include "src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetBuilder/CSVBuilder.h"
 #include "src/Vendor/impulse-ml-dataset/src/src/Impulse/Dataset.h"
 #include "src/Vendor/impulse-ml-dataset/src/src/Impulse/DatasetModifier/DatasetSlicer.h"
@@ -37,7 +37,7 @@ void TEST_Regression() {
         data.output.addSample(Impulse::DatasetSample({i}));
     }
 
-    Impulse::NeuralNetwork::Network::Network *network = builder.getNetwork();
+    Impulse::NeuralNetwork::Network *network = builder.getNetwork();
 
     Impulse::NeuralNetwork::Trainer::RegressionTrainer *trainer = new Impulse::NeuralNetwork::Trainer::RegressionTrainer(
             network);
@@ -56,7 +56,7 @@ void TEST_Regression() {
     std::cout << network->forward(data.inputVector.row(2)) << std::endl;
     std::cout << network->forward(data.inputVector.row(3)) << std::endl;
 
-    Impulse::NeuralNetwork::Network::NetworkSerializer *serializer = new Impulse::NeuralNetwork::Network::NetworkSerializer(network);
+    Impulse::NeuralNetwork::NetworkSerializer *serializer = new Impulse::NeuralNetwork::NetworkSerializer(network);
     std::string filename = "/home/hud/ml/purelin.json";
     serializer->toJSON(filename);
     std::cout << "Saved." << std::endl;
@@ -150,7 +150,7 @@ void TEST_Classification() {
     builder.createHiddenLayer(10);
     builder.addOutputLayer();
 
-    Impulse::NeuralNetwork::Network::Network *net = builder.getNetwork();
+    Impulse::NeuralNetwork::Network *net = builder.getNetwork();
     // end build network
 
     // create dataset
@@ -185,7 +185,7 @@ void TEST_Classification() {
 
     std::cout << net->forward(dataset.input.getSampleAt(0)->exportToEigen()) << std::endl;
 
-    Impulse::NeuralNetwork::Network::NetworkSerializer *serializer = new Impulse::NeuralNetwork::Network::NetworkSerializer(
+    Impulse::NeuralNetwork::NetworkSerializer *serializer = new Impulse::NeuralNetwork::NetworkSerializer(
             net);
     std::string filename = "/home/hud/CLionProjects/impulse-new/cmake-build-release/logistic.json";
     serializer->toJSON(filename);
@@ -210,7 +210,7 @@ void TEST_Classification() {
 
 void TEST_ClassificationLoad() {
     Impulse::NeuralNetwork::Builder::ClassificationBuilder * builder = new Impulse::NeuralNetwork::Builder::ClassificationBuilder();
-    Impulse::NeuralNetwork::Network::Network * net = builder->buildFromJSON("/home/hud/CLionProjects/impulse-new/cmake-build-release/logistic.json");
+    Impulse::NeuralNetwork::Network * net = builder->buildFromJSON("/home/hud/CLionProjects/impulse-new/cmake-build-release/logistic.json");
     std::cout << "Loaded." << std::endl;
 
     // create dataset
@@ -237,9 +237,9 @@ void TEST_ClassificationLoad() {
 
 int main() {
     //TEST_my();
-    //TEST_Regression();
+    TEST_Regression();
     //TEST_Classification();
-    TEST_ClassificationLoad();
+    //TEST_ClassificationLoad();
     getchar();
     return 0;
 }

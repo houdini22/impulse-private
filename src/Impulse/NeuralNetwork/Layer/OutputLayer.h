@@ -28,6 +28,10 @@ namespace Impulse {
                     return 0.0;
                 }
 
+                double activation(double input) {
+                    return input;
+                }
+
                 Eigen::VectorXd backward(Eigen::VectorXd sigma, AbstractLayer *nextLayer) {
                     return Eigen::VectorXd();
                 }

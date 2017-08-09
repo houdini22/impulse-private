@@ -30,58 +30,6 @@ namespace Impulse {
                     }
                 }
 
-                Eigen::VectorXd
-                backward(Eigen::VectorXd sigma, Impulse::NeuralNetwork::Layer::AbstractLayer *nextLayer) {
-                    Eigen::VectorXd tmpResultSigma(this->size);
-                    tmpResultSigma.setZero();
-
-                    NeuronContainer *neurons = nextLayer->getNeurons();
-                    for (unsigned int i = 1; i < nextLayer->getSize(); i++) {
-                        Eigen::VectorXd tmp = neurons->at(i)->backward(sigma(i - 1));
-                        for (unsigned int j = 0; j < tmp.size(); j++) {
-                            tmpResultSigma(j) += tmp(j);
-                        }
-                    }
-
-                    Eigen::VectorXd resultSigma(this->size - 1);
-                    for (unsigned int i = 1; i < tmpResultSigma.size(); i++) {
-                        resultSigma(i - 1) = tmpResultSigma(i);
-                    }
-
-                    Eigen::VectorXd *a = this->getA();
-                    for (unsigned int i = 0; i < resultSigma.size(); i++) {
-                        resultSigma(i) *= this->derivative((*a)(i + 1));
-                    }
-
-                    return resultSigma;
-                }
-
-                Eigen::VectorXd forward(Eigen::VectorXd input) {
-                    Eigen::VectorXd output(this->neurons.size());
-
-                    // get value from bias neuron
-                    double biasResult = this->neurons.at(0)->forward(input);
-
-                    output(0) = biasResult; // save to output layer
-                    this->a(0) = (biasResult); // save to activated values container
-
-                    // start from 1 not bias neuron
-                    unsigned int i = 1;
-                    for (NeuronContainer::iterator it = this->neurons.begin() + 1; it != this->neurons.end(); ++it) {
-                        double result = (*it)->forward(input);
-
-                        this->z(i - 1) = result; // save to raw output values container
-
-                        double activated = this->activation(result);
-                        //save
-                        output(i) = activated;
-                        this->a(i) = activated;
-
-                        i++;
-                    }
-                    return output;
-                }
-
                 double derivative(double input) {
                     return input * (1.0 - input);
                 }

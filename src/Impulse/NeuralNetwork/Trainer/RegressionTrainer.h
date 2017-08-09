@@ -11,7 +11,7 @@ namespace Impulse {
 
             class RegressionTrainer : public AbstractTrainer {
             public:
-                RegressionTrainer(Impulse::NeuralNetwork::Network::Network *net) : AbstractTrainer(net) {
+                RegressionTrainer(Impulse::NeuralNetwork::Network *net) : AbstractTrainer(net) {
 
                 }
                 double errorForSample(double prediction, double output) {

@@ -20,7 +20,7 @@
 
 namespace Impulse {
     namespace NeuralNetwork {
-        namespace Network {
+        namespace Trainer {
             struct CostGradientResult;
         }
         namespace Math {

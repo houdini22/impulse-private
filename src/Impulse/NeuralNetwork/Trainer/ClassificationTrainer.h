@@ -11,7 +11,7 @@ namespace Impulse {
 
             class ClassificationTrainer : public AbstractTrainer {
             public:
-                ClassificationTrainer(Impulse::NeuralNetwork::Network::Network *net) : AbstractTrainer(net) {
+                ClassificationTrainer(Impulse::NeuralNetwork::Network *net) : AbstractTrainer(net) {
 
                 }
 

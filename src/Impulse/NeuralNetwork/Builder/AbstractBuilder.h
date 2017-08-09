@@ -1,7 +1,7 @@
 #ifndef IMPULSE_ABSTRACTBUILDER2_H
 #define IMPULSE_ABSTRACTBUILDER2_H
 
-#include "../Network/Network.h"
+#include "../Network.h"
 #include "../Layer/InputLayer.h"
 #include "../Layer/OutputLayer.h"
 #include "../../../Vendor/json.hpp"
@@ -16,11 +16,11 @@ namespace Impulse {
 
             class AbstractBuilder {
             protected:
-                Impulse::NeuralNetwork::Network::Network *network;
+                Impulse::NeuralNetwork::Network *network;
                 unsigned int prevSize;
             public:
                 AbstractBuilder() {
-                    this->network = new Impulse::NeuralNetwork::Network::Network();
+                    this->network = new Impulse::NeuralNetwork::Network();
                 }
 
                 AbstractBuilder *createInputLayer(unsigned int size) {
@@ -39,11 +39,11 @@ namespace Impulse {
 
                 virtual void createHiddenLayer(unsigned int size) = 0;
 
-                Impulse::NeuralNetwork::Network::Network *getNetwork() {
+                Impulse::NeuralNetwork::Network *getNetwork() {
                     return this->network;
                 }
 
-                Impulse::NeuralNetwork::Network::Network *buildFromJSON(std::string path) {
+                Impulse::NeuralNetwork::Network *buildFromJSON(std::string path) {
                     std::ifstream fileStream(path);
                     json jsonFile;
                     fileStream >> jsonFile;

@@ -37,8 +37,8 @@ set(SOURCE_FILES
         src/Impulse/NeuralNetwork/Math/Minimizer/Fmincg.h
         src/Impulse/NeuralNetwork/Math/Matrix.h
         src/Impulse/NeuralNetwork/Math/Vector.h
-        src/Impulse/NeuralNetwork/Network/Network.h
-        src/Impulse/NeuralNetwork/Network/NetworkSerializer.h
+        src/Impulse/NeuralNetwork/Network.h
+        src/Impulse/NeuralNetwork/NetworkSerializer.h
         src/Impulse/NeuralNetwork/Neuron/AbstractNeuron.h
         src/Impulse/NeuralNetwork/Neuron/BiasNeuron.h
         src/Impulse/NeuralNetwork/Neuron/InputNeuron.h

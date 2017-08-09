@@ -62,6 +62,10 @@ namespace Impulse {
                 double derivative(double input) {
                     return 0.0;
                 }
+
+                double activation(double input) {
+                    return input;
+                }
             };
 
         }
