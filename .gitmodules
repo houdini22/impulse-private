@@ -1,3 +1,6 @@
 [submodule "src/Vendor/impulse-ml-dataset"]
 	path = src/Vendor/impulse-ml-dataset
 	url = git@github.com:impulse-ml/impulse-ml-dataset.git
+[submodule "src/Vendor/q"]
+	path = src/Vendor/q
+	url = git@github.com:grantila/q.git

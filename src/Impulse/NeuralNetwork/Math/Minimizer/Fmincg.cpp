@@ -90,8 +90,8 @@ namespace Impulse {
                     int red = 1; // starting point
                     int ls_failed = 0; // no previous line search has failed
                     Impulse::NeuralNetwork::Trainer::CostGradientResult evaluateCost = costFunction(input);
-                    double f1 = evaluateCost.getCost();
-                    df1 = evaluateCost.getGradient();
+                    double f1 = *evaluateCost.getCost();
+                    df1 = *evaluateCost.getGradient();
                     i = i + (length < 0 ? 1 : 0);
                     // search direction is steepest
                     s = (df1 * -1.0);
@@ -110,8 +110,8 @@ namespace Impulse {
                         // fill our new line searched parameters
                         input = input + (s * z1);
                         Impulse::NeuralNetwork::Trainer::CostGradientResult evaluateCost2 = costFunction(input);
-                        double f2 = evaluateCost2.getCost();
-                        df2 = evaluateCost2.getGradient();
+                        double f2 = *evaluateCost2.getCost();
+                        df2 = *evaluateCost2.getGradient();
                         i = i + (length < 0 ? 1 : 0); // count epochs
                         double d2 = df2.dot(s);
                         // initialize point 3 equal to point 1
@@ -154,8 +154,8 @@ namespace Impulse {
                                 z1 = z1 + z2;
                                 input = input + (s * z2);
                                 Impulse::NeuralNetwork::Trainer::CostGradientResult evaluateCost3 = costFunction(input);
-                                f2 = evaluateCost3.getCost();
-                                df2 = evaluateCost3.getGradient();
+                                f2 = *evaluateCost3.getCost();
+                                df2 = *evaluateCost3.getGradient();
                                 M = M - 1;
                                 i = i + (length < 0 ? 1 : 0); // count epochs
                                 d2 = df2.dot(s);
@@ -205,8 +205,8 @@ namespace Impulse {
                             // update current estimates
                             input = input + (s * z2);
                             Impulse::NeuralNetwork::Trainer::CostGradientResult evaluateCost3 = costFunction(input);
-                            f2 = evaluateCost3.getCost();
-                            df2 = evaluateCost3.getGradient();
+                            f2 = *evaluateCost3.getCost();
+                            df2 = *evaluateCost3.getGradient();
                             M = M - 1;
                             i = i + (length < 0 ? 1 : 0); // count epochs?!
                             d2 = df2.dot(s);

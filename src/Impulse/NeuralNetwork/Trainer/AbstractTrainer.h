@@ -16,12 +16,12 @@ namespace Impulse {
                 double error;
                 Eigen::VectorXd gradient;
 
-                double getCost() {
-                    return this->error;
+                double * getCost() {
+                    return &this->error;
                 }
 
-                Eigen::VectorXd getGradient() {
-                    return this->gradient;
+                Eigen::VectorXd * getGradient() {
+                    return &this->gradient;
                 }
             };
 

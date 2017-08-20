@@ -236,10 +236,34 @@ void TEST_ClassificationLoad() {
 }
 
 int main() {
+    //Eigen::initParallel();
+    //Eigen::setNbThreads(8);
     //TEST_my();
-    TEST_Regression();
-    //TEST_Classification();
+    //TEST_Regression();
+    TEST_Classification();
     //TEST_ClassificationLoad();
+    /*int size = 1000000;
+    Eigen::VectorXd v1 = Eigen::VectorXd::Ones(size);
+    Eigen::VectorXd v2 = Eigen::VectorXd::Ones(size);
+
+    clock_t begin = clock();
+    Eigen::VectorXd v3 = v1 + v2;
+    clock_t end = clock();
+    std::cout << "Time: " << (double(end - begin) / CLOCKS_PER_SEC) << std::endl;
+
+    q::run( "thread name", [ ]( )
+    {
+        return "0";
+    } )
+            ->terminate( ) // Will not really terminate, but rather await completion
+            .then( [ ]( std::vector< std::string >&& strings )
+                   {
+                       // The result from the thread function is *moved* to this function
+                       std::cout << strings.size( ) << " strings are now sorted" << std::endl;
+                   } );
+
+*/
+
     getchar();
     return 0;
 }
